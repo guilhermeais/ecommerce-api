@@ -1,0 +1,1626 @@
+---
+openapi: 3.0.0
+info:
+  title: Ecommerce API
+  description: API para aplicação ecommerce
+  version: 1.0.0
+servers:
+- url: https://virtserver.swaggerhub.com/GUILHERMETEIXEIRAAIS/Ecommerce-API/1.0.0
+  description: SwaggerHub API Auto Mocking
+- url: https://virtserver.swaggerhub.com/GUILHERMETEIXEIRAAIS/THERAPIST-API/1.0.0
+  description: SwaggerHub API Auto Mocking
+- url: /
+  description: Servidor de desenvolvimento
+tags:
+- name: Login e Cadastro
+  description: Cadastro e autenticação de usuários
+- name: Administração de Produtos
+  description: API de Administração Produtos
+- name: Mostruário
+  description: API de mostruário para o usuário final
+- name: Categorias
+  description: API de Categorias
+- name: Estoque
+  description: API de Estoque
+- name: Vendas
+  description: API de Vendas
+- name: Relatórios
+  description: API de Estoque
+paths:
+  /sign-up:
+    post:
+      tags:
+      - Login e Cadastro
+      summary: Cadastro de Usuário/Comprador
+      description: Cria uma nova conta de usuário/Comprador.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignupUser'
+        required: true
+      responses:
+        "200":
+          description: Usuário criado com sucesso.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthenticationResponse'
+  /sign-up/{confirmationToken}/confirm:
+    post:
+      tags:
+      - Login e Cadastro
+      summary: Confirma Email
+      description: Completa o processo de cadastro do usuário.
+      parameters:
+      - name: confirmationToken
+        in: path
+        description: Token de confirmação do email.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Cadastro finalizado com sucesso.
+        "401":
+          description: Token de Confirmação Expirado/Inválido.
+  /login:
+    post:
+      tags:
+      - Login e Cadastro
+      summary: Login de Usuário
+      description: Faz o login de um usuário existente.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Login'
+        required: true
+      responses:
+        "200":
+          description: Login realizado com sucesso.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthenticationResponse'
+  /user:
+    get:
+      tags:
+      - Login e Cadastro
+      - Login e Cadastro
+      summary: Obter Informações do Usuário Logado
+      description: Recupera informações sobre o usuário atualmente logado.
+      responses:
+        "200":
+          description: Informações do usuário recuperadas com sucesso.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+      security:
+      - JWTAuth: []
+  /admin/sign-up/invites:
+    get:
+      tags:
+      - Login e Cadastro
+      summary: Busca convites enviados.
+      description: Busca convites.
+      responses:
+        "200":
+          description: Convites criados
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AdminInvite'
+      security:
+      - JWTAuth: []
+    post:
+      tags:
+      - Login e Cadastro
+      summary: Enviar convite para Administrador (Esse convite expira)
+      description: Convida administrador.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdminSingupInvite'
+        required: true
+      responses:
+        "201":
+          description: Solicitação Concluida.
+      security:
+      - JWTAuth: []
+  /admin/sign-up/invites/{inviteToken}/finish:
+    post:
+      tags:
+      - Login e Cadastro
+      summary: Aceita convite e finaliza o cadastro do administrador
+      description: Convida administrador.
+      parameters:
+      - name: inviteToken
+        in: path
+        description: Token de Cadastro enviado por e-mail (Expira)
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FinishAdminSingup'
+        required: true
+      responses:
+        "200":
+          description: Solicitação Concluida.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthenticationResponse'
+        "401":
+          description: Convite de cadastro expirado ou inválido.
+  /admin/products:
+    get:
+      tags:
+      - Administração de Produtos
+      summary: Busca Produtos
+      parameters:
+      - name: name
+        in: query
+        description: Nome do Produto
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: categoryId
+        in: query
+        description: Categoria do Produto
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: subCategoryId
+        in: query
+        description: Categoria do Produto
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: Limite de Resultados (Padrão é 10)
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: page
+        in: query
+        description: Página atual (Padrão é 1)
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: number
+      responses:
+        "200":
+          description: Produtos Encontrados.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200'
+      security:
+      - JWTAuth: []
+    post:
+      tags:
+      - Administração de Produtos
+      summary: Cria Produto
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CreateProduct'
+        required: true
+      responses:
+        "200":
+          description: Produtos Criado.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200'
+      security:
+      - JWTAuth: []
+  /admin/products/{id}:
+    get:
+      tags:
+      - Administração de Produtos
+      summary: Busca Produto por Id
+      parameters:
+      - name: id
+        in: path
+        description: Id do Produto
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Produto Encontrado.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        "404":
+          description: Produto não encontrado.
+      security:
+      - JWTAuth: []
+    patch:
+      tags:
+      - Administração de Produtos
+      summary: Atualiza Produto
+      parameters:
+      - name: id
+        in: path
+        description: Id do Produto
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UpdateProduct'
+        required: true
+      responses:
+        "201":
+          description: Produto Atualizado.
+        "404":
+          description: Produto não encontrado.
+      security:
+      - JWTAuth: []
+  /admin/products/{productId}/stock:
+    get:
+      tags:
+      - Estoque
+      summary: Busca estoque do produto
+      parameters:
+      - name: productId
+        in: path
+        description: Id do Produto
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Estoque do produto encontrado.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductStock'
+        "404":
+          description: Produto não encontrado.
+      security:
+      - JWTAuth: []
+  /admin/products/{productId}/stock/movements:
+    get:
+      tags:
+      - Estoque
+      summary: Busca movimentações do estoque do produto
+      parameters:
+      - name: productId
+        in: path
+        description: Id do Produto
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: Limite de Resultados (Padrão é 10)
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: page
+        in: query
+        description: Página atual (Padrão é 1)
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: number
+      responses:
+        "200":
+          description: "Movimentações do estoque. Pode ser tanto movimentação manual quanto por vendas, as duas contém uma razão (reason) diferente."
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_1'
+        "404":
+          description: Produto não encontrado.
+      security:
+      - JWTAuth: []
+    post:
+      tags:
+      - Estoque
+      summary: Realiza movimentação no estoque
+      parameters:
+      - name: productId
+        in: path
+        description: Id do Produto
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddStockMovement'
+        required: true
+      responses:
+        "200":
+          description: Movimentação realizada.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StockMovementResult'
+      security:
+      - JWTAuth: []
+  /admin/stock:
+    get:
+      tags:
+      - Estoque
+      summary: Busca estoque geral dos produtos cadastrados
+      parameters:
+      - name: productId
+        in: query
+        description: Id do Produto
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: Limite de Resultados (Padrão é 10)
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: page
+        in: query
+        description: Página atual (Padrão é 1)
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: number
+      responses:
+        "200":
+          description: Estoques.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_2'
+        "404":
+          description: Produto não encontrado.
+      security:
+      - JWTAuth: []
+  /admin/categories:
+    get:
+      tags:
+      - Categorias
+      summary: Busca Categorias
+      parameters:
+      - name: name
+        in: query
+        description: Nome da Categoria
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: Limite de Resultados (Padrão é 10)
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: page
+        in: query
+        description: Página atual (Padrão é 1)
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: number
+      responses:
+        "200":
+          description: Produtos Encontrados.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_3'
+      security:
+      - JWTAuth: []
+    post:
+      tags:
+      - Categorias
+      summary: Cria Categoria
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCategory'
+        required: true
+      responses:
+        "200":
+          description: Categoria Criada.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+      security:
+      - JWTAuth: []
+  /admin/categories/{id}:
+    get:
+      tags:
+      - Categorias
+      summary: Busca Categoria por ID
+      parameters:
+      - name: id
+        in: path
+        description: Id da Categoria
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Produtos Encontrados.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_3'
+      security:
+      - JWTAuth: []
+    delete:
+      tags:
+      - Categorias
+      summary: Apaga Categoria
+      parameters:
+      - name: id
+        in: path
+        description: Id da Categoria
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "201":
+          description: Categoria atualizada com sucesso
+      security:
+      - JWTAuth: []
+    patch:
+      tags:
+      - Categorias
+      summary: Atualiza Categoria
+      parameters:
+      - name: id
+        in: path
+        description: Id da Categoria
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCategory'
+        required: true
+      responses:
+        "201":
+          description: Categoria atualizada com sucesso.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+      security:
+      - JWTAuth: []
+  /admin/categories/{id}/sub-category:
+    get:
+      tags:
+      - Categorias
+      summary: Busca Sub-Categorias
+      parameters:
+      - name: id
+        in: path
+        description: Id da Categoria Pai
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: SubCategorias Encontrados.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_4'
+      security:
+      - JWTAuth: []
+    post:
+      tags:
+      - Categorias
+      summary: Cria SubCategoria
+      parameters:
+      - name: id
+        in: path
+        description: Id da Categoria Pai
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCategory'
+        required: true
+      responses:
+        "200":
+          description: SubCategoria Criada.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubCategory'
+      security:
+      - JWTAuth: []
+  /admin/categories/{rootId}/sub-category/{id}:
+    get:
+      tags:
+      - Categorias
+      summary: Busca Sub-Categoria
+      parameters:
+      - name: rootId
+        in: path
+        description: Id da Categoria Pai
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: id
+        in: path
+        description: Id da SubCategoria
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: SubCategoria Encontrada.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubCategory'
+      security:
+      - JWTAuth: []
+    delete:
+      tags:
+      - Categorias
+      summary: Apaga Sub-Categoria
+      parameters:
+      - name: rootId
+        in: path
+        description: Id da Categoria Pai
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: id
+        in: path
+        description: Id da SubCategoria
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "201":
+          description: SubCategoria Apagada.
+      security:
+      - JWTAuth: []
+    patch:
+      tags:
+      - Categorias
+      summary: Atualiza Sub-Categoria
+      parameters:
+      - name: rootId
+        in: path
+        description: Id da Categoria Pai
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: id
+        in: path
+        description: Id da SubCategoria
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          applicaiton/json:
+            schema:
+              $ref: '#/components/schemas/CreateCategory'
+        required: true
+      responses:
+        "200":
+          description: SubCategoria Atualizada.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubCategory'
+      security:
+      - JWTAuth: []
+  /admin/sales:
+    get:
+      tags:
+      - Vendas
+      summary: Listar vendas
+      description: Retorna uma lista de todas as vendas.
+      parameters:
+      - name: productId
+        in: query
+        description: ID do produto vendido
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: customerId
+        in: query
+        description: ID do cliente que realizou a compra
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: categoryId
+        in: query
+        description: ID da categoria do produto vendido
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: subCategoryId
+        in: query
+        description: ID da subcategoria do produto vendido
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: startDate
+        in: query
+        description: Data de início do período de vendas
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          format: date-time
+      - name: endDate
+        in: query
+        description: Data de término do período de vendas
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          format: date-time
+      - name: limit
+        in: query
+        description: Limite de resultados por página (padrão é 10)
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+      - name: page
+        in: query
+        description: Número da página para exibição (padrão é 1)
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: Lista de vendas encontradas.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_5'
+      security:
+      - JWTAuth: []
+  /admin/reports/chat/conversations:
+    get:
+      tags:
+      - Relatórios
+      summary: Busca histórico de conversas com o chat gerador de relatórios
+      description: Retorna um histórico de conversas.
+      parameters:
+      - name: limit
+        in: query
+        description: Limite de resultados por página (padrão é 10)
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+      - name: page
+        in: query
+        description: Número da página para exibição (padrão é 1)
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: Histórico de conversas com o chat.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_6'
+      security:
+      - JWTAuth: []
+  /admin/reports/chat/send-message:
+    post:
+      tags:
+      - Relatórios
+      summary: Enviar mensagem para solicitar um relatório
+      description: Permite que o usuário envie uma mensagem para solicitar um relatório ao chatbot.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MessageRequest'
+        required: true
+      responses:
+        "200":
+          description: Mensagem enviada com sucesso.
+      security:
+      - JWTAuth: []
+  /showcase:
+    get:
+      tags:
+      - Mostruário
+      summary: Busca Produtos para o usuário final visualizar
+      parameters:
+      - name: name
+        in: query
+        description: Nome do Produto
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: categoryId
+        in: query
+        description: Categoria do Produto
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: subCategoryId
+        in: query
+        description: Categoria do Produto
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: Limite de Resultados (Padrão é 10)
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: page
+        in: query
+        description: Página atual (Padrão é 1)
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: number
+      responses:
+        "200":
+          description: Produtos Encontrados.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_7'
+      security:
+      - JWTAuth: []
+  /showcase/recomendations:
+    get:
+      tags:
+      - Mostruário
+      summary: Busca produtos recomendados para o usuário
+      parameters:
+      - name: limit
+        in: query
+        description: Limite de Resultados (Padrão é 10)
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: page
+        in: query
+        description: Página atual (Padrão é 1)
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: number
+      responses:
+        "200":
+          description: Produtos Encontrados.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_7'
+      security:
+      - JWTAuth: []
+    post:
+      tags:
+      - Administração de Produtos
+      summary: Cria Produto
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CreateProduct'
+        required: true
+      responses:
+        "200":
+          description: Produtos Criado.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200'
+      security:
+      - JWTAuth: []
+  /checkout:
+    post:
+      tags:
+      - Carrinho
+      summary: Processa o checkout de um carrinho de compras
+      description: |
+        Processa o checkout de um carrinho de compras.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CheckoutRequest'
+        required: true
+      responses:
+        "200":
+          description: Checkout realizado com sucesso.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CheckoutResponse'
+      security:
+      - JWTAuth: []
+  /orders:
+    get:
+      tags:
+      - Pedidos
+      summary: Busca os pedidos do cliente
+      description: Retorna uma lista dos pedidos realizados pelo cliente.
+      responses:
+        "200":
+          description: Lista de pedidos encontrados.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_8'
+      security:
+      - JWTAuth: []
+components:
+  schemas:
+    SignupUser:
+      required:
+      - cpf
+      - email
+      - name
+      - password
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+        name:
+          type: string
+        cpf:
+          type: string
+        phone:
+          type: string
+        address:
+          $ref: '#/components/schemas/Address'
+      description: Dados necessários para o cadastro do usuário.
+    AdminSingupInvite:
+      required:
+      - email
+      - name
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+        name:
+          type: string
+      description: Dados necessários convidar administrador.
+    AdminInvite:
+      type: object
+      properties:
+        id:
+          type: string
+        token:
+          type: string
+        email:
+          type: string
+          format: email
+        name:
+          type: string
+        createdAt:
+          type: integer
+        expiresAt:
+          type: integer
+        status:
+          type: string
+          enum:
+          - finished
+          - expired
+      description: Convite enviado a um administrador
+    FinishAdminSingup:
+      $ref: '#/components/schemas/SignupUser'
+    Address:
+      required:
+      - address
+      - cep
+      - city
+      - state
+      type: object
+      properties:
+        cep:
+          type: string
+        address:
+          type: string
+        number:
+          type: string
+        state:
+          type: string
+        city:
+          type: string
+      description: Endereço.
+    Login:
+      required:
+      - email
+      - password
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+      description: Dados necessários para o login do usuário.
+    AuthenticationResponse:
+      required:
+      - token
+      type: object
+      properties:
+        authToken:
+          type: string
+        user:
+          $ref: '#/components/schemas/User'
+      description: Token de Autenticação do usuário
+    MaritalStatus:
+      type: string
+      description: Estado civil do usuário
+      enum:
+      - single
+      - married
+      - divorced
+      - widower
+    Role:
+      type: string
+      description: Papel do Usuário
+      enum:
+      - admin
+      - master
+      - user
+    User:
+      required:
+      - city
+      - email
+      - job
+      - maritalStatus
+      - name
+      - password
+      - state
+      type: object
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        maritalStatus:
+          $ref: '#/components/schemas/MaritalStatus'
+        role:
+          $ref: '#/components/schemas/Role'
+        address:
+          $ref: '#/components/schemas/Address'
+      description: Informações sobre um usuário.
+    Product:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        price:
+          type: number
+        isShown:
+          type: boolean
+          description: Booleano que define se iremos exibir o produto no ecommerce ou não.
+        category:
+          $ref: '#/components/schemas/SubCategory'
+        image:
+          type: string
+      description: Produto
+    ProductShowcase:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        price:
+          type: number
+        category:
+          $ref: '#/components/schemas/SubCategory'
+        image:
+          type: string
+      description: Produto exibido ao cliente final
+    Category:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+      description: Categoria
+    CreateCategory:
+      type: object
+      properties:
+        name:
+          type: string
+      description: Cria Categoria
+    SubCategory:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        rootCategory:
+          $ref: '#/components/schemas/Category'
+      description: Categoria
+    CreateProduct:
+      required:
+      - name
+      - price
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        price:
+          type: number
+        image:
+          type: string
+          format: bytes
+        subCategoryId:
+          type: string
+        isShown:
+          type: boolean
+      description: Criação de Produto
+    UpdateProduct:
+      type: object
+      description: Atualização de Produto
+      allOf:
+      - $ref: '#/components/schemas/CreateProduct'
+    ProductStockList:
+      type: object
+      properties:
+        productId:
+          type: string
+        productName:
+          type: string
+        productImage:
+          type: string
+        stockQuantity:
+          type: number
+    ProductStock:
+      type: object
+      properties:
+        quantity:
+          type: number
+          description: Quantidade em estoque do produto
+      description: Estoque de um produto
+    ProductStockMovement:
+      type: object
+      properties:
+        movementType:
+          $ref: '#/components/schemas/StockMovementType'
+        quantity:
+          type: number
+        productId:
+          type: number
+        date:
+          type: string
+          format: date-time
+        reason:
+          $ref: '#/components/schemas/StockMovementReason'
+    AddStockMovement:
+      required:
+      - movementType
+      - quantity
+      - reason
+      type: object
+      properties:
+        movementType:
+          $ref: '#/components/schemas/StockMovementType'
+        quantity:
+          type: number
+        reason:
+          type: string
+          description: Motivo da movimentação
+    StockMovementResult:
+      type: object
+      properties:
+        movement:
+          $ref: '#/components/schemas/ProductStockMovement'
+        stockQuantity:
+          type: number
+    StockMovementType:
+      type: string
+      enum:
+      - addition
+      - removal
+    StockMovementReason:
+      type: object
+      properties:
+        reasonType:
+          $ref: '#/components/schemas/StockMovementReasonType'
+        reasonDetails:
+          oneOf:
+          - $ref: '#/components/schemas/SaleMovementReason'
+          - $ref: '#/components/schemas/ManualMovementReason'
+    StockMovementReasonType:
+      type: string
+      enum:
+      - sale
+      - manual
+    SaleMovementReason:
+      type: object
+      properties:
+        saleId:
+          type: string
+    ManualMovementReason:
+      type: object
+      properties:
+        userId:
+          type: string
+        description:
+          type: string
+    Sale:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID da venda
+        items:
+          type: array
+          description: Lista de itens vendidos
+          items:
+            $ref: '#/components/schemas/SaleItem'
+        paymentMethod:
+          $ref: '#/components/schemas/PaymentMethod'
+        paymentDetails:
+          description: Detalhes específicos do método de pagamento
+          oneOf:
+          - $ref: '#/components/schemas/PixPaymentDetails'
+          - $ref: '#/components/schemas/CardPaymentDetails'
+          - $ref: '#/components/schemas/BoletoPaymentDetails'
+        deliveryAddress:
+          $ref: '#/components/schemas/Address'
+        totalAmount:
+          type: number
+          description: Valor total da venda
+          format: float
+        date:
+          type: string
+          description: Data e hora da venda
+          format: date-time
+    PaymentMethod:
+      type: string
+      description: Método de pagamento utilizado na venda
+      enum:
+      - pix
+      - card
+      - boleto
+    SaleItem:
+      type: object
+      properties:
+        productId:
+          type: string
+          description: ID do produto vendido
+        productName:
+          type: string
+          description: Nome do produto
+        productImage:
+          type: string
+          description: Imagem do Produto
+        quantity:
+          type: integer
+          description: Quantidade de itens vendidos
+        unitPrice:
+          type: number
+          description: Preço unitário do produto
+          format: float
+    PixPaymentDetails:
+      type: object
+      properties:
+        customerKey:
+          type: string
+          description: Chave Pix gerada para o cliente pagar
+    CardPaymentDetails:
+      type: object
+      properties:
+        cardNumber:
+          type: string
+          description: Número do cartão de crédito ou débito
+        expirationDate:
+          type: string
+          description: Data de validade do cartão
+          format: date-time
+        cvv:
+          type: string
+          description: Código de segurança do cartão
+    BoletoPaymentDetails:
+      type: object
+      properties:
+        boletoNumber:
+          type: string
+          description: Número do boleto bancário
+        expirationDate:
+          type: string
+          description: Data de vencimento do boleto
+          format: date-time
+    Message:
+      type: object
+      properties:
+        sender:
+          type: string
+          description: "O remetente da mensagem (por exemplo, \"Usuário\" ou \"Chat\")."
+          enum:
+          - user
+          - chat
+        content:
+          type: string
+          description: O conteúdo da mensagem.
+        replyingMessageId:
+          type: string
+          description: "O chat sempre irá responder uma solicitação do usuário, logo, aqui vai conter o id da mensagem que o chat respondeu."
+        readed:
+          type: boolean
+          description: Indica se a mensagem já foi lida (serve só para o usuário)
+        attachment:
+          $ref: '#/components/schemas/Message_attachment'
+    MessageRequest:
+      type: object
+      properties:
+        message:
+          type: string
+          description: O conteúdo da mensagem enviada pelo usuário.
+    CheckoutRequest:
+      required:
+      - cartItems
+      - deliveryAddress
+      - paymentMethod
+      type: object
+      properties:
+        cartItems:
+          type: array
+          description: Lista de itens no carrinho de compras.
+          items:
+            $ref: '#/components/schemas/CartItem'
+        paymentMethod:
+          $ref: '#/components/schemas/PaymentMethod'
+        paymentDetails:
+          description: Detalhes específicos do método de pagamento
+          oneOf:
+          - $ref: '#/components/schemas/PixPaymentDetails'
+          - $ref: '#/components/schemas/CardPaymentDetails'
+          - $ref: '#/components/schemas/BoletoPaymentDetails'
+        deliveryAddress:
+          $ref: '#/components/schemas/Address'
+      description: Requisição de checkout de carrinho de compras.
+    CartItem:
+      required:
+      - productId
+      - quantity
+      type: object
+      properties:
+        productId:
+          type: string
+          description: ID do produto.
+        quantity:
+          type: integer
+          description: Quantidade do produto no carrinho.
+      description: Item no carrinho de compras.
+    CheckoutResponse:
+      type: object
+      properties:
+        orderId:
+          type: string
+          description: Identificador único da ordem de compra gerada.
+        totalAmount:
+          type: number
+          description: Valor total da compra realizada.
+        paymentMethod:
+          $ref: '#/components/schemas/PaymentMethod'
+        paymentDetails:
+          description: Detalhes específicos do método de pagamento
+          oneOf:
+          - $ref: '#/components/schemas/PixPaymentDetails'
+          - $ref: '#/components/schemas/CardPaymentDetails'
+          - $ref: '#/components/schemas/BoletoPaymentDetails'
+      description: Resposta do checkout de carrinho de compras.
+    Order:
+      type: object
+      properties:
+        orderId:
+          type: string
+          description: ID do pedido.
+        items:
+          type: array
+          description: Lista de itens do pedido.
+          items:
+            $ref: '#/components/schemas/OrderItem'
+        paymentMethod:
+          $ref: '#/components/schemas/PaymentMethod'
+        paymentDetails:
+          description: Detalhes específicos do método de pagamento
+          oneOf:
+          - $ref: '#/components/schemas/PixPaymentDetails'
+          - $ref: '#/components/schemas/CardPaymentDetails'
+          - $ref: '#/components/schemas/BoletoPaymentDetails'
+        deliveryAddress:
+          $ref: '#/components/schemas/Address'
+        totalAmount:
+          type: number
+          description: Valor total do pedido.
+          format: float
+        status:
+          type: string
+          description: Status atual do pedido.
+          enum:
+          - completed
+        date:
+          type: string
+          description: Data e hora em que o pedido foi feito.
+          format: date-time
+      description: Pedido do cliente.
+    OrderItem:
+      type: object
+      properties:
+        productId:
+          type: string
+          description: ID do produto.
+        productName:
+          type: string
+          description: Nome do produto.
+        quantity:
+          type: integer
+          description: Quantidade do produto no pedido.
+        unitPrice:
+          type: number
+          description: Preço unitário do produto.
+          format: float
+        totalAmount:
+          type: number
+          description: Valor total do item.
+          format: float
+      description: Item de pedido.
+    PaginatedResponse:
+      type: object
+      properties:
+        total:
+          type: number
+        pages:
+          type: number
+        currentPage:
+          type: number
+    inline_response_200:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Product'
+      allOf:
+      - $ref: '#/components/schemas/PaginatedResponse'
+    inline_response_200_1:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductStockMovement'
+      allOf:
+      - $ref: '#/components/schemas/PaginatedResponse'
+    inline_response_200_2:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductStockList'
+      allOf:
+      - $ref: '#/components/schemas/PaginatedResponse'
+    inline_response_200_3:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Category'
+      allOf:
+      - $ref: '#/components/schemas/PaginatedResponse'
+    inline_response_200_4:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubCategory'
+      allOf:
+      - $ref: '#/components/schemas/PaginatedResponse'
+    inline_response_200_5:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Sale'
+      allOf:
+      - $ref: '#/components/schemas/PaginatedResponse'
+    inline_response_200_6:
+      type: object
+      properties:
+        unreadMessagesCount:
+          type: integer
+        isBusy:
+          type: boolean
+          description: "Indica se o chat está ocupado gerando algum relatório, enquanto estiver ocupado, o chat irá rejeitar as mensagens."
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/Message'
+      allOf:
+      - $ref: '#/components/schemas/PaginatedResponse'
+    inline_response_200_7:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductShowcase'
+      allOf:
+      - $ref: '#/components/schemas/PaginatedResponse'
+    inline_response_200_8:
+      type: object
+      properties:
+        orders:
+          type: array
+          items:
+            $ref: '#/components/schemas/Order'
+      allOf:
+      - $ref: '#/components/schemas/PaginatedResponse'
+    Message_attachment:
+      type: object
+      properties:
+        type:
+          type: string
+          description: "O tipo de anexo (por exemplo, \"PDF\")."
+          enum:
+          - pdf
+        title:
+          type: string
+          description: O título do anexo.
+        size:
+          type: string
+          description: O tamanho do anexo.
+        downloadLink:
+          type: string
+          description: O link para baixar o anexo.
+          format: uri
+      description: "Informações sobre qualquer anexo na mensagem, como um relatório em PDF."
+  securitySchemes:
+    JWTAuth:
+      type: http
+      description: Token JWT necessário para autenticar o usuário.
+      scheme: bearer
