@@ -1029,6 +1029,7 @@ components:
           enum:
           - finished
           - expired
+          - pending
       description: Convite enviado a um administrador
     FinishAdminSingup:
       $ref: '#/components/schemas/SignupUser'
