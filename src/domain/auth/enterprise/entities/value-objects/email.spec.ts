@@ -37,7 +37,7 @@ describe('Email', () => {
     comparedEmail: string;
     isEqual: boolean;
   }[])(
-    'should return $isEqual when $email is equal to $comparedEmail',
+    'should return $isEqual when comparing $email with $comparedEmail',
     ({ email, comparedEmail, isEqual }) => {
       const emailInstance = Email.create(email);
       const comparedEmailInstance = Email.create(comparedEmail);
