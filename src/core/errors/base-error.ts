@@ -19,7 +19,9 @@ export class BaseError extends Error {
     super(message);
     this.name = this.constructor.name;
     this.code = code;
-    this.details = details;
+    this.details = details ?? '';
     this.timestamp = new Date();
+
+    Error.captureStackTrace(this, this.constructor);
   }
 }
