@@ -10,4 +10,9 @@ export abstract class UserEvents implements Event<UserEventsMap> {
     event: K,
     data: UserEventsMap[K],
   ): Promise<void>;
+
+  abstract subscribe<K extends keyof UserEventsMap>(
+    event: K,
+    callback: (data: UserEventsMap[K]) => void,
+  ): void;
 }
