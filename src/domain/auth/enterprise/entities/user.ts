@@ -1,20 +1,19 @@
 import { Entity } from '@/core/entities/entity';
+import { UniqueEntityID } from '@/core/entities/unique-entity-id';
 import { Role } from './enums/role';
 import { Address } from './value-objects/address';
 import { CPF } from './value-objects/cpf';
 import { Email } from './value-objects/email';
-import { Password } from './value-objects/password';
-import { UniqueEntityID } from '@/core/entities/unique-entity-id';
 
 export type UserProps = {
   email: Email;
-  password: Password;
+  password: string;
   cpf: CPF;
   address: Address;
   name: string;
   phone: string;
   role: Role;
-  isConfirmed: boolean;
+  isConfirmed?: boolean;
 };
 
 export class User extends Entity<UserProps> {

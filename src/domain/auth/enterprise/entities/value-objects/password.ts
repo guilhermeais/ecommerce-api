@@ -1,8 +1,10 @@
 import { ValueObject } from '@/core/entities/value-object';
 import { InvalidPasswordError } from './errors/invalid-password-error';
-
-export class Password extends ValueObject<{ value: string }> {
-  private constructor(props: { value: string }) {
+export type PasswordProps = {
+  value: string;
+};
+export class Password extends ValueObject<PasswordProps> {
+  private constructor(props: PasswordProps) {
     super(props);
   }
 
