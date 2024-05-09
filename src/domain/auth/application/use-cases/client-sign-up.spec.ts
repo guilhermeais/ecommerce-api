@@ -2,7 +2,7 @@ import { Logger } from '@/shared/logger';
 import { FakeEncrypter } from 'test/auth/application/gateways/cryptography/fake-encrypter';
 import { FakeHasher } from 'test/auth/application/gateways/cryptography/fake-hasher';
 import { FakeUserEvents } from 'test/auth/application/gateways/events/fake-user-events';
-import { InMemoryUserRepository } from 'test/auth/application/gateways/repositories/user-repository.mock';
+import { InMemoryUserRepository } from '@/infra/database/in-memory/repositories/in-memory-user-repository';
 import { makeFakeLogger } from 'test/shared/logger.mock';
 import { ClientSignUp, ClientSignUpRequest } from './client-sign-up';
 import { makeUser } from 'test/auth/enterprise/entities/make-user';
