@@ -16,4 +16,8 @@ export abstract class ValueObject<Props> {
 
     return JSON.stringify(vo.props) === JSON.stringify(this.props);
   }
+
+  public toObject(): Props {
+    return structuredClone(this.props);
+  }
 }
