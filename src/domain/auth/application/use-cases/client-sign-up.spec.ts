@@ -4,7 +4,7 @@ import { FakeHasher } from 'test/auth/application/gateways/cryptography/fake-has
 import { FakeUserEvents } from 'test/auth/application/gateways/events/fake-user-events';
 import { InMemoryUserRepository } from '@/infra/database/in-memory/repositories/in-memory-user-repository';
 import { makeFakeLogger } from 'test/shared/logger.mock';
-import { ClientSignUp, ClientSignUpRequest } from './client-sign-up';
+import { ClientSignUpUseCase, ClientSignUpRequest } from './client-sign-up';
 import { makeUser } from 'test/auth/enterprise/entities/make-user';
 import { faker } from '@faker-js/faker';
 import { Email } from '../../enterprise/entities/value-objects/email';
@@ -21,7 +21,7 @@ describe('ClientSignUp usecase', () => {
   let encrypter: FakeEncrypter;
   let userEvents: FakeUserEvents;
   let logger: Logger;
-  let sut: ClientSignUp;
+  let sut: ClientSignUpUseCase;
 
   beforeEach(() => {
     userRepository = new InMemoryUserRepository();
@@ -30,7 +30,7 @@ describe('ClientSignUp usecase', () => {
     userEvents = new FakeUserEvents();
     logger = makeFakeLogger();
 
-    sut = new ClientSignUp(
+    sut = new ClientSignUpUseCase(
       userRepository,
       hasher,
       encrypter,

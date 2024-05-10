@@ -13,7 +13,9 @@ export type GetUserRequest = {
 export type GetUserResponse = User;
 
 @Injectable()
-export class GetUser implements UseCase<GetUserRequest, GetUserResponse> {
+export class GetUserUseCase
+  implements UseCase<GetUserRequest, GetUserResponse>
+{
   constructor(
     private readonly userRepository: UserRepository,
     private readonly logger: Logger,
@@ -21,7 +23,7 @@ export class GetUser implements UseCase<GetUserRequest, GetUserResponse> {
 
   async execute(request: GetUserRequest): Promise<GetUserResponse> {
     this.logger.log(
-      GetUser.name,
+      GetUserUseCase.name,
       `Buscando usuário com ${JSON.stringify(request, null, 2)}`,
     );
 
@@ -31,7 +33,7 @@ export class GetUser implements UseCase<GetUserRequest, GetUserResponse> {
 
     if (!user) {
       this.logger.warn(
-        GetUser.name,
+        GetUserUseCase.name,
         `Usuário com parametros ${JSON.stringify(request, null, 2)} não encontrado`,
       );
       throw new EntityNotFoundError('Usuário', request.userId);

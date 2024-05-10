@@ -1,17 +1,17 @@
+import { Logger } from '@/shared/logger';
 import { Injectable } from '@nestjs/common';
 import { UseCase } from 'src/core/types/use-case';
+import { Role } from '../../enterprise/entities/enums/role';
+import { User } from '../../enterprise/entities/user';
+import { Address } from '../../enterprise/entities/value-objects/address';
+import { CPF } from '../../enterprise/entities/value-objects/cpf';
 import { Email } from '../../enterprise/entities/value-objects/email';
 import { Password } from '../../enterprise/entities/value-objects/password';
-import { UserRepository } from '../gateways/repositories/user-repository';
-import { CPF } from '../../enterprise/entities/value-objects/cpf';
-import { Address } from '../../enterprise/entities/value-objects/address';
-import { EmailAlreadyInUseError } from './errors/email-already-in-use-error';
-import { Logger } from '@/shared/logger';
-import { User } from '../../enterprise/entities/user';
-import { Role } from '../../enterprise/entities/enums/role';
-import { Hasher } from '../gateways/cryptography/hasher';
 import { Encrypter } from '../gateways/cryptography/encrypter';
+import { Hasher } from '../gateways/cryptography/hasher';
 import { UserEvents } from '../gateways/events/user-events';
+import { UserRepository } from '../gateways/repositories/user-repository';
+import { EmailAlreadyInUseError } from './errors/email-already-in-use-error';
 
 export type ClientSignUpRequest = {
   email: string;
@@ -33,7 +33,7 @@ export type ClientSignUpResponse = {
 };
 
 @Injectable()
-export class ClientSignUp
+export class ClientSignUpUseCase
   implements UseCase<ClientSignUpRequest, ClientSignUpResponse>
 {
   constructor(
@@ -46,7 +46,7 @@ export class ClientSignUp
 
   async execute(request: ClientSignUpRequest): Promise<ClientSignUpResponse> {
     this.logger.log(
-      ClientSignUp.name,
+      ClientSignUpUseCase.name,
       `Iniciando cadastro do cliente ${request.name} com o email ${request.email}: ${JSON.stringify(
         request,
         undefined,
@@ -59,7 +59,7 @@ export class ClientSignUp
 
     if (userWithSameEmail) {
       this.logger.log(
-        ClientSignUp.name,
+        ClientSignUpUseCase.name,
         `O email ${request.email} já está em uso por outro usuário.`,
       );
       throw new EmailAlreadyInUseError(request.email);
@@ -90,7 +90,7 @@ export class ClientSignUp
     });
 
     this.logger.log(
-      ClientSignUp.name,
+      ClientSignUpUseCase.name,
       `Cliente ${request.name} - ${user.id} cadastrado com sucesso!`,
     );
 

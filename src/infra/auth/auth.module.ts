@@ -6,9 +6,12 @@ import { EnvModule } from '../env/env.module';
 import { EnvService } from '../env/env.service';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { JwtStrategy } from './jwt.strategy';
+import { DatabaseModule } from '../database/database.module';
+import { GetUserUseCase } from '@/domain/auth/application/use-cases/get-user';
 
 @Module({
   imports: [
+    DatabaseModule,
     PassportModule,
     JwtModule.registerAsync({
       imports: [EnvModule],
@@ -27,6 +30,7 @@ import { JwtStrategy } from './jwt.strategy';
     }),
   ],
   providers: [
+    GetUserUseCase,
     JwtStrategy,
     EnvService,
     {
