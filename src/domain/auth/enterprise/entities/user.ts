@@ -6,6 +6,7 @@ import { CPF } from './value-objects/cpf';
 import { Email } from './value-objects/email';
 
 export type UserProps = {
+  id?: UniqueEntityID;
   email: Email;
   password: string;
   cpf: CPF;
