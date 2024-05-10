@@ -86,7 +86,7 @@ export class ClientSignUp
     await this.userEvents.publish('user.created', user);
 
     const authToken = await this.encrypter.encrypt({
-      id: user.id.toString(),
+      sub: user.id.toString(),
     });
 
     this.logger.log(
