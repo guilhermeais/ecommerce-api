@@ -9,7 +9,7 @@ import { Email } from '../../enterprise/entities/value-objects/email';
 import { Password } from '../../enterprise/entities/value-objects/password';
 import { Encrypter } from '../gateways/cryptography/encrypter';
 import { Hasher } from '../gateways/cryptography/hasher';
-import { UserEvents } from '../gateways/events/user-events';
+import { UserEvents, UserEventsEnum } from '../gateways/events/user-events';
 import { UserRepository } from '../gateways/repositories/user-repository';
 import { EmailAlreadyInUseError } from './errors/email-already-in-use-error';
 
@@ -83,7 +83,7 @@ export class ClientSignUpUseCase
 
     await this.userRepository.save(user);
 
-    await this.userEvents.publish('user.created', user);
+    await this.userEvents.publish(UserEventsEnum.USER_CREATED, user);
 
     const authToken = await this.encrypter.encrypt({
       sub: user.id.toString(),
