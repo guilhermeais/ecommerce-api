@@ -3,6 +3,7 @@ import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { z } from 'zod';
 import { EnvService } from '../env/env.service';
+import { GetUser } from '@/domain/auth/application/use-cases/get-user';
 
 const tokenPayloadSchema = z.object({
   sub: z.string().uuid(),
@@ -12,7 +13,10 @@ export type UserPayload = z.infer<typeof tokenPayloadSchema>;
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-  constructor(config: EnvService) {
+  constructor(
+    config: EnvService,
+    private readonly getUser: GetUser,
+  ) {
     const publicKey = config.get('JWT_PUBLIC_KEY');
 
     super({
@@ -23,6 +27,8 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: UserPayload) {
-    return tokenPayloadSchema.parse(payload);
+    const { sub } = tokenPayloadSchema.parse(payload);
+
+    return this.getUser.execute({ userId: sub });
   }
 }
