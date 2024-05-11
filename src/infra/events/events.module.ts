@@ -4,7 +4,7 @@ import { GenerateConfirmationTokenUseCase } from '@/domain/auth/application/use-
 import { Module } from '@nestjs/common';
 import { CryptographyModule } from '../cryptography/cryptography.module';
 import { DatabaseModule } from '../database/database.module';
-import { EventEmitterEventManager } from './event-emitter-user-events';
+import { EventEmitterEventManager } from './event-emitter-event-manager';
 
 @Module({
   imports: [DatabaseModule, CryptographyModule],
