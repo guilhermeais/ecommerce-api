@@ -18,8 +18,8 @@
 ```
 
 ## Requisitos
-- 🟩 Cadastrar Usuário/Comprador
-- 🟩 Um usuário/comprador deve conseguir se cadastrar no ecommerce
+- ❎ Cadastrar Usuário/Comprador
+- ❎ Um usuário/comprador deve conseguir se cadastrar no ecommerce
     - ❎ Teremos uma conta por email, caso tente cadastrar um e-mail repetido, obteremos erro.
     - ❎ O email deve ser válido.
     - ❎ A senha deve ser hasheada ao salvar na base de dados.
