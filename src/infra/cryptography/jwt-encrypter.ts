@@ -1,12 +1,25 @@
 import { Encrypter } from '@/domain/auth/application/gateways/cryptography/encrypter';
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { EnvService } from '../env/env.service';
 
 @Injectable()
 export class JwtEncrypter implements Encrypter {
-  constructor(private jwtService: JwtService) {}
+  constructor(
+    private jwtService: JwtService,
+    private readonly env: EnvService,
+  ) {}
 
-  encrypt(payload: Record<string, unknown>): Promise<string> {
-    return this.jwtService.signAsync(payload);
+  async encrypt(payload: Record<string, unknown>): Promise<string> {
+    return await this.jwtService.signAsync(payload);
+  }
+
+  async decode(token: string): Promise<Record<string, unknown>> {
+    const publicKey = this.env.get('JWT_PUBLIC_KEY');
+
+    return await this.jwtService.verifyAsync(token, {
+      algorithms: ['RS256'],
+      publicKey: Buffer.from(publicKey, 'base64'),
+    });
   }
 }
