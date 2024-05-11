@@ -11,7 +11,13 @@ export class InMemoryUserRepository implements UserRepository {
   }
 
   async save(user: User): Promise<void> {
-    this.users.push(user);
+    const index = this.users.findIndex((u) => u.id.equals(user.id));
+
+    if (index === -1) {
+      this.users.push(user);
+    } else {
+      this.users[index] = user;
+    }
   }
 
   async findById(id: UniqueEntityID): Promise<User | null> {

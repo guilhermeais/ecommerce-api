@@ -19,10 +19,13 @@ export type UserProps = {
 
 export class User extends Entity<UserProps> {
   static create(props: UserProps) {
-    return new User({
-      ...props,
-      isConfirmed: !!props.isConfirmed,
-    });
+    return new User(
+      {
+        ...props,
+        isConfirmed: !!props.isConfirmed,
+      },
+      props.id,
+    );
   }
 
   static restore = (props: UserProps, id: UniqueEntityID) => {
