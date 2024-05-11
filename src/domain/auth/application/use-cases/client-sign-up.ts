@@ -1,3 +1,4 @@
+import { EventManager, Events } from '@/core/types/events';
 import { Logger } from '@/shared/logger';
 import { Injectable } from '@nestjs/common';
 import { UseCase } from 'src/core/types/use-case';
@@ -9,7 +10,6 @@ import { Email } from '../../enterprise/entities/value-objects/email';
 import { Password } from '../../enterprise/entities/value-objects/password';
 import { Encrypter } from '../gateways/cryptography/encrypter';
 import { Hasher } from '../gateways/cryptography/hasher';
-import { UserEvents, UserEventsEnum } from '../gateways/events/user-events';
 import { UserRepository } from '../gateways/repositories/user-repository';
 import { EmailAlreadyInUseError } from './errors/email-already-in-use-error';
 
@@ -41,7 +41,7 @@ export class ClientSignUpUseCase
     private readonly userRepository: UserRepository,
     private readonly hasher: Hasher,
     private readonly encrypter: Encrypter,
-    private readonly userEvents: UserEvents,
+    private readonly eventManager: EventManager,
     private readonly logger: Logger,
   ) {}
 
@@ -84,7 +84,7 @@ export class ClientSignUpUseCase
 
     await this.userRepository.save(user);
 
-    await this.userEvents.publish(UserEventsEnum.USER_CREATED, user);
+    await this.eventManager.publish(Events.USER_CREATED, user);
 
     const authToken = await this.encrypter.encrypt({
       sub: user.id.toString(),

@@ -18,8 +18,14 @@ export class JwtEncrypter implements Encrypter {
     options?: EncryptOptions,
   ): Promise<string> {
     return await this.jwtService.signAsync(payload, {
-      expiresIn: options?.expiresIn,
+      ...(options?.expiresIn && {
+        expiresIn: this.msToSeconds(options.expiresIn),
+      }),
     });
+  }
+
+  private msToSeconds(ms: number): number {
+    return Math.floor(ms / 1000);
   }
 
   async decode(token: string): Promise<Record<string, unknown>> {

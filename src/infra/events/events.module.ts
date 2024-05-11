@@ -1,15 +1,21 @@
-import { UserEvents } from '@/domain/auth/application/gateways/events/user-events';
-import { Global, Module } from '@nestjs/common';
-import { EventEmitterUserEvents } from './event-emitter-user-events';
+import { EventManager } from '@/core/types/events';
+import { OnUserCreated } from '@/domain/auth/application/subscribers/on-user-created';
+import { GenerateConfirmationTokenUseCase } from '@/domain/auth/application/use-cases/generate-confirmation-token';
+import { Module } from '@nestjs/common';
+import { CryptographyModule } from '../cryptography/cryptography.module';
+import { DatabaseModule } from '../database/database.module';
+import { EventEmitterEventManager } from './event-emitter-user-events';
 
-@Global()
 @Module({
+  imports: [DatabaseModule, CryptographyModule],
   providers: [
     {
-      provide: UserEvents,
-      useClass: EventEmitterUserEvents,
+      provide: EventManager,
+      useClass: EventEmitterEventManager,
     },
+    GenerateConfirmationTokenUseCase,
+    OnUserCreated,
   ],
-  exports: [UserEvents],
+  exports: [EventManager],
 })
 export class EventsModule {}

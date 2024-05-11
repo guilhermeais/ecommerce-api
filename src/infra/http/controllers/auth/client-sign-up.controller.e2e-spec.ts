@@ -1,27 +1,24 @@
 import { UserRepository } from '@/domain/auth/application/gateways/repositories/user-repository';
 import { DefaultExceptionFilter } from '@/infra/http/filters/default-exception-filter.filter';
 
+import { EventManager, Events } from '@/core/types/events';
+import { Role } from '@/domain/auth/enterprise/entities/enums/role';
+import { User } from '@/domain/auth/enterprise/entities/user';
+import { Email } from '@/domain/auth/enterprise/entities/value-objects/email';
+import { InvalidCPFError } from '@/domain/auth/enterprise/entities/value-objects/errors/invalid-cpf-error';
+import { InvalidEmailFormatError } from '@/domain/auth/enterprise/entities/value-objects/errors/invalid-email-format-error';
+import { InvalidPasswordError } from '@/domain/auth/enterprise/entities/value-objects/errors/invalid-password-error';
 import { DatabaseModule } from '@/infra/database/database.module';
 import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
 import { makeSignUpBody } from 'test/infra/http/controllers/auth/sign-up-body.mock';
 import { makeTestingApp } from 'test/make-app';
 import { SignUpBody } from './client-sign-up.controller';
-import { InvalidEmailFormatError } from '@/domain/auth/enterprise/entities/value-objects/errors/invalid-email-format-error';
-import { InvalidPasswordError } from '@/domain/auth/enterprise/entities/value-objects/errors/invalid-password-error';
-import { InvalidCPFError } from '@/domain/auth/enterprise/entities/value-objects/errors/invalid-cpf-error';
-import {
-  UserEvents,
-  UserEventsEnum,
-} from '@/domain/auth/application/gateways/events/user-events';
-import { Email } from '@/domain/auth/enterprise/entities/value-objects/email';
-import { Role } from '@/domain/auth/enterprise/entities/enums/role';
-import { User } from '@/domain/auth/enterprise/entities/user';
 
 describe('ClientSignUp (E2E)', () => {
   let app: INestApplication;
   let userRepository: UserRepository;
-  let userEvents: UserEvents;
+  let eventManager: EventManager;
 
   beforeAll(async () => {
     const moduleRef = await makeTestingApp({
@@ -34,8 +31,8 @@ describe('ClientSignUp (E2E)', () => {
 
     userRepository = moduleRef.get(UserRepository);
 
-    userEvents = moduleRef.get(UserEvents);
-    userEvents.clearSubscriptions();
+    eventManager = moduleRef.get(EventManager);
+    eventManager.clearSubscriptions();
     await app.init();
   });
 
@@ -48,7 +45,7 @@ describe('ClientSignUp (E2E)', () => {
       const body = makeSignUpBody();
 
       const userCreatedEventPromise = new Promise<User>((resolve) => {
-        userEvents.subscribe(UserEventsEnum.USER_CREATED, resolve);
+        eventManager.subscribe(Events.USER_CREATED, resolve);
       });
 
       const response = await request(app.getHttpServer())

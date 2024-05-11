@@ -1,29 +1,24 @@
+import { EventManager, Events } from '@/core/types/events';
 import { Logger } from '@/shared/logger';
 import { Injectable } from '@nestjs/common';
 import { User } from '../../enterprise/entities/user';
-import {
-  ConfirmationTokenEvents,
-  ConfirmationTokenEventsEnum,
-} from '../gateways/events/confirmation-token-events';
-import { UserEvents, UserEventsEnum } from '../gateways/events/user-events';
 import { GenerateConfirmationTokenUseCase } from '../use-cases/generate-confirmation-token';
 
 @Injectable()
 export class OnUserCreated {
   constructor(
-    private readonly userEvents: UserEvents,
+    private readonly events: EventManager,
     private readonly logger: Logger,
     private readonly generateConfirmationToken: GenerateConfirmationTokenUseCase,
-    private readonly confirmationTokenEvents: ConfirmationTokenEvents,
   ) {
     this.logger.log(OnUserCreated.name, 'subscribing to user created event');
-    this.userEvents.subscribe(UserEventsEnum.USER_CREATED, (...args) =>
+    this.events.subscribe(Events.USER_CREATED, (...args) =>
       this.handle(...args),
     );
 
     this.logger.log(
       OnUserCreated.name,
-      `Subscribed to ${UserEventsEnum.USER_CREATED} event.`,
+      `Subscribed to ${Events.USER_CREATED} event.`,
     );
   }
 
@@ -43,8 +38,8 @@ export class OnUserCreated {
         `Confirmation token ${confirmationToken.id.toString()} generated for user [${user.id.toString()}] ${user.email.value}`,
       );
 
-      await this.confirmationTokenEvents.publish(
-        ConfirmationTokenEventsEnum.CONFIRMATION_TOKEN_CREATED,
+      await this.events.publish(
+        Events.CONFIRMATION_TOKEN_CREATED,
         confirmationToken,
       );
 

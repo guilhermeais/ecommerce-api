@@ -1,25 +1,26 @@
+import { Events } from '@/core/types/events';
+import { InMemoryUserRepository } from '@/infra/database/in-memory/repositories/in-memory-user-repository';
 import { Logger } from '@/shared/logger';
+import { faker } from '@faker-js/faker';
+import { cpf } from 'cpf-cnpj-validator';
 import { FakeEncrypter } from 'test/auth/application/gateways/cryptography/fake-encrypter';
 import { FakeHasher } from 'test/auth/application/gateways/cryptography/fake-hasher';
-import { FakeUserEvents } from 'test/auth/application/gateways/events/fake-user-events';
-import { InMemoryUserRepository } from '@/infra/database/in-memory/repositories/in-memory-user-repository';
-import { makeFakeLogger } from 'test/shared/logger.mock';
-import { ClientSignUpUseCase, ClientSignUpRequest } from './client-sign-up';
 import { makeUser } from 'test/auth/enterprise/entities/make-user';
-import { faker } from '@faker-js/faker';
+import { FakeEventManager } from 'test/core/type/event/fake-event-manager';
+import { makeFakeLogger } from 'test/shared/logger.mock';
+import { Role } from '../../enterprise/entities/enums/role';
 import { Email } from '../../enterprise/entities/value-objects/email';
-import { cpf } from 'cpf-cnpj-validator';
-import { EmailAlreadyInUseError } from './errors/email-already-in-use-error';
+import { InvalidCPFError } from '../../enterprise/entities/value-objects/errors/invalid-cpf-error';
 import { InvalidEmailFormatError } from '../../enterprise/entities/value-objects/errors/invalid-email-format-error';
 import { InvalidPasswordError } from '../../enterprise/entities/value-objects/errors/invalid-password-error';
-import { InvalidCPFError } from '../../enterprise/entities/value-objects/errors/invalid-cpf-error';
-import { Role } from '../../enterprise/entities/enums/role';
+import { ClientSignUpRequest, ClientSignUpUseCase } from './client-sign-up';
+import { EmailAlreadyInUseError } from './errors/email-already-in-use-error';
 
 describe('ClientSignUp usecase', () => {
   let userRepository: InMemoryUserRepository;
   let hasher: FakeHasher;
   let encrypter: FakeEncrypter;
-  let userEvents: FakeUserEvents;
+  let eventManager: FakeEventManager;
   let logger: Logger;
   let sut: ClientSignUpUseCase;
 
@@ -27,14 +28,14 @@ describe('ClientSignUp usecase', () => {
     userRepository = new InMemoryUserRepository();
     hasher = new FakeHasher();
     encrypter = new FakeEncrypter();
-    userEvents = new FakeUserEvents();
+    eventManager = new FakeEventManager();
     logger = makeFakeLogger();
 
     sut = new ClientSignUpUseCase(
       userRepository,
       hasher,
       encrypter,
-      userEvents,
+      eventManager,
       logger,
     );
   });
@@ -109,7 +110,7 @@ describe('ClientSignUp usecase', () => {
     expect(user!.email.value).toBe(request.email);
     expect(user!.cpf.value).toBe(request.cpf);
     expect(user!.phone).toBe(request.phone);
-    expect(user!.address.toObject()).toEqual(request.address);
+    expect(user!.address?.toObject()).toEqual(request.address);
     expect(user!.role).toBe(Role.USER);
 
     expect(user!.password).not.toBe(request.password);
@@ -120,13 +121,13 @@ describe('ClientSignUp usecase', () => {
     const request = makeClientSignUpRequest();
 
     const resolveTestPromise = new Promise<void>((resolve) => {
-      userEvents.subscribe('user.created', (user) => {
+      eventManager.subscribe(Events.USER_CREATED, (user) => {
         expect(user).toBeDefined();
         expect(user!.name).toBe(request.name);
         expect(user!.email.value).toBe(request.email);
         expect(user!.cpf.value).toBe(request.cpf);
         expect(user!.phone).toBe(request.phone);
-        expect(user!.address.toObject()).toEqual(request.address);
+        expect(user?.address?.toObject()).toEqual(request.address);
         expect(user!.role).toBe(Role.USER);
       });
 

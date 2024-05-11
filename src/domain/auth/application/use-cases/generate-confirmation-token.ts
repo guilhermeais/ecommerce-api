@@ -6,6 +6,7 @@ import { UniqueEntityID } from '@/core/entities/unique-entity-id';
 import { EntityNotFoundError } from '@/core/errors/commom/entity-not-found-error';
 import { ConfirmationToken } from '../../enterprise/entities/confirmation-token';
 import { ConfirmationTokensRepository } from '../gateways/repositories/confirmation-tokens-repository';
+import { Injectable } from '@nestjs/common';
 
 export type GenerateConfirmationTokenRequest = {
   userId: string;
@@ -13,6 +14,8 @@ export type GenerateConfirmationTokenRequest = {
 };
 
 export type GenerateConfirmationTokenResponse = ConfirmationToken;
+
+@Injectable()
 export class GenerateConfirmationTokenUseCase
   implements
     UseCase<

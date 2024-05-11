@@ -3,18 +3,19 @@ import { Injectable, Logger as NestLogger } from '@nestjs/common';
 
 @Injectable()
 export class NestJsLogger implements Logger {
+  #logger = new NestLogger();
   log(context: string, message: string): void {
-    NestLogger.log(message, context);
+    this.#logger.log(message, context);
   }
 
   error(context: string, message: string, trace: string): void {
-    NestLogger.error(message, trace, context);
+    this.#logger.error(message, trace, context);
   }
 
   warn(context: string, message: string): void {
-    NestLogger.warn(message, context);
+    this.#logger.warn(message, context);
   }
   debug(context: string, message: string): void {
-    NestLogger.debug(message, context);
+    this.#logger.debug(message, context);
   }
 }
