@@ -18,8 +18,8 @@ export type ClientSignUpRequest = {
   password: string;
   name: string;
   cpf: string;
-  phone: string;
-  address: {
+  phone?: string;
+  address?: {
     cep: string;
     address: string;
     number: string;
@@ -30,6 +30,7 @@ export type ClientSignUpRequest = {
 
 export type ClientSignUpResponse = {
   authToken: string;
+  user: User;
 };
 
 @Injectable()
@@ -69,7 +70,7 @@ export class ClientSignUpUseCase
     const hashedPassword = await this.hasher.hash(password.value);
 
     const cpf = CPF.create(request.cpf);
-    const address = Address.create(request.address);
+    const address = request.address && Address.create(request.address);
 
     const user = User.create({
       name: request.name,
@@ -77,7 +78,7 @@ export class ClientSignUpUseCase
       cpf,
       email,
       password: hashedPassword,
-      phone: request.phone,
+      phone: request?.phone,
       role: Role.USER,
     });
 
@@ -94,6 +95,6 @@ export class ClientSignUpUseCase
       `Cliente ${request.name} - ${user.id} cadastrado com sucesso!`,
     );
 
-    return { authToken };
+    return { authToken, user };
   }
 }
