@@ -10,9 +10,9 @@ export type UserProps = {
   email: Email;
   password: string;
   cpf: CPF;
-  address: Address;
+  address?: Address;
   name: string;
-  phone: string;
+  phone?: string;
   role: Role;
   isConfirmed?: boolean;
 };
