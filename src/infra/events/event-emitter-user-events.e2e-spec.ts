@@ -2,7 +2,10 @@ import { INestApplication } from '@nestjs/common';
 import { EventEmitterUserEvents } from './event-emitter-user-events';
 import { makeTestingApp } from 'test/make-app';
 import { makeUser } from 'test/auth/enterprise/entities/make-user';
-import { UserEventsEnum } from '@/domain/auth/application/gateways/events/user-events';
+import {
+  UserEvents,
+  UserEventsEnum,
+} from '@/domain/auth/application/gateways/events/user-events';
 
 describe('EventEmitterUserEvents', () => {
   let sut: EventEmitterUserEvents;
@@ -12,7 +15,7 @@ describe('EventEmitterUserEvents', () => {
     const module = await makeTestingApp().compile();
     app = module.createNestApplication();
     await app.init();
-    sut = app.get(EventEmitterUserEvents);
+    sut = app.get(UserEvents);
   });
 
   beforeEach(() => {
