@@ -1,12 +1,12 @@
+import { Logger } from '@/shared/logger';
 import { Injectable } from '@nestjs/common';
 import { User } from '../../enterprise/entities/user';
-import { UserEvents, UserEventsEnum } from '../gateways/events/user-events';
-import { Logger } from '@/shared/logger';
-import { GenerateConfirmationTokenUseCase } from '../use-cases/generate-confirmation-token';
 import {
   ConfirmationTokenEvents,
   ConfirmationTokenEventsEnum,
 } from '../gateways/events/confirmation-token-events';
+import { UserEvents, UserEventsEnum } from '../gateways/events/user-events';
+import { GenerateConfirmationTokenUseCase } from '../use-cases/generate-confirmation-token';
 
 @Injectable()
 export class OnUserCreated {
@@ -17,9 +17,8 @@ export class OnUserCreated {
     private readonly confirmationTokenEvents: ConfirmationTokenEvents,
   ) {
     this.logger.log(OnUserCreated.name, 'subscribing to user created event');
-    this.userEvents.subscribe(
-      UserEventsEnum.USER_CREATED,
-      this.handle.bind(this),
+    this.userEvents.subscribe(UserEventsEnum.USER_CREATED, (...args) =>
+      this.handle(...args),
     );
 
     this.logger.log(
