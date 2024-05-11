@@ -1,10 +1,13 @@
-export interface Event<EventsMap> {
-  publish: <K extends keyof EventsMap>(event: K, data: EventsMap[K]) => void;
+export abstract class Event<EventsMap> {
+  abstract publish: <K extends keyof EventsMap>(
+    event: K,
+    data: EventsMap[K],
+  ) => Promise<void>;
 
-  subscribe: <K extends keyof EventsMap>(
+  abstract subscribe: <K extends keyof EventsMap>(
     event: K,
     callback: (data: EventsMap[K]) => void,
   ) => void;
 
-  clearSubscriptions: () => void;
+  abstract clearSubscriptions: () => void;
 }

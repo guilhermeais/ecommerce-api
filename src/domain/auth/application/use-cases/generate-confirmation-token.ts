@@ -12,12 +12,7 @@ export type GenerateConfirmationTokenRequest = {
   expiresIn?: number;
 };
 
-export type GenerateConfirmationTokenResponse = {
-  confirmationId: string;
-  token: string;
-  expiresIn: number;
-};
-
+export type GenerateConfirmationTokenResponse = ConfirmationToken;
 export class GenerateConfirmationTokenUseCase
   implements
     UseCase<
@@ -85,11 +80,7 @@ export class GenerateConfirmationTokenUseCase
 
       await this.confirmationTokenRepository.save(confirmationToken);
 
-      return {
-        token,
-        expiresIn,
-        confirmationId: confirmationToken.id.toString(),
-      };
+      return confirmationToken;
     } catch (error: any) {
       this.logger.error(
         GenerateConfirmationTokenUseCase.name,

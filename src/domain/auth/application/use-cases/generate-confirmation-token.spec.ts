@@ -70,21 +70,21 @@ describe('GenerateConfirmationTokenUseCase', () => {
     const existingUser = makeUser({ id: existingUserId });
     await userRepository.save(existingUser);
 
-    const response = await sut.execute(request);
+    const confirmationToken = await sut.execute(request);
 
-    expect(response.confirmationId).toBeTypeOf('string');
-    expect(response.token).toBeDefined();
-    expect(response.expiresIn).toBeDefined();
-    expect(response.expiresIn).toBe(1000 * 60 * 60 * 24);
+    expect(confirmationToken.id.toString()).toBeTypeOf('string');
+    expect(confirmationToken.token).toBeDefined();
+    expect(confirmationToken.expiresIn).toBeDefined();
+    expect(confirmationToken.expiresIn).toBe(1000 * 60 * 60 * 24);
 
-    const decodedToken = await encrypter.decode(response.token);
+    const decodedToken = await encrypter.decode(confirmationToken.token);
 
     expect(decodedToken.userId).toBe(existingUserId.toString());
     expect(decodedToken.email).toBe(existingUser.email.value);
     expect(decodedToken.createdAt).toBe(new Date().toISOString());
 
     expect(
-      await confirmationsTokenRepository.findByToken(response.token),
+      await confirmationsTokenRepository.findByToken(confirmationToken.token),
     ).toBeDefined();
   });
 
