@@ -32,4 +32,24 @@ export class Address extends ValueObject<AddressProps> {
       missingProperties,
     };
   }
+
+  get cep() {
+    return this.props.cep;
+  }
+
+  get address() {
+    return this.props.address;
+  }
+
+  get number() {
+    return this.props.number;
+  }
+
+  get state() {
+    return this.props.state;
+  }
+
+  get city() {
+    return this.props.city;
+  }
 }
