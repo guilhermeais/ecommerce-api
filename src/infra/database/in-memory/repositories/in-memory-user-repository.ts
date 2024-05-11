@@ -17,4 +17,8 @@ export class InMemoryUserRepository implements UserRepository {
   async findById(id: UniqueEntityID): Promise<User | null> {
     return this.users.find((user) => user.id.equals(id)) || null;
   }
+
+  async clear(): Promise<void> {
+    this.users.length = 0;
+  }
 }
