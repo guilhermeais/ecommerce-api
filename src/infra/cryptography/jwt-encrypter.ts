@@ -1,4 +1,7 @@
-import { Encrypter } from '@/domain/auth/application/gateways/cryptography/encrypter';
+import {
+  EncryptOptions,
+  Encrypter,
+} from '@/domain/auth/application/gateways/cryptography/encrypter';
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { EnvService } from '../env/env.service';
@@ -10,8 +13,13 @@ export class JwtEncrypter implements Encrypter {
     private readonly env: EnvService,
   ) {}
 
-  async encrypt(payload: Record<string, unknown>): Promise<string> {
-    return await this.jwtService.signAsync(payload);
+  async encrypt(
+    payload: Record<string, unknown>,
+    options?: EncryptOptions,
+  ): Promise<string> {
+    return await this.jwtService.signAsync(payload, {
+      expiresIn: options?.expiresIn,
+    });
   }
 
   async decode(token: string): Promise<Record<string, unknown>> {
