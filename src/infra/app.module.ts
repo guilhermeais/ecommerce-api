@@ -4,6 +4,9 @@ import { envSchema } from './env/env';
 import { EnvModule } from './env/env.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { EventsModule } from './events/events.module';
+import { HttpModule } from './http/controllers/http.module';
+import { AuthModule } from './auth/auth.module';
+import { ToolsModule } from '@/shared/tools/tools.module';
 
 @Module({
   imports: [
@@ -18,6 +21,9 @@ import { EventsModule } from './events/events.module';
       validate: (env) => envSchema.parse(env),
     }),
     EnvModule,
+    HttpModule,
+    AuthModule,
+    ToolsModule,
   ],
   controllers: [],
   providers: [],
