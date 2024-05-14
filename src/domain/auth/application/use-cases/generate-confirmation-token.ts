@@ -73,7 +73,9 @@ export class GenerateConfirmationTokenUseCase
       const confirmationToken = ConfirmationToken.create({
         token,
         expiresIn,
-        userId: user.id.toString(),
+        userId: user.id,
+        email: user.email,
+        userName: user.name,
       });
 
       this.logger.log(

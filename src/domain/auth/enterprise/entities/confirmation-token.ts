@@ -1,9 +1,13 @@
 import { Entity } from '@/core/entities/entity';
+import { UniqueEntityID } from '@/core/entities/unique-entity-id';
+import { Email } from './value-objects/email';
 
 export type ConfirmationTokenProps = {
   token: string;
   expiresIn: number;
-  userId: string;
+  userId: UniqueEntityID;
+  email: Email;
+  userName: string;
   createdAt?: Date;
 };
 
@@ -13,7 +17,7 @@ export class ConfirmationToken extends Entity<ConfirmationTokenProps> {
   }
 
   public static create(props: ConfirmationTokenProps): ConfirmationToken {
-    props.createdAt = props.createdAt || new Date();
+    props!.createdAt = props.createdAt || new Date();
     return new ConfirmationToken(props);
   }
 
@@ -25,12 +29,20 @@ export class ConfirmationToken extends Entity<ConfirmationTokenProps> {
     return this.props.expiresIn;
   }
 
-  get userId(): string {
+  get userId(): UniqueEntityID {
     return this.props.userId;
   }
 
+  get email(): Email {
+    return this.props.email;
+  }
+
+  get userName(): string {
+    return this.props.userName;
+  }
+
   get createdAt(): Date {
-    return this.props.createdAt;
+    return this.props!.createdAt!;
   }
 
   isExpired(now = new Date()): boolean {
