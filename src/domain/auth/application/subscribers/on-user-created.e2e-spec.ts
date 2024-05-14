@@ -33,7 +33,7 @@ describe('OnUserCreated E2E', () => {
       eventManager.subscribe(
         Events.CONFIRMATION_TOKEN_CREATED,
         async (confirmationToken) => {
-          expect(confirmationToken.userId).toBe(user.id.toString());
+          expect(confirmationToken.userId.equals(user.id)).toBeTruthy();
 
           const found = await confirmationTokensRepository.findByToken(
             confirmationToken.token,
@@ -41,7 +41,7 @@ describe('OnUserCreated E2E', () => {
 
           expect(found).toBeDefined();
 
-          expect(found?.userId).toBe(user.id.toString());
+          expect(found?.userId.equals(user.id)).toBeTruthy();
           resolve();
         },
       );
