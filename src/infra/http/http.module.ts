@@ -3,7 +3,7 @@ import { CryptographyModule } from '@/infra/cryptography/cryptography.module';
 import { DatabaseModule } from '@/infra/database/database.module';
 import { EventsModule } from '@/infra/events/events.module';
 import { Module } from '@nestjs/common';
-import { ClientSignUpController } from './auth/client-sign-up.controller';
+import { ClientSignUpController } from './controllers/auth/client-sign-up.controller';
 
 @Module({
   imports: [EventsModule, DatabaseModule, CryptographyModule],
