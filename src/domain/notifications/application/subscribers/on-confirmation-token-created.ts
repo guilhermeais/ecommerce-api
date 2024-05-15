@@ -1,8 +1,10 @@
 import { EventManager, Events } from '@/core/types/events';
 import { ConfirmationToken } from '@/domain/auth/enterprise/entities/confirmation-token';
+import { EnvService } from '@/infra/env/env.service';
 import { Logger } from '@/shared/logger';
 import { Injectable } from '@nestjs/common';
-import { EmailSender } from '../gateways/notificaitons/email-sender';
+import { EmailSender } from '../gateways/notifications/email-sender';
+import { EmailTemplate } from '../gateways/notifications/email-templates';
 
 @Injectable()
 export class OnConfirmationTokenCreated {
@@ -10,6 +12,7 @@ export class OnConfirmationTokenCreated {
     private readonly emailSender: EmailSender,
     private readonly logger: Logger,
     private readonly events: EventManager,
+    private readonly envService: EnvService,
   ) {
     this.logger.log(
       OnConfirmationTokenCreated.name,
@@ -37,10 +40,11 @@ export class OnConfirmationTokenCreated {
       const emailResult = await this.emailSender.send({
         to: confirmationToken.email.value,
         subject: `Confirmação de Cadastro`,
-        template: 'account-confirmation',
+        template: EmailTemplate.AccountConfirmation,
         contentObject: {
+          confirmationUrl: `${this.envService.get('APP_CONFIRMATION_URL')}/${confirmationToken.token}`,
+          name: firstName,
           token: confirmationToken.token,
-          userName: firstName,
         },
       });
 

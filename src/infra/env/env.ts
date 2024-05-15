@@ -6,7 +6,15 @@ export const envSchema = z.object({
   JWT_PRIVATE_KEY: z.string(),
   JWT_PUBLIC_KEY: z.string(),
 
-  APP_NAME: z.string().optional().default('Ecommerce dos Pia'),
+  APP_NAME: z.string().optional().default('PiaLabs Ecommerce'),
+
+  APP_EMAIL: z.string().email(),
+
+  APP_CONFIRMATION_URL: z.string().url(),
+
+  GOOGLE_CLIENT_ID: z.string(),
+  GOOGLE_CLIENT_SECRET: z.string(),
+  GOOGLE_REFRESH_TOKEN: z.string(),
 });
 
 export type Env = z.infer<typeof envSchema>;

@@ -1,7 +1,7 @@
 import { EventManager, Events } from '@/core/types/events';
 import { INestApplication } from '@nestjs/common';
 import { makeTestingApp } from 'test/make-app';
-import { EmailSender } from '../gateways/notificaitons/email-sender';
+import { EmailSender } from '../gateways/notifications/email-sender';
 import { makeConfirmationToken } from 'test/auth/enterprise/entities/make-confirmation-token';
 import { faker } from '@faker-js/faker';
 import { Email } from '@/domain/auth/enterprise/entities/value-objects/email';

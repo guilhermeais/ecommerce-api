@@ -1,4 +1,4 @@
-import { EmailSender } from '@/domain/notifications/application/gateways/notificaitons/email-sender';
+import { EmailSender } from '@/domain/notifications/application/gateways/notifications/email-sender';
 import { Module } from '@nestjs/common';
 import { FakeEmailSender } from './fake-email-sender';
 

@@ -7,9 +7,10 @@ import { CryptographyModule } from '../cryptography/cryptography.module';
 import { DatabaseModule } from '../database/database.module';
 import { NotificationsModule } from '../notifications/notifications.module';
 import { EventEmitterEventManager } from './event-emitter-event-manager';
+import { EnvModule } from '../env/env.module';
 
 @Module({
-  imports: [DatabaseModule, CryptographyModule, NotificationsModule],
+  imports: [DatabaseModule, CryptographyModule, NotificationsModule, EnvModule],
   providers: [
     {
       provide: EventManager,
