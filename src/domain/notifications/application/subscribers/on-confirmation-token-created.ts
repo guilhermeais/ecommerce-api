@@ -39,7 +39,7 @@ export class OnConfirmationTokenCreated {
 
       const emailResult = await this.emailSender.send({
         to: confirmationToken.email.value,
-        subject: `Confirmação de Cadastro`,
+        subject: `[${this.envService.get('APP_NAME')}] Confirmação de Cadastro`,
         template: EmailTemplate.AccountConfirmation,
         contentObject: {
           confirmationUrl: `${this.envService.get('APP_CONFIRMATION_URL')}/${confirmationToken.token}`,
