@@ -2,12 +2,12 @@ import { UniqueEntityID } from '@/core/entities/unique-entity-id';
 import { EntityNotFoundError } from '@/core/errors/commom/entity-not-found-error';
 import { InMemoryConfirmationTokensRepository } from '@/infra/database/in-memory/repositories/in-memory-confirmation-tokens.repository';
 import { InMemoryUserRepository } from '@/infra/database/in-memory/repositories/in-memory-user-repository';
+import { EnvService } from '@/infra/env/env.service';
 import { Logger } from '@/shared/logger';
 import { faker } from '@faker-js/faker';
-import { FakeEncrypter } from 'test/auth/application/gateways/cryptography/fake-encrypter';
 import { makeUser } from 'test/auth/enterprise/entities/make-user';
 import { makeFakeLogger } from 'test/shared/logger.mock';
-import { Encrypter } from '../gateways/cryptography/encrypter';
+import { MockProxy, mock } from 'vitest-mock-extended';
 import { ConfirmationTokensRepository } from '../gateways/repositories/confirmation-tokens-repository';
 import { UserRepository } from '../gateways/repositories/user-repository';
 import {
@@ -20,7 +20,9 @@ describe('GenerateConfirmationTokenUseCase', () => {
   let userRepository: UserRepository;
   let confirmationsTokenRepository: ConfirmationTokensRepository;
   let logger: Logger;
-  let encrypter: Encrypter;
+  let envService: MockProxy<EnvService>;
+
+  const CONFIRMATION_TOKEN_EXPIRES_IN = 1000 * 60 * 60 * 24;
 
   beforeAll(() => {
     vi.useFakeTimers();
@@ -30,13 +32,15 @@ describe('GenerateConfirmationTokenUseCase', () => {
     userRepository = new InMemoryUserRepository();
     confirmationsTokenRepository = new InMemoryConfirmationTokensRepository();
     logger = makeFakeLogger();
-    encrypter = new FakeEncrypter();
+    envService = mock();
+
+    envService.get.mockReturnValue(CONFIRMATION_TOKEN_EXPIRES_IN);
 
     sut = new GenerateConfirmationTokenUseCase(
       userRepository,
       logger,
-      encrypter,
       confirmationsTokenRepository,
+      envService,
     );
   });
 
@@ -73,18 +77,21 @@ describe('GenerateConfirmationTokenUseCase', () => {
     const confirmationToken = await sut.execute(request);
 
     expect(confirmationToken.id.toString()).toBeTypeOf('string');
-    expect(confirmationToken.token).toBeDefined();
+    expect(confirmationToken.email.toString()).toBe(
+      existingUser.email.toString(),
+    );
+    expect(confirmationToken.userName.toString()).toBe(
+      existingUser.name.toString(),
+    );
+    expect(confirmationToken.userId.toString()).toBe(
+      existingUser.id.toString(),
+    );
+    expect(confirmationToken.used).toBe(false);
     expect(confirmationToken.expiresIn).toBeDefined();
-    expect(confirmationToken.expiresIn).toBe(1000 * 60 * 60 * 24);
-
-    const decodedToken = await encrypter.decode(confirmationToken.token);
-
-    expect(decodedToken.userId).toBe(existingUserId.toString());
-    expect(decodedToken.email).toBe(existingUser.email.value);
-    expect(decodedToken.createdAt).toBe(new Date().toISOString());
+    expect(confirmationToken.expiresIn).toBe(CONFIRMATION_TOKEN_EXPIRES_IN);
 
     expect(
-      await confirmationsTokenRepository.findByToken(confirmationToken.token),
+      await confirmationsTokenRepository.findById(confirmationToken.id),
     ).toBeDefined();
   });
 

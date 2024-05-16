@@ -6,6 +6,11 @@ export const envSchema = z.object({
   JWT_PRIVATE_KEY: z.string(),
   JWT_PUBLIC_KEY: z.string(),
 
+  CONFIRMATION_TOKEN_EXPIRES_IN: z.coerce
+    .number()
+    .optional()
+    .default(1000 * 60 * 60 * 24),
+
   APP_NAME: z.string().optional().default('PiaLabs Ecommerce'),
 
   APP_EMAIL: z.string().email(),

@@ -4,8 +4,7 @@ export enum EmailTemplate {
 
 export type AccountConfirmationData = {
   name: string;
-  token: string;
-  confirmationUrl: string;
+  confirmationId: string;
 };
 
 export type EmailTemplatesMap = {

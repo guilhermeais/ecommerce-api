@@ -32,7 +32,7 @@ export class OnConfirmationTokenCreated {
     try {
       this.logger.log(
         OnConfirmationTokenCreated.name,
-        `Sending confirmation email to ${confirmationToken.email} with token ${confirmationToken.id} - ${confirmationToken.token}`,
+        `Sending confirmation email to ${confirmationToken.email.value} with id ${confirmationToken.id}`,
       );
 
       const [firstName] = confirmationToken.userName.split(' ');
@@ -42,20 +42,19 @@ export class OnConfirmationTokenCreated {
         subject: `[${this.envService.get('APP_NAME')}] Confirmação de Cadastro`,
         template: EmailTemplate.AccountConfirmation,
         contentObject: {
-          confirmationUrl: `${this.envService.get('APP_CONFIRMATION_URL')}/${confirmationToken.token}`,
+          confirmationId: confirmationToken.id.toString(),
           name: firstName,
-          token: confirmationToken.token,
         },
       });
 
       this.logger.log(
         OnConfirmationTokenCreated.name,
-        `Confirmation ${confirmationToken.id} email sent to ${confirmationToken.email}: ${JSON.stringify(emailResult, null, 2)}`,
+        `Confirmation ${confirmationToken.id.toString()} email sent to ${confirmationToken.email.value}: ${JSON.stringify(emailResult, null, 2)}`,
       );
     } catch (error: any) {
       this.logger.error(
         OnConfirmationTokenCreated.name,
-        `Error sending confirmation email to ${confirmationToken.email}: ${error.message}`,
+        `Error sending confirmation email to ${confirmationToken.email.value}: ${error.message}`,
         error.stack,
       );
     }

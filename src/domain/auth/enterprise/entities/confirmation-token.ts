@@ -3,11 +3,11 @@ import { UniqueEntityID } from '@/core/entities/unique-entity-id';
 import { Email } from './value-objects/email';
 
 export type ConfirmationTokenProps = {
-  token: string;
   expiresIn: number;
   userId: UniqueEntityID;
   email: Email;
   userName: string;
+  used?: boolean;
   createdAt?: Date;
 };
 
@@ -18,11 +18,8 @@ export class ConfirmationToken extends Entity<ConfirmationTokenProps> {
 
   public static create(props: ConfirmationTokenProps): ConfirmationToken {
     props!.createdAt = props.createdAt || new Date();
+    props.used = props.used ?? false;
     return new ConfirmationToken(props);
-  }
-
-  get token(): string {
-    return this.props.token;
   }
 
   get expiresIn(): number {
@@ -45,7 +42,15 @@ export class ConfirmationToken extends Entity<ConfirmationTokenProps> {
     return this.props!.createdAt!;
   }
 
+  get used(): boolean {
+    return this.props.used!;
+  }
+
   isExpired(now = new Date()): boolean {
     return now > new Date(this.createdAt.getTime() + this.expiresIn);
+  }
+
+  markAsUsed(): void {
+    this.props.used = true;
   }
 }

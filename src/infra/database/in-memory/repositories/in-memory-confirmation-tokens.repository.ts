@@ -1,3 +1,4 @@
+import { UniqueEntityID } from '@/core/entities/unique-entity-id';
 import { ConfirmationTokensRepository } from '@/domain/auth/application/gateways/repositories/confirmation-tokens-repository';
 import { ConfirmationToken } from '@/domain/auth/enterprise/entities/confirmation-token';
 
@@ -13,8 +14,8 @@ export class InMemoryConfirmationTokensRepository
     this.tokens.push(confirmationToken);
   }
 
-  async findByToken(token: string): Promise<ConfirmationToken | undefined> {
-    const found = this.tokens.find((t) => t.token === token);
+  async findById(id: UniqueEntityID): Promise<ConfirmationToken | undefined> {
+    const found = this.tokens.find((t) => id.equals(t.id));
 
     return found;
   }

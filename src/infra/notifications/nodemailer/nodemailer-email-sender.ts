@@ -28,11 +28,12 @@ export class NodeMailerEmailSender implements EmailSender {
     [K in keyof EmailTemplatesMap]: (data: EmailTemplatesMap[K]) => string;
   } = {
     'account-confirmation': (data) => {
+      const confirmationUrl = `${this.env.get('APP_CONFIRMATION_URL')}?confirmationId=${data.confirmationId}`;
       return `
         <h1>Confirmação de Conta</h1>
         <p>Olá, ${data.name}!</p>
         <p> Clique no botão abaixo para confirmar sua conta </p>
-        <a href="${data.confirmationUrl}">Confirmar Conta</a>
+        <a href="${confirmationUrl}">Confirmar Conta</a>
       `;
     },
   };

@@ -40,5 +40,8 @@ describe('OnConfirmationTokenCreated E2E', () => {
     expect(sentEmails).toHaveLength(1);
     expect(sentEmails[0].request.to).toBe(email.value);
     expect(sentEmails[0].request.template).toBe('account-confirmation');
+    expect(sentEmails[0].request.contentObject.confirmationId).toBe(
+      sentEmails[0].request.contentObject.confirmationId,
+    );
   }, 100000);
 });

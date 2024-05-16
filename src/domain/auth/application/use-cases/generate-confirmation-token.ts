@@ -1,12 +1,12 @@
-import { UseCase } from '@/core/types/use-case';
-import { UserRepository } from '../gateways/repositories/user-repository';
-import { Logger } from '@/shared/logger';
-import { Encrypter } from '../gateways/cryptography/encrypter';
 import { UniqueEntityID } from '@/core/entities/unique-entity-id';
 import { EntityNotFoundError } from '@/core/errors/commom/entity-not-found-error';
+import { UseCase } from '@/core/types/use-case';
+import { EnvService } from '@/infra/env/env.service';
+import { Logger } from '@/shared/logger';
+import { Injectable } from '@nestjs/common';
 import { ConfirmationToken } from '../../enterprise/entities/confirmation-token';
 import { ConfirmationTokensRepository } from '../gateways/repositories/confirmation-tokens-repository';
-import { Injectable } from '@nestjs/common';
+import { UserRepository } from '../gateways/repositories/user-repository';
 
 export type GenerateConfirmationTokenRequest = {
   userId: string;
@@ -26,8 +26,8 @@ export class GenerateConfirmationTokenUseCase
   constructor(
     private readonly userRepository: UserRepository,
     private readonly logger: Logger,
-    private readonly encrypter: Encrypter,
     private readonly confirmationTokenRepository: ConfirmationTokensRepository,
+    private readonly envService: EnvService,
   ) {}
 
   async execute(
@@ -46,32 +46,19 @@ export class GenerateConfirmationTokenUseCase
       if (!user) {
         throw new EntityNotFoundError('Usuário', request.userId);
       }
-      const ONE_DAY_MS = 1000 * 60 * 60 * 24;
 
-      const expiresIn = request.expiresIn || ONE_DAY_MS;
-
-      const payload = {
-        userId: user.id.toString(),
-        email: user.email.value,
-        createdAt: new Date().toISOString(),
-      };
-
-      this.logger.log(
-        GenerateConfirmationTokenUseCase.name,
-        `Generating confirmation token for user ${request.userId} with expiration ${expiresIn}: ${JSON.stringify(payload)}`,
+      const CONFIRMATION_TOKEN_EXPIRES_IN = this.envService.get(
+        'CONFIRMATION_TOKEN_EXPIRES_IN',
       );
 
-      const token = await this.encrypter.encrypt(payload, {
-        expiresIn,
-      });
+      const expiresIn = request.expiresIn || CONFIRMATION_TOKEN_EXPIRES_IN;
 
       this.logger.log(
         GenerateConfirmationTokenUseCase.name,
-        `Generated confirmation token for user ${request.userId}: ${token}`,
+        `Generating confirmation token for user ${request.userId} with expiration ${expiresIn}`,
       );
 
       const confirmationToken = ConfirmationToken.create({
-        token,
         expiresIn,
         userId: user.id,
         email: user.email,
@@ -80,7 +67,7 @@ export class GenerateConfirmationTokenUseCase
 
       this.logger.log(
         GenerateConfirmationTokenUseCase.name,
-        `Saving confirmation token for user ${request.userId}`,
+        `Saving confirmation token ${confirmationToken.id.toString()} for user ${request.userId}`,
       );
 
       await this.confirmationTokenRepository.save(confirmationToken);
