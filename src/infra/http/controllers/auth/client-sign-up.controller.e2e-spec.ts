@@ -12,7 +12,7 @@ import { DatabaseModule } from '@/infra/database/database.module';
 import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
 import { makeSignUpBody } from 'test/infra/http/controllers/auth/sign-up-body.mock';
-import { makeTestingApp } from 'test/make-app';
+import { makeTestingApp } from 'test/make-testing-app';
 import { SignUpBody } from './client-sign-up.controller';
 
 describe('ClientSignUp (E2E)', () => {

@@ -1,6 +1,6 @@
 import { INestApplication } from '@nestjs/common';
 import { JwtEncrypter } from './jwt-encrypter';
-import { makeTestingApp } from 'test/make-app';
+import { makeTestingApp } from 'test/make-testing-app';
 import { Encrypter } from '@/domain/auth/application/gateways/cryptography/encrypter';
 
 describe('JwtEncrypter', () => {

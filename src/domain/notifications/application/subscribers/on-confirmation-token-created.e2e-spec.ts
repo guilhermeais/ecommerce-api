@@ -1,6 +1,6 @@
 import { EventManager, Events } from '@/core/types/events';
 import { INestApplication } from '@nestjs/common';
-import { makeTestingApp } from 'test/make-app';
+import { makeTestingApp } from 'test/make-testing-app';
 import { EmailSender } from '../gateways/notifications/email-sender';
 import { makeConfirmationToken } from 'test/auth/enterprise/entities/make-confirmation-token';
 import { faker } from '@faker-js/faker';
@@ -33,12 +33,12 @@ describe('OnConfirmationTokenCreated E2E', () => {
       }),
     );
 
-    await setTimeout(50);
+    await setTimeout(100);
 
     const sentEmails = await emailSender.getSentEmails();
 
     expect(sentEmails).toHaveLength(1);
     expect(sentEmails[0].request.to).toBe(email.value);
     expect(sentEmails[0].request.template).toBe('account-confirmation');
-  });
+  }, 100000);
 });

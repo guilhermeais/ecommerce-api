@@ -1,7 +1,7 @@
 import { EventManager, Events } from '@/core/types/events';
 import { INestApplication } from '@nestjs/common';
 import { makeUser } from 'test/auth/enterprise/entities/make-user';
-import { makeTestingApp } from 'test/make-app';
+import { makeTestingApp } from 'test/make-testing-app';
 import { EventEmitterEventManager } from './event-emitter-event-manager';
 
 describe('EventEmitterEventManager', () => {

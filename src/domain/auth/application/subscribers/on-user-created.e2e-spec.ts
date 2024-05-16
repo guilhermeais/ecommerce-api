@@ -1,5 +1,5 @@
 import { INestApplication } from '@nestjs/common';
-import { makeTestingApp } from 'test/make-app';
+import { makeTestingApp } from 'test/make-testing-app';
 
 import { EventManager, Events } from '@/core/types/events';
 import { makeUser } from 'test/auth/enterprise/entities/make-user';

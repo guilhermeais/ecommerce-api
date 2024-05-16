@@ -15,11 +15,12 @@ export async function setup() {
     JWT_PRIVATE_KEY: Buffer.from(privateKeyPem).toString('base64'),
     JWT_PUBLIC_KEY: Buffer.from(publicKeyPem).toString('base64'),
     APP_NAME: 'PiaLabs Ecommerce',
-    APP_EMAIL: 'fake-email@mail.com',
+    APP_EMAIL: 'test@mail.com',
     GOOGLE_CLIENT_ID: 'fake-client-id',
-    GOOGLE_CLIENT_SECRET: 'fake-client',
-    GOOGLE_REFRESH_TOKEN: 'fake-refresh',
+    GOOGLE_CLIENT_SECRET: 'fake-secret',
+    GOOGLE_REFRESH_TOKEN: 'fake-refresh-token',
     APP_CONFIRMATION_URL: 'http://localhost:3000/confirm',
+    GOOGLE_REDIRECT_URI: 'https://developers.google.com/oauthplayground',
   };
 
   Object.entries(mockedEnvs).forEach(([key, value]) => {
