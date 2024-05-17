@@ -12,6 +12,7 @@ import { Encrypter } from '../gateways/cryptography/encrypter';
 import { Hasher } from '../gateways/cryptography/hasher';
 import { UserRepository } from '../gateways/repositories/user-repository';
 import { EmailAlreadyInUseError } from './errors/email-already-in-use-error';
+import { LoginResponse } from './login';
 
 export type ClientSignUpRequest = {
   email: string;
@@ -28,10 +29,7 @@ export type ClientSignUpRequest = {
   };
 };
 
-export type ClientSignUpResponse = {
-  authToken: string;
-  user: User;
-};
+export type ClientSignUpResponse = LoginResponse;
 
 @Injectable()
 export class ClientSignUpUseCase
