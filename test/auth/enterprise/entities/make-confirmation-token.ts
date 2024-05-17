@@ -12,7 +12,6 @@ export function makeConfirmationToken(
   return ConfirmationToken.create({
     email: Email.create(faker.internet.email()),
     userId: new UniqueEntityID(),
-    token: 'fake-token',
     expiresIn: 1000 * 60 * 60 * 24,
     userName: faker.person.fullName(),
     ...modifications,

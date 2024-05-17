@@ -4,6 +4,7 @@ import { Role } from './enums/role';
 import { Address } from './value-objects/address';
 import { CPF } from './value-objects/cpf';
 import { Email } from './value-objects/email';
+import { ConfirmationToken } from './confirmation-token';
 
 export type UserProps = {
   id?: UniqueEntityID;
@@ -64,7 +65,8 @@ export class User extends Entity<UserProps> {
     return this.props.isConfirmed;
   }
 
-  public confirm() {
+  public confirm(confirmationToken: ConfirmationToken) {
+    confirmationToken.markAsUsed();
     this.props.isConfirmed = true;
   }
 }
