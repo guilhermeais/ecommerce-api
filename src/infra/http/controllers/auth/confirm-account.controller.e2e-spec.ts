@@ -34,10 +34,10 @@ describe('ConfirmAccountController (E2E)', () => {
     encrypter = moduleRef.get(Encrypter);
 
     await app.init();
-    eventManager.clearSubscriptions();
   });
 
   beforeEach(async () => {
+    eventManager.clearSubscriptions();
     await userRepository.clear();
     await confirmationTokensRepository.clear();
   });
