@@ -46,14 +46,14 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/AuthenticationResponse'
-  /sign-up/{confirmationToken}/confirm:
+  /sign-up/{confirmationId}/confirm:
     post:
       tags:
       - Login e Cadastro
       summary: Confirma Email
       description: Completa o processo de cadastro do usuário.
       parameters:
-      - name: confirmationToken
+      - name: confirmationId
         in: path
         description: Token de confirmação do email.
         required: true

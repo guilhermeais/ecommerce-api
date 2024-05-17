@@ -24,4 +24,8 @@ export abstract class Entity<Props> {
 
     return false;
   }
+
+  public toProps() {
+    return structuredClone(this.props);
+  }
 }

@@ -1,11 +1,11 @@
+import { ConsoleLogger, Injectable } from '@nestjs/common';
 import { Logger } from '../logger';
-import { Injectable, Logger as NestLogger } from '@nestjs/common';
 
 @Injectable()
 export class NestJsLogger implements Logger {
-  #logger = new NestLogger();
+  #logger = new ConsoleLogger();
   log(context: string, message: string): void {
-    this.#logger.log(message, context);
+    this.#logger.log(context, message);
   }
 
   error(context: string, message: string, trace: string): void {

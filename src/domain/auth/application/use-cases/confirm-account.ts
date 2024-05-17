@@ -6,6 +6,7 @@ import { ConfirmationTokensRepository } from '../gateways/repositories/confirmat
 import { UserRepository } from '../gateways/repositories/user-repository';
 import { ConfirmationTokenExpiredError } from './errors/confirmation-token-expired-error';
 import { InvalidConfirmationTokenError } from './errors/invalid-confirmation-token-error';
+import { Injectable } from '@nestjs/common';
 
 export type ConfirmAccountRequest = {
   confirmationId: string;
@@ -14,6 +15,7 @@ export type ConfirmAccountRequest = {
 
 export type ConfirmAccountResponse = void;
 
+@Injectable()
 export class ConfirmAccountUseCase
   implements UseCase<ConfirmAccountRequest, ConfirmAccountResponse>
 {

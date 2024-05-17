@@ -13,11 +13,11 @@ export class JwtEncrypter implements Encrypter {
     private readonly env: EnvService,
   ) {}
 
-  async encrypt(
-    payload: Record<string, unknown>,
+  async encrypt<T = Record<string, unknown>>(
+    payload: T,
     options?: EncryptOptions,
   ): Promise<string> {
-    return await this.jwtService.signAsync(payload, {
+    return await this.jwtService.signAsync(payload as any, {
       ...(options?.expiresIn && {
         expiresIn: this.msToSeconds(options.expiresIn),
       }),
@@ -28,12 +28,12 @@ export class JwtEncrypter implements Encrypter {
     return Math.floor(ms / 1000);
   }
 
-  async decode(token: string): Promise<Record<string, unknown>> {
+  async decode<T = Record<string, unknown>>(token: string): Promise<T> {
     const publicKey = this.env.get('JWT_PUBLIC_KEY');
 
-    return await this.jwtService.verifyAsync(token, {
+    return (await this.jwtService.verifyAsync(token, {
       algorithms: ['RS256'],
       publicKey: Buffer.from(publicKey, 'base64'),
-    });
+    })) as T;
   }
 }

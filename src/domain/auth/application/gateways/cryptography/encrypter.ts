@@ -3,8 +3,8 @@ export type EncryptOptions = {
 };
 
 export abstract class Encrypter {
-  abstract encrypt(
-    payload: Record<string, unknown>,
+  abstract encrypt<T = Record<string, unknown>>(
+    payload: T,
     options?: EncryptOptions,
   ): Promise<string>;
   abstract decode<T = Record<string, unknown>>(token: string): Promise<T>;

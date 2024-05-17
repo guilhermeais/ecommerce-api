@@ -1,9 +1,13 @@
+import { GetUserUseCase } from '@/domain/auth/application/use-cases/get-user';
+import { Logger } from '@/shared/logger';
 import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
+import { Request } from 'express';
+import { ParamsDictionary } from 'express-serve-static-core';
 import { ExtractJwt, Strategy } from 'passport-jwt';
+import { ParsedQs } from 'qs';
 import { z } from 'zod';
 import { EnvService } from '../env/env.service';
-import { GetUserUseCase } from '@/domain/auth/application/use-cases/get-user';
 
 const tokenPayloadSchema = z.object({
   sub: z.string().uuid(),
@@ -12,10 +16,11 @@ const tokenPayloadSchema = z.object({
 export type UserPayload = z.infer<typeof tokenPayloadSchema>;
 
 @Injectable()
-export class JwtStrategy extends PassportStrategy(Strategy) {
+export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   constructor(
     config: EnvService,
     private readonly getUser: GetUserUseCase,
+    private readonly logger: Logger,
   ) {
     const publicKey = config.get('JWT_PUBLIC_KEY');
 
@@ -27,8 +32,26 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: UserPayload) {
+    this.logger.log(JwtStrategy.name, `Validating user ${payload}`);
     const { sub } = tokenPayloadSchema.parse(payload);
 
-    return this.getUser.execute({ userId: sub });
+    this.logger.log(JwtStrategy.name, `Getting user ${sub}`);
+
+    const user = await this.getUser.execute({ userId: sub });
+
+    this.logger.log(
+      JwtStrategy.name,
+      `User ${user.id.toString()} - ${user.name} found`,
+    );
+
+    return user;
+  }
+
+  authenticate(
+    req: Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>,
+    options?: any,
+  ): void {
+    this.logger.log(JwtStrategy.name, `Authenticating user...`);
+    super.authenticate(req, options);
   }
 }

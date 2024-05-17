@@ -21,7 +21,7 @@ export const TransporterFactory: Provider = {
       },
     };
     logger.log(
-      TransporterFactory.toString(),
+      'TransporterFactory',
       `Creating nodemailer transporter with options: ${JSON.stringify(oauth2Options, null, 2)}`,
     );
     const oauth2Client = new OAuth2(oauth2Options);
@@ -29,8 +29,8 @@ export const TransporterFactory: Provider = {
     const accessToken = await oauth2Client.getAccessToken();
 
     logger.debug(
-      TransporterFactory.toString(),
-      `Access token: ${JSON.stringify(accessToken, null, 2)}`,
+      'TransporterFactory',
+      `Access token: ${JSON.stringify(accessToken.token, null, 2)}`,
     );
 
     const transporter = createTransport({
@@ -45,7 +45,7 @@ export const TransporterFactory: Provider = {
       },
     } as SMTPTransport.Options);
 
-    logger.log(TransporterFactory.toString(), 'Transporter created!');
+    logger.log('TransporterFactory', 'Transporter created!');
 
     return transporter;
   },

@@ -3,7 +3,7 @@
 ## Dados
 ```json
 {
-  "confirmationToken": ""
+  "confirmationId": ""
 }
 ```
 
