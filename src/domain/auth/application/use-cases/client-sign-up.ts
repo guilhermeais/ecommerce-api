@@ -13,6 +13,7 @@ import { Hasher } from '../gateways/cryptography/hasher';
 import { UserRepository } from '../gateways/repositories/user-repository';
 import { EmailAlreadyInUseError } from './errors/email-already-in-use-error';
 import { LoginResponse } from './login';
+import { UserPayload } from '@/infra/auth/jwt.strategy';
 
 export type ClientSignUpRequest = {
   email: string;
@@ -84,7 +85,7 @@ export class ClientSignUpUseCase
 
     await this.eventManager.publish(Events.USER_CREATED, user);
 
-    const authToken = await this.encrypter.encrypt({
+    const authToken = await this.encrypter.encrypt<UserPayload>({
       sub: user.id.toString(),
     });
 

@@ -1,14 +1,14 @@
+import { Role } from '@/domain/auth/enterprise/entities/enums/role';
 import {
+  CreateSignUpInviteData,
   SignUpInvite,
-  SignUpInviteProps,
 } from '@/domain/auth/enterprise/entities/signup-invite';
 import { Email } from '@/domain/auth/enterprise/entities/value-objects/email';
-import { makeUser } from './make-user';
-import { Role } from '@/domain/auth/enterprise/entities/enums/role';
 import { faker } from '@faker-js/faker';
+import { makeUser } from './make-user';
 
 export function makeSignUpInvite(
-  modifications?: Partial<SignUpInviteProps>,
+  modifications?: Partial<CreateSignUpInviteData>,
 ): SignUpInvite {
   return SignUpInvite.create({
     guestEmail: Email.create(faker.internet.email()),

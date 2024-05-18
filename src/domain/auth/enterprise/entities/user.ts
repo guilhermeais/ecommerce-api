@@ -16,6 +16,7 @@ export type UserProps = {
   phone?: string;
   role: Role;
   isConfirmed?: boolean;
+  signUpInviteId?: UniqueEntityID;
 };
 
 export class User extends Entity<UserProps> {
@@ -65,8 +66,16 @@ export class User extends Entity<UserProps> {
     return this.props.isConfirmed;
   }
 
+  get signUpInviteId() {
+    return this.props.signUpInviteId;
+  }
+
   public confirm(confirmationToken: ConfirmationToken) {
     confirmationToken.markAsUsed();
     this.props.isConfirmed = true;
+  }
+
+  setSignUpInviteId(signUpInviteId: UniqueEntityID) {
+    this.props.signUpInviteId = signUpInviteId;
   }
 }

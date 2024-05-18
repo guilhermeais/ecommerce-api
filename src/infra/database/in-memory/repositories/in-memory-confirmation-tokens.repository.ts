@@ -11,7 +11,15 @@ export class InMemoryConfirmationTokensRepository
   }
 
   async save(confirmationToken: ConfirmationToken): Promise<void> {
-    this.tokens.push(confirmationToken);
+    const index = this.tokens.findIndex((t) =>
+      t.id.equals(confirmationToken.id),
+    );
+
+    if (index === -1) {
+      this.tokens.push(confirmationToken);
+    } else {
+      this.tokens[index] = confirmationToken;
+    }
   }
 
   async findById(id: UniqueEntityID): Promise<ConfirmationToken | null> {

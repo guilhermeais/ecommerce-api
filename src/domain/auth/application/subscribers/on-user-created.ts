@@ -3,6 +3,7 @@ import { Logger } from '@/shared/logger';
 import { Injectable } from '@nestjs/common';
 import { User } from '../../enterprise/entities/user';
 import { GenerateConfirmationTokenUseCase } from '../use-cases/generate-confirmation-token';
+import { Role } from '../../enterprise/entities/enums/role';
 
 @Injectable()
 export class OnUserCreated {
@@ -24,6 +25,10 @@ export class OnUserCreated {
 
   async handle(user: User): Promise<void> {
     try {
+      const isNormalUser = [Role.USER].includes(user.role);
+
+      if (!isNormalUser) return;
+
       this.logger.log(
         OnUserCreated.name,
         `Generated confirmation token for user [${user.id.toString()}] ${user.email.value}`,

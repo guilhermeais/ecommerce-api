@@ -12,7 +12,13 @@ export class InMemorySignUpInvitesRepository
   }
 
   async save(signUpInvite: SignUpInvite): Promise<void> {
-    this.invites.push(signUpInvite);
+    const index = this.invites.findIndex((t) => t.id.equals(signUpInvite.id));
+
+    if (index === -1) {
+      this.invites.push(signUpInvite);
+    } else {
+      this.invites[index] = signUpInvite;
+    }
   }
 
   async findById(id: UniqueEntityID): Promise<SignUpInvite | null> {
