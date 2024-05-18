@@ -7,8 +7,8 @@ import { User } from './user';
 import { Email } from './value-objects/email';
 
 export type SignUpInviteProps = {
-  email: Email;
-  name: string;
+  guestEmail: Email;
+  guestName: string;
   sentBy: User;
   expiresIn?: number;
   createdAt?: Date;
@@ -48,12 +48,12 @@ export class SignUpInvite extends Entity<SignUpInviteProps> {
     );
   }
 
-  get email(): Email {
-    return this.props.email;
+  get guestEmail(): Email {
+    return this.props.guestEmail;
   }
 
-  get name(): string {
-    return this.props.name;
+  get guestName(): string {
+    return this.props.guestName;
   }
 
   get sentBy(): User {

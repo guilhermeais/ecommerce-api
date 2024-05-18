@@ -19,7 +19,7 @@ export async function setup() {
     GOOGLE_CLIENT_ID: 'fake-client-id',
     GOOGLE_CLIENT_SECRET: 'fake-secret',
     GOOGLE_REFRESH_TOKEN: 'fake-refresh-token',
-    APP_CONFIRMATION_URL: 'http://localhost:3000/confirm',
+    ACCOUNT_CONFIRMATION_URL: 'http://localhost:3000/confirm',
     GOOGLE_REDIRECT_URI: 'https://developers.google.com/oauthplayground',
   };
 

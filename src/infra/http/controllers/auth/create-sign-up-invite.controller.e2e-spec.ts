@@ -77,8 +77,8 @@ describe('CreateSignUpInviteController (E2E)', () => {
       );
 
       expect(signUpinvite).toBeDefined();
-      expect(signUpinvite!.email.value).toBe(body.email);
-      expect(signUpinvite!.name).toBe(body.name);
+      expect(signUpinvite!.guestEmail.value).toBe(body.email);
+      expect(signUpinvite!.guestName).toBe(body.name);
       expect(signUpinvite!.sentBy.id.toString()).toBe(user.id.toString());
     });
 

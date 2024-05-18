@@ -28,12 +28,22 @@ export class NodeMailerEmailSender implements EmailSender {
     [K in keyof EmailTemplatesMap]: (data: EmailTemplatesMap[K]) => string;
   } = {
     'account-confirmation': (data) => {
-      const confirmationUrl = `${this.env.get('APP_CONFIRMATION_URL')}?confirmationId=${data.confirmationId}`;
+      const confirmationUrl = `${this.env.get('ACCOUNT_CONFIRMATION_URL')}?confirmationId=${data.confirmationId}`;
       return `
         <h1>Confirmação de Conta</h1>
         <p>Olá, ${data.name}!</p>
         <p> Clique no botão abaixo para confirmar sua conta </p>
         <a href="${confirmationUrl}">Confirmar Conta</a>
+      `;
+    },
+    'sign-up-invite': (data) => {
+      const finishSignUpUrl = `${this.env.get('FINISH_SIGNUP_INVITE_URL')}?inviteId=${data.inviteId}`;
+
+      return `
+        <h1>Convite para se juntar ao ${this.env.get('APP_NAME')} 🚀</h1>
+        <p>Olá, ${data.guestName}!</p>
+        <p> Você foi convidado por <b>${data.sentByName}</b> para se juntar ao <b>${this.env.get('APP_NAME')}</b> 🎉 </p>
+        <a href="${finishSignUpUrl}">Finalizar Cadastro</a>
       `;
     },
   };

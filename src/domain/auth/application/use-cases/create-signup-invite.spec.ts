@@ -52,8 +52,8 @@ describe('CreateSignupInvite usecase', () => {
     );
 
     expect(signUpInvite).toBeDefined();
-    expect(signUpInvite!.email.value).toBe(request.email);
-    expect(signUpInvite!.name).toBe(request.name);
+    expect(signUpInvite!.guestEmail.value).toBe(request.email);
+    expect(signUpInvite!.guestName).toBe(request.name);
     expect(signUpInvite!.sentBy).toBe(request.sentBy);
 
     const eventSignUpInvite = await singUpInviteCreatedPromise;

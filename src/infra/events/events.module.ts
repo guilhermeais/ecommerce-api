@@ -8,6 +8,7 @@ import { DatabaseModule } from '../database/database.module';
 import { NotificationsModule } from '../notifications/notifications.module';
 import { EventEmitterEventManager } from './event-emitter-event-manager';
 import { EnvModule } from '../env/env.module';
+import { OnSignUpInviteCreated } from '@/domain/notifications/application/subscribers/on-sign-up-invite-created';
 
 @Module({
   imports: [DatabaseModule, CryptographyModule, NotificationsModule, EnvModule],
@@ -19,6 +20,7 @@ import { EnvModule } from '../env/env.module';
     GenerateConfirmationTokenUseCase,
     OnUserCreated,
     OnConfirmationTokenCreated,
+    OnSignUpInviteCreated,
   ],
   exports: [EventManager],
 })

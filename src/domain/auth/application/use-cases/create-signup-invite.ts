@@ -33,8 +33,8 @@ export class CreateSignUpInviteUseCase
     const email = Email.create(request.email);
 
     const signUpInvite = SignUpInvite.create({
-      email,
-      name,
+      guestEmail: email,
+      guestName: name,
       sentBy,
     });
 

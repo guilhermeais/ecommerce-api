@@ -20,7 +20,9 @@ export const envSchema = z.object({
 
   APP_EMAIL: z.string().email(),
 
-  APP_CONFIRMATION_URL: z.string().url(),
+  ACCOUNT_CONFIRMATION_URL: z.string().url(),
+
+  FINISH_SIGNUP_INVITE_URL: z.string().url(),
 
   GOOGLE_CLIENT_ID: z.string(),
   GOOGLE_CLIENT_SECRET: z.string(),
