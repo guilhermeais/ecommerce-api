@@ -3,14 +3,14 @@ import { DefaultExceptionFilter } from '@/infra/http/filters/default-exception-f
 
 import { EventManager, Events } from '@/core/types/events';
 import { ConfirmationTokensRepository } from '@/domain/auth/application/gateways/repositories/confirmation-tokens-repository';
-import { ConfirmationToken } from '@/domain/auth/enterprise/entities/confirmation-token';
+import { User } from '@/domain/auth/enterprise/entities/user';
 import { DatabaseModule } from '@/infra/database/database.module';
 import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
 import { makeSignUpBody } from 'test/infra/http/controllers/auth/sign-up-body.mock';
 import { makeTestingApp } from 'test/make-testing-app';
 
-describe('Account creation and confirmation E2E flow', () => {
+describe('Signup and login E2E flow', () => {
   let app: INestApplication;
   let userRepository: UserRepository;
   let confirmationTokensRepository: ConfirmationTokensRepository;
@@ -33,18 +33,17 @@ describe('Account creation and confirmation E2E flow', () => {
   });
 
   beforeEach(async () => {
+    eventManager.clearSubscriptions();
     await userRepository.clear();
     await confirmationTokensRepository.clear();
   });
 
-  it('should create and confirm an account', async () => {
+  it('should create and login', async () => {
     const body = makeSignUpBody();
 
-    const confirmationTokenCreated = new Promise<ConfirmationToken>(
-      (resolve) => {
-        eventManager.subscribe(Events.CONFIRMATION_TOKEN_CREATED, resolve);
-      },
-    );
+    const userCreatedPromise = new Promise<User>((resolve) => {
+      eventManager.subscribe(Events.USER_CREATED, resolve);
+    });
 
     const response = await request(app.getHttpServer())
       .post('/sign-up')
@@ -53,22 +52,20 @@ describe('Account creation and confirmation E2E flow', () => {
     expect(response.status).toBe(201);
     expect(response.body.authToken).toEqual(expect.any(String));
 
-    const { authToken } = response.body;
+    await userCreatedPromise;
 
-    const confirmationToken = await confirmationTokenCreated;
+    const loginResponse = await request(app.getHttpServer())
+      .post('/login')
+      .send({
+        email: body.email,
+        password: body.password,
+      });
 
-    const user = await userRepository.findById(confirmationToken.userId);
-    expect(user!.isConfirmed).toBe(false);
+    expect(loginResponse.status).toBe(201);
 
-    const confirmTokenResponse = await request(app.getHttpServer())
-      .post(`/sign-up/${confirmationToken.id.toString()}/confirm`)
-      .set('Authorization', `Bearer ${authToken}`)
-      .send();
-
-    expect(confirmTokenResponse.status).toBe(201);
-
-    const updatedUser = await userRepository.findById(confirmationToken.userId);
-
-    expect(updatedUser!.isConfirmed).toBe(true);
+    expect(loginResponse.body).toEqual({
+      authToken: expect.any(String),
+      user: response.body.user,
+    });
   });
 });

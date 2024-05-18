@@ -1,3 +1,4 @@
+import { Role } from '@/domain/auth/enterprise/entities/enums/role';
 import { User } from '@/domain/auth/enterprise/entities/user';
 
 export type UserHTTPResponse = {
@@ -13,6 +14,7 @@ export type UserHTTPResponse = {
     state: string;
     city: string;
   };
+  role: Role;
   isConfirmed?: boolean;
 };
 
@@ -31,6 +33,7 @@ export class UserPresenter {
         state: user.address.state,
         city: user.address.city,
       },
+      role: user.role,
       isConfirmed: user.isConfirmed,
     };
   }

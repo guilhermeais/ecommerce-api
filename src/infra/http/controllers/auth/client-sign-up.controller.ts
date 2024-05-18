@@ -1,10 +1,11 @@
+import { ClientSignUpUseCase } from '@/domain/auth/application/use-cases/client-sign-up';
+import { Public } from '@/infra/auth/public.decorator';
+import { Logger } from '@/shared/logger';
 import { Body, Controller, Post } from '@nestjs/common';
 import { z } from 'zod';
 import { ZodValidationPipe } from '../../pipes/zod-validation.pipe';
-import { Public } from '@/infra/auth/public.decorator';
-import { ClientSignUpUseCase } from '@/domain/auth/application/use-cases/client-sign-up';
-import { Logger } from '@/shared/logger';
-import { UserHTTPResponse, UserPresenter } from '../presenters/user-presenter';
+import { UserPresenter } from '../presenters/user-presenter';
+import { LoginResponse } from './login.controller';
 
 const AddressSchema = z.object({
   cep: z.string(),
@@ -27,10 +28,7 @@ const SignUpBodySchema = z.object({
 
 export type SignUpBody = z.infer<typeof SignUpBodySchema>;
 
-export type SignUpResponse = {
-  authToken: string;
-  user: UserHTTPResponse;
-};
+export type SignUpResponse = LoginResponse;
 
 @Controller('sign-up')
 export class ClientSignUpController {
@@ -48,7 +46,10 @@ export class ClientSignUpController {
     try {
       this.logger.log(
         ClientSignUpController.name,
-        `Called with body: ${JSON.stringify(body)}`,
+        `Called with body: ${JSON.stringify({
+          ...body,
+          password: '*****',
+        })}`,
       );
 
       const { authToken, user } = await this.clientSignUpUseCase.execute(body);
