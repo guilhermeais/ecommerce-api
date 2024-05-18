@@ -1,20 +1,22 @@
 # Ecommerce API
 
-Projeto Integrado FATEC
+Este é o projeto integrado da FATEC, uma API de Ecommerce que inclui vários módulos, incluindo autenticação, gerenciamento de produtos, etc.
 
-### Contribuidores
+## Contribuidores
 
-🚧
+🚧 Adicionar...
 
 ## Módulos
 
-#### Autenticação 🔑✉️ 
-[![Generic badge](https://img.shields.io/badge/Progresso-90%-<COLOR>.svg)](https://shields.io/)
+### Autenticação 🔑✉️ 
 
-Modulo de autenticação do usuário administrador e cliente normal. 
-- ❎ [client-sign-up](./requirements/auth/client-sign-up.md)
-- ❎ [client-sign-up-confirmation](./requirements/auth/client-sign-up-confirmation.md)
-- ❎ [login](./requirements/auth/login.md)
-- ❎ [signup-invite](./requirements/auth/signup-invite.md)
-- ❎ [finish-signup-invite](./requirements/auth/finish-signup-invite.md)
-- 🟩 [list-signup-invites](./requirements/auth/list-signup-invites.md)
+![Progresso](https://img.shields.io/badge/Progresso-90%25-green)
+
+Este módulo lida com a autenticação do usuário administrador e do cliente normal. Aqui estão os requisitos e seu status atual:
+
+- ❎ [Cadastro de cliente](./requirements/auth/client-sign-up.md)
+- ❎ [Confirmação de cadastro de cliente](./requirements/auth/client-sign-up-confirmation.md)
+- ❎ [Login](./requirements/auth/login.md)
+- ❎ [Convite para cadastro](./requirements/auth/signup-invite.md)
+- ❎ [Conclusão do convite para cadastro](./requirements/auth/finish-signup-invite.md)
+- 🟩 [Lista de convites para cadastro](./requirements/auth/list-signup-invites.md)
