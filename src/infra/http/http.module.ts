@@ -10,6 +10,8 @@ import { ConfirmAccountController } from './controllers/auth/confirm-account.con
 import { CreateSignUpInviteController } from './controllers/auth/create-sign-up-invite.controller';
 import { LoginController } from './controllers/auth/login.controller';
 import { CreateSignUpInviteUseCase } from '@/domain/auth/application/use-cases/create-signup-invite';
+import { FinishSignUpInviteController } from './controllers/auth/finish-sign-up-invite.controller';
+import { FinishSignUpInviteUseCase } from '@/domain/auth/application/use-cases/finish-sign-up-invite';
 
 @Module({
   imports: [EventsModule, DatabaseModule, CryptographyModule],
@@ -18,12 +20,14 @@ import { CreateSignUpInviteUseCase } from '@/domain/auth/application/use-cases/c
     ConfirmAccountController,
     LoginController,
     CreateSignUpInviteController,
+    FinishSignUpInviteController,
   ],
   providers: [
     ClientSignUpUseCase,
     ConfirmAccountUseCase,
     LoginUseCase,
     CreateSignUpInviteUseCase,
+    FinishSignUpInviteUseCase,
   ],
 })
 export class HttpModule {}

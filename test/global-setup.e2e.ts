@@ -21,6 +21,10 @@ export async function setup() {
     GOOGLE_REFRESH_TOKEN: 'fake-refresh-token',
     ACCOUNT_CONFIRMATION_URL: 'http://localhost:3000/confirm',
     GOOGLE_REDIRECT_URI: 'https://developers.google.com/oauthplayground',
+
+    CONFIRMATION_TOKEN_EXPIRES_IN: 1000 * 60 * 60 * 24,
+    FINISH_SIGNUP_INVITE_URL: 'http://localhost:3000/finish-signup-invite',
+    SIGNUP_INVITE_EXPIRES_IN: 1000 * 60 * 60 * 24,
   };
 
   Object.entries(mockedEnvs).forEach(([key, value]) => {

@@ -12,6 +12,7 @@ import { Hasher } from '../gateways/cryptography/hasher';
 import { SignUpInvitesRepository } from '../gateways/repositories/sign-up-invites.repository';
 import { UserRepository } from '../gateways/repositories/user-repository';
 import { LoginResponse } from './login';
+import { Injectable } from '@nestjs/common';
 
 export type FinishSigUpInviteRequest = {
   inviteId: string;
@@ -32,6 +33,7 @@ export type FinishSigUpInviteRequest = {
 
 export type FinishSignUpInviteResponse = LoginResponse;
 
+@Injectable()
 export class FinishSignUpInviteUseCase
   implements UseCase<FinishSigUpInviteRequest, FinishSignUpInviteResponse>
 {
