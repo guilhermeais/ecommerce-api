@@ -3,7 +3,6 @@
 ```json
 {
     "id": "string",
-    "token": "string",
     "email": "user@example.com",
     "name": "string",
     "createdAt": 0,
