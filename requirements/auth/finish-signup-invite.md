@@ -4,7 +4,7 @@
 
 ```json
 {
-  "inviteToken": "string",
+  "inviteId": "string",
   "finishSignupData": {
     "password": "string",
     "name": "string",
@@ -23,9 +23,9 @@
 
 ## Requisitos
 
-- 🟩 Um usuário convidado deve ser capaz de finalizar o seu cadastro.
-  - 🟩 Deve retornar um erro se o convite já tiver expirado
-  - 🟩 Deve invalidar o token de convite
-  - 🟩 Deve criar uma conta pro usuário
-  - 🟩 Deve retornar o **token de autenticação do usuário**
-  - 🟩 Uma conta criada a partir de um convite já é **confirmada** automaticamente.
+- ❎ Um usuário convidado deve ser capaz de finalizar o seu cadastro.
+  - ❎ Deve retornar um erro se o convite já tiver expirado
+  - ❎ Deve invalidar o token de convite
+  - ❎ Deve criar uma conta pro usuário
+  - ❎ Deve retornar o **token de autenticação do usuário**
+  - ❎ Uma conta criada a partir de um convite já é **confirmada** automaticamente.
