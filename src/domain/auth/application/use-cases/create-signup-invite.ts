@@ -4,6 +4,7 @@ import { User } from '../../enterprise/entities/user';
 import { SignUpInvite } from '../../enterprise/entities/signup-invite';
 import { EventManager, Events } from '@/core/types/events';
 import { Email } from '../../enterprise/entities/value-objects/email';
+import { Injectable } from '@nestjs/common';
 
 export type CreateSignUpInviteRequest = {
   email: string;
@@ -15,6 +16,7 @@ export type CreateSignUpInviteResponse = {
   signUpInviteId: string;
 };
 
+@Injectable()
 export class CreateSignUpInviteUseCase
   implements UseCase<CreateSignUpInviteRequest, CreateSignUpInviteResponse>
 {

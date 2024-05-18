@@ -7,7 +7,9 @@ import { EventsModule } from '@/infra/events/events.module';
 import { Module } from '@nestjs/common';
 import { ClientSignUpController } from './controllers/auth/client-sign-up.controller';
 import { ConfirmAccountController } from './controllers/auth/confirm-account.controller';
+import { CreateSignUpInviteController } from './controllers/auth/create-sign-up-invite.controller';
 import { LoginController } from './controllers/auth/login.controller';
+import { CreateSignUpInviteUseCase } from '@/domain/auth/application/use-cases/create-signup-invite';
 
 @Module({
   imports: [EventsModule, DatabaseModule, CryptographyModule],
@@ -15,7 +17,13 @@ import { LoginController } from './controllers/auth/login.controller';
     ClientSignUpController,
     ConfirmAccountController,
     LoginController,
+    CreateSignUpInviteController,
   ],
-  providers: [ClientSignUpUseCase, ConfirmAccountUseCase, LoginUseCase],
+  providers: [
+    ClientSignUpUseCase,
+    ConfirmAccountUseCase,
+    LoginUseCase,
+    CreateSignUpInviteUseCase,
+  ],
 })
 export class HttpModule {}
