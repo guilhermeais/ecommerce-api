@@ -11,6 +11,11 @@ export const envSchema = z.object({
     .optional()
     .default(1000 * 60 * 60 * 24),
 
+  SIGNUP_INVITE_EXPIRES_IN: z.coerce
+    .number()
+    .optional()
+    .default(1000 * 60 * 60 * 24),
+
   APP_NAME: z.string().optional().default('PiaLabs Ecommerce'),
 
   APP_EMAIL: z.string().email(),

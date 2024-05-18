@@ -14,9 +14,9 @@ export class InMemoryConfirmationTokensRepository
     this.tokens.push(confirmationToken);
   }
 
-  async findById(id: UniqueEntityID): Promise<ConfirmationToken | undefined> {
+  async findById(id: UniqueEntityID): Promise<ConfirmationToken | null> {
     const found = this.tokens.find((t) => t.id.equals(id));
 
-    return found;
+    return found || null;
   }
 }

@@ -1,15 +1,19 @@
 import { ConfirmationToken } from '@/domain/auth/enterprise/entities/confirmation-token';
+import { SignUpInvite } from '@/domain/auth/enterprise/entities/signup-invite';
 import { User } from '@/domain/auth/enterprise/entities/user';
 
 export enum Events {
   USER_CREATED = 'user.created',
   CONFIRMATION_TOKEN_CREATED = 'confirmationToken.created',
+  SIGN_UP_INVITE_CREATED = 'signUpInvite.created',
 }
 
 export type EventsMap = {
   [Events.USER_CREATED]: User;
 
   [Events.CONFIRMATION_TOKEN_CREATED]: ConfirmationToken;
+
+  [Events.SIGN_UP_INVITE_CREATED]: SignUpInvite;
 };
 
 export abstract class EventManager {

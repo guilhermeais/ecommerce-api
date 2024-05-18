@@ -6,6 +6,6 @@ export abstract class ConfirmationTokensRepository
   implements Repository<ConfirmationToken>
 {
   abstract save(confirmationToken: ConfirmationToken): Promise<void>;
-  abstract findById(id: UniqueEntityID): Promise<ConfirmationToken | undefined>;
+  abstract findById(id: UniqueEntityID): Promise<ConfirmationToken | null>;
   abstract clear(): Promise<void>;
 }
