@@ -12,6 +12,8 @@ import { LoginController } from './controllers/auth/login.controller';
 import { CreateSignUpInviteUseCase } from '@/domain/auth/application/use-cases/create-signup-invite';
 import { FinishSignUpInviteController } from './controllers/auth/finish-sign-up-invite.controller';
 import { FinishSignUpInviteUseCase } from '@/domain/auth/application/use-cases/finish-sign-up-invite';
+import { ListSignUpInvitesController } from './controllers/auth/list-sign-up-invites.controller';
+import { ListSignUpInvitesUseCase } from '@/domain/auth/application/use-cases/list-signup-invites';
 
 @Module({
   imports: [EventsModule, DatabaseModule, CryptographyModule],
@@ -21,6 +23,7 @@ import { FinishSignUpInviteUseCase } from '@/domain/auth/application/use-cases/f
     LoginController,
     CreateSignUpInviteController,
     FinishSignUpInviteController,
+    ListSignUpInvitesController,
   ],
   providers: [
     ClientSignUpUseCase,
@@ -28,6 +31,7 @@ import { FinishSignUpInviteUseCase } from '@/domain/auth/application/use-cases/f
     LoginUseCase,
     CreateSignUpInviteUseCase,
     FinishSignUpInviteUseCase,
+    ListSignUpInvitesUseCase,
   ],
 })
 export class HttpModule {}

@@ -23,7 +23,7 @@ export class InMemorySignUpInvitesRepository
       total: this.invites.length,
       pages,
       limit: request.limit,
-      currentPage: page,
+      currentPage: request.page,
     };
   }
 

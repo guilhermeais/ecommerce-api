@@ -42,6 +42,7 @@ export class UserFactory {
     user: User;
     hashedPassword: string;
     plainPassword: string;
+    accessToken: string;
   }> {
     const plainPassword = modifications?.password ?? faker.internet.password();
     const hashedPassword = await this.hasher.hash(plainPassword);
@@ -52,10 +53,13 @@ export class UserFactory {
 
     await this.userRepository.save(user);
 
+    const accessToken = await this.generateAccessToken(user);
+
     return {
       user,
       hashedPassword,
       plainPassword,
+      accessToken,
     };
   }
 

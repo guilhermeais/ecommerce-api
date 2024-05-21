@@ -3,11 +3,13 @@ import { SignUpInvite } from '../../enterprise/entities/signup-invite';
 import { SignUpInvitesRepository } from '../gateways/repositories/sign-up-invites.repository';
 import { Logger } from '@/shared/logger';
 import { PaginatedRequest, PaginatedResponse } from '@/core/types/pagination';
+import { Injectable } from '@nestjs/common';
 
 export type ListSignUpInvitesRequest = PaginatedRequest;
 
 export type ListSignUpInvitesResponse = PaginatedResponse<SignUpInvite>;
 
+@Injectable()
 export class ListSignUpInvitesUseCase
   implements UseCase<ListSignUpInvitesRequest, ListSignUpInvitesResponse>
 {
