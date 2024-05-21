@@ -12,5 +12,5 @@
 ```
 
 ## Requisitos
-- 🟩 Um usuário master ou administrador deve conseguir visualizar os convites que ele enviou.
-    - 🟩 Deve retornar uma lista de convites com o **estado**, podendo ser **finished**, **pending** ou **expired**.
+- ❎ Um usuário master ou administrador deve conseguir visualizar os convites que ele enviou.
+    - ❎ Deve retornar uma lista de convites com o **estado**, podendo ser **finished**, **pending**.
