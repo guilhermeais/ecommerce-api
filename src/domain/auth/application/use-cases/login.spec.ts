@@ -7,13 +7,13 @@ import { makeUser } from 'test/auth/enterprise/entities/make-user';
 import { makeFakeLogger } from 'test/shared/logger.mock';
 import { Encrypter } from '../gateways/cryptography/encrypter';
 import { Hasher } from '../gateways/cryptography/hasher';
-import { UserRepository } from '../gateways/repositories/user-repository';
+import { UsersRepository } from '../gateways/repositories/user-repository';
 import { InvalidLoginRequestError } from './errors/invalid-login-request-error';
 import { LoginRequest, LoginUseCase } from './login';
 
 describe('Login use case', () => {
   let sut: LoginUseCase;
-  let userRepository: UserRepository;
+  let userRepository: UsersRepository;
   let hasher: Hasher;
   let encrypter: Encrypter;
   let logger: Logger;

@@ -1,7 +1,33 @@
 import forge from 'node-forge';
 import { Env } from '@/infra/env/env';
+import {
+  MongoDBContainer,
+  StartedMongoDBContainer,
+} from '@testcontainers/mongodb';
+
+let mongoContainer: StartedMongoDBContainer;
+
+async function startMongoDB() {
+  console.log('⌛ Starting MongoDBContainer...');
+
+  mongoContainer = await new MongoDBContainer().start();
+
+  const uri = `${mongoContainer.getConnectionString()}?directConnection=true`;
+
+  console.log(`🚀 MongoDBContainer started at ${uri}`);
+
+  return { uri };
+}
+
+async function stopMongoDB() {
+  console.log('⌛ Stopping MongoDBContainer...');
+  await mongoContainer.stop();
+  console.log('💤 MongoDBContainer stopped');
+}
 
 export async function setup() {
+  const { uri } = await startMongoDB();
+
   const { publicKey, privateKey } = forge.pki.rsa.generateKeyPair({
     bits: 2048,
     e: 0x10001,
@@ -25,6 +51,9 @@ export async function setup() {
     CONFIRMATION_TOKEN_EXPIRES_IN: 1000 * 60 * 60 * 24,
     FINISH_SIGNUP_INVITE_URL: 'http://localhost:3000/finish-signup-invite',
     SIGNUP_INVITE_EXPIRES_IN: 1000 * 60 * 60 * 24,
+
+    IS_TESTING: true,
+    MONGO_URI: uri,
   };
 
   Object.entries(mockedEnvs).forEach(([key, value]) => {
@@ -34,4 +63,5 @@ export async function setup() {
 
 export async function teardown() {
   console.log('teardown');
+  await stopMongoDB();
 }

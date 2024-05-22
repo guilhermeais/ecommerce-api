@@ -3,7 +3,7 @@ import { EntityNotFoundError } from '@/core/errors/commom/entity-not-found-error
 import { UseCase } from '@/core/types/use-case';
 import { Logger } from '@/shared/logger';
 import { ConfirmationTokensRepository } from '../gateways/repositories/confirmation-tokens-repository';
-import { UserRepository } from '../gateways/repositories/user-repository';
+import { UsersRepository } from '../gateways/repositories/user-repository';
 import { ConfirmationTokenExpiredError } from './errors/confirmation-token-expired-error';
 import { InvalidConfirmationTokenError } from './errors/invalid-confirmation-token-error';
 import { Injectable } from '@nestjs/common';
@@ -21,7 +21,7 @@ export class ConfirmAccountUseCase
 {
   constructor(
     private readonly logger: Logger,
-    private readonly userRepository: UserRepository,
+    private readonly userRepository: UsersRepository,
     private readonly confirmationTokensRepository: ConfirmationTokensRepository,
   ) {}
 

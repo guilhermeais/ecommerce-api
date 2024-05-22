@@ -1,4 +1,4 @@
-import { UserRepository } from '@/domain/auth/application/gateways/repositories/user-repository';
+import { UsersRepository } from '@/domain/auth/application/gateways/repositories/user-repository';
 import { DefaultExceptionFilter } from '@/infra/http/filters/default-exception-filter.filter';
 
 import { EventManager } from '@/core/types/events';
@@ -34,7 +34,7 @@ export function makeFinishSignUpInviteBody(
 
 describe('FinishSignUpInviteController (E2E)', () => {
   let app: INestApplication;
-  let userRepository: UserRepository;
+  let userRepository: UsersRepository;
   let signUpInvitesRepository: SignUpInvitesRepository;
   let eventManager: EventManager;
 
@@ -47,7 +47,7 @@ describe('FinishSignUpInviteController (E2E)', () => {
 
     app.useGlobalFilters(new DefaultExceptionFilter());
 
-    userRepository = moduleRef.get(UserRepository);
+    userRepository = moduleRef.get(UsersRepository);
     signUpInvitesRepository = moduleRef.get(SignUpInvitesRepository);
 
     eventManager = moduleRef.get(EventManager);

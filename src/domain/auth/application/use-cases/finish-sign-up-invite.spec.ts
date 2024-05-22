@@ -2,7 +2,7 @@ import { EventManager } from '@/core/types/events';
 import { Encrypter } from '../gateways/cryptography/encrypter';
 import { Hasher } from '../gateways/cryptography/hasher';
 import { SignUpInvitesRepository } from '../gateways/repositories/sign-up-invites.repository';
-import { UserRepository } from '../gateways/repositories/user-repository';
+import { UsersRepository } from '../gateways/repositories/user-repository';
 import {
   FinishSigUpInviteRequest,
   FinishSignUpInviteUseCase,
@@ -29,7 +29,7 @@ import { CPF } from '../../enterprise/entities/value-objects/cpf';
 describe('FinishSignUpInvite use case', () => {
   let sut: FinishSignUpInviteUseCase;
   let signUpInvitesRepository: SignUpInvitesRepository;
-  let userRepository: UserRepository;
+  let userRepository: UsersRepository;
   let hasher: Hasher;
   let encrypter: Encrypter;
   let eventManager: EventManager;

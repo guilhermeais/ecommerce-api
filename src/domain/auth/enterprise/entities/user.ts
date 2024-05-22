@@ -17,6 +17,8 @@ export type UserProps = {
   role: Role;
   isConfirmed?: boolean;
   signUpInviteId?: UniqueEntityID;
+  createdAt?: Date;
+  updatedAt?: Date;
 };
 
 export class User extends Entity<UserProps> {
@@ -25,6 +27,7 @@ export class User extends Entity<UserProps> {
       {
         ...props,
         isConfirmed: !!props.isConfirmed,
+        createdAt: new Date(),
       },
       props.id,
     );
@@ -68,6 +71,14 @@ export class User extends Entity<UserProps> {
 
   get signUpInviteId() {
     return this.props.signUpInviteId;
+  }
+
+  get createdAt() {
+    return this.props.createdAt;
+  }
+
+  get updatedAt() {
+    return this.props.updatedAt;
   }
 
   public confirm(confirmationToken: ConfirmationToken) {

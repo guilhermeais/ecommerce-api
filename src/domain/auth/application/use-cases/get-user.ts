@@ -1,6 +1,6 @@
 import { UseCase } from '@/core/types/use-case';
 import { User } from '../../enterprise/entities/user';
-import { UserRepository } from '../gateways/repositories/user-repository';
+import { UsersRepository } from '../gateways/repositories/user-repository';
 import { Logger } from '@/shared/logger';
 import { EntityNotFoundError } from '@/core/errors/commom/entity-not-found-error';
 import { UniqueEntityID } from '@/core/entities/unique-entity-id';
@@ -17,7 +17,7 @@ export class GetUserUseCase
   implements UseCase<GetUserRequest, GetUserResponse>
 {
   constructor(
-    private readonly userRepository: UserRepository,
+    private readonly userRepository: UsersRepository,
     private readonly logger: Logger,
   ) {}
 

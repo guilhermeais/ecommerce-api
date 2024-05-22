@@ -30,6 +30,14 @@ export const envSchema = z.object({
   GOOGLE_REDIRECT_URI: z
     .string()
     .default('https://developers.google.com/oauthplayground'),
+
+  MONGO_URI: z.string(),
+  IS_TESTING: z
+    .boolean({
+      coerce: true,
+    })
+    .optional()
+    .default(false),
 });
 
 export type Env = z.infer<typeof envSchema>;

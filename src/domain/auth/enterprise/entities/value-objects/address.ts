@@ -10,14 +10,21 @@ export type AddressProps = {
 };
 
 export class Address extends ValueObject<AddressProps> {
-  public static create(address: AddressProps): Address {
-    const { missingProperties } = Address.isValid(address);
+  public static create(unsafeAddress: AddressProps): Address {
+    const addressProps: AddressProps = {
+      cep: unsafeAddress.cep,
+      address: unsafeAddress.address,
+      number: unsafeAddress.number,
+      state: unsafeAddress.state,
+      city: unsafeAddress.city,
+    };
+    const { missingProperties } = Address.isValid(addressProps);
 
     if (missingProperties.length) {
       throw new InvalidAddressError({ missingProperties });
     }
 
-    return new Address(address);
+    return new Address(addressProps);
   }
 
   private static isValid(address: AddressProps): {

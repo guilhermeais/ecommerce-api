@@ -1,6 +1,6 @@
 import { Encrypter } from '@/domain/auth/application/gateways/cryptography/encrypter';
 import { Hasher } from '@/domain/auth/application/gateways/cryptography/hasher';
-import { UserRepository } from '@/domain/auth/application/gateways/repositories/user-repository';
+import { UsersRepository } from '@/domain/auth/application/gateways/repositories/user-repository';
 import { Role } from '@/domain/auth/enterprise/entities/enums/role';
 import { User, UserProps } from '@/domain/auth/enterprise/entities/user';
 import { Address } from '@/domain/auth/enterprise/entities/value-objects/address';
@@ -33,7 +33,7 @@ export function makeUser(modifications?: Partial<UserProps>): User {
 @Injectable()
 export class UserFactory {
   constructor(
-    private readonly userRepository: UserRepository,
+    private readonly userRepository: UsersRepository,
     private readonly hasher: Hasher,
     private readonly encypter: Encrypter,
   ) {}

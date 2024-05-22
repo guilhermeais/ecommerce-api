@@ -2,7 +2,7 @@ import {
   ConfirmAccountRequest,
   ConfirmAccountUseCase,
 } from './confirm-account';
-import { UserRepository } from '../gateways/repositories/user-repository';
+import { UsersRepository } from '../gateways/repositories/user-repository';
 import { ConfirmationTokensRepository } from '../gateways/repositories/confirmation-tokens-repository';
 import { makeFakeLogger } from 'test/shared/logger.mock';
 import { InMemoryUserRepository } from '@/infra/database/in-memory/repositories/in-memory-user-repository';
@@ -19,7 +19,7 @@ import { UniqueEntityID } from '@/core/entities/unique-entity-id';
 describe('ConfirmAccountUseCase', () => {
   let sut: ConfirmAccountUseCase;
   let logger: Logger;
-  let userRepository: UserRepository;
+  let userRepository: UsersRepository;
   let confirmationTokensRepository: ConfirmationTokensRepository;
 
   beforeEach(() => {

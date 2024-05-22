@@ -1,4 +1,4 @@
-import { UserRepository } from '@/domain/auth/application/gateways/repositories/user-repository';
+import { UsersRepository } from '@/domain/auth/application/gateways/repositories/user-repository';
 import { DefaultExceptionFilter } from '@/infra/http/filters/default-exception-filter.filter';
 
 import { EventManager } from '@/core/types/events';
@@ -16,7 +16,7 @@ import { LoginBodyRequest } from './login.controller';
 
 describe('ClientSignUp (E2E)', () => {
   let app: INestApplication;
-  let userRepository: UserRepository;
+  let userRepository: UsersRepository;
   let eventManager: EventManager;
   let encrypter: Encrypter;
   let userFactory: UserFactory;
@@ -31,7 +31,7 @@ describe('ClientSignUp (E2E)', () => {
 
     app.useGlobalFilters(new DefaultExceptionFilter());
 
-    userRepository = moduleRef.get(UserRepository);
+    userRepository = moduleRef.get(UsersRepository);
     eventManager = moduleRef.get(EventManager);
     encrypter = moduleRef.get(Encrypter);
     userFactory = moduleRef.get(UserFactory);

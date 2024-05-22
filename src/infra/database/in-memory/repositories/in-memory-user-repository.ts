@@ -1,9 +1,9 @@
 import { UniqueEntityID } from '@/core/entities/unique-entity-id';
-import { UserRepository } from '@/domain/auth/application/gateways/repositories/user-repository';
+import { UsersRepository } from '@/domain/auth/application/gateways/repositories/user-repository';
 import { User } from '@/domain/auth/enterprise/entities/user';
 import { Email } from '@/domain/auth/enterprise/entities/value-objects/email';
 
-export class InMemoryUserRepository implements UserRepository {
+export class InMemoryUserRepository implements UsersRepository {
   private readonly users: User[] = [];
 
   async findByEmail(email: Email): Promise<User | null> {

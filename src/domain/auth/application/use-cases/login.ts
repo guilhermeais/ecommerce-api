@@ -5,7 +5,7 @@ import { User } from '../../enterprise/entities/user';
 import { Email } from '../../enterprise/entities/value-objects/email';
 import { Encrypter } from '../gateways/cryptography/encrypter';
 import { Hasher } from '../gateways/cryptography/hasher';
-import { UserRepository } from '../gateways/repositories/user-repository';
+import { UsersRepository } from '../gateways/repositories/user-repository';
 import { InvalidLoginRequestError } from './errors/invalid-login-request-error';
 import { Injectable } from '@nestjs/common';
 
@@ -22,7 +22,7 @@ export type LoginResponse = {
 @Injectable()
 export class LoginUseCase implements UseCase<LoginRequest, LoginResponse> {
   constructor(
-    private readonly userRepository: UserRepository,
+    private readonly userRepository: UsersRepository,
     private readonly hasher: Hasher,
     private readonly encrypter: Encrypter,
     private readonly logger: Logger,

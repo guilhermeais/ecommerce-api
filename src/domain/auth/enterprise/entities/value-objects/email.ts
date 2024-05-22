@@ -18,6 +18,10 @@ export class Email extends ValueObject<{ value: string }> {
     return new Email({ value: email });
   }
 
+  public static restore(email: string): Email {
+    return new Email({ value: email });
+  }
+
   private static isValid(email: string): boolean {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);

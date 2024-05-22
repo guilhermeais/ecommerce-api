@@ -1,4 +1,4 @@
-import { UserRepository } from '@/domain/auth/application/gateways/repositories/user-repository';
+import { UsersRepository } from '@/domain/auth/application/gateways/repositories/user-repository';
 import { DefaultExceptionFilter } from '@/infra/http/filters/default-exception-filter.filter';
 
 import { EventManager, Events } from '@/core/types/events';
@@ -12,7 +12,7 @@ import { makeTestingApp } from 'test/make-testing-app';
 
 describe('Signup and account confirmation E2E flow', () => {
   let app: INestApplication;
-  let userRepository: UserRepository;
+  let userRepository: UsersRepository;
   let confirmationTokensRepository: ConfirmationTokensRepository;
   let eventManager: EventManager;
 
@@ -25,7 +25,7 @@ describe('Signup and account confirmation E2E flow', () => {
 
     app.useGlobalFilters(new DefaultExceptionFilter());
 
-    userRepository = moduleRef.get(UserRepository);
+    userRepository = moduleRef.get(UsersRepository);
     confirmationTokensRepository = moduleRef.get(ConfirmationTokensRepository);
     eventManager = moduleRef.get(EventManager);
 

@@ -6,7 +6,7 @@ import { Logger } from '@/shared/logger';
 import { Injectable } from '@nestjs/common';
 import { ConfirmationToken } from '../../enterprise/entities/confirmation-token';
 import { ConfirmationTokensRepository } from '../gateways/repositories/confirmation-tokens-repository';
-import { UserRepository } from '../gateways/repositories/user-repository';
+import { UsersRepository } from '../gateways/repositories/user-repository';
 
 export type GenerateConfirmationTokenRequest = {
   userId: string;
@@ -24,7 +24,7 @@ export class GenerateConfirmationTokenUseCase
     >
 {
   constructor(
-    private readonly userRepository: UserRepository,
+    private readonly userRepository: UsersRepository,
     private readonly logger: Logger,
     private readonly confirmationTokenRepository: ConfirmationTokensRepository,
     private readonly envService: EnvService,

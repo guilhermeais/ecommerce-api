@@ -9,7 +9,7 @@ import { makeUser } from 'test/auth/enterprise/entities/make-user';
 import { makeFakeLogger } from 'test/shared/logger.mock';
 import { MockProxy, mock } from 'vitest-mock-extended';
 import { ConfirmationTokensRepository } from '../gateways/repositories/confirmation-tokens-repository';
-import { UserRepository } from '../gateways/repositories/user-repository';
+import { UsersRepository } from '../gateways/repositories/user-repository';
 import {
   GenerateConfirmationTokenRequest,
   GenerateConfirmationTokenUseCase,
@@ -17,7 +17,7 @@ import {
 
 describe('GenerateConfirmationTokenUseCase', () => {
   let sut: GenerateConfirmationTokenUseCase;
-  let userRepository: UserRepository;
+  let userRepository: UsersRepository;
   let confirmationsTokenRepository: ConfirmationTokensRepository;
   let logger: Logger;
   let envService: MockProxy<EnvService>;

@@ -1,4 +1,4 @@
-import { UserRepository } from '@/domain/auth/application/gateways/repositories/user-repository';
+import { UsersRepository } from '@/domain/auth/application/gateways/repositories/user-repository';
 import { DefaultExceptionFilter } from '@/infra/http/filters/default-exception-filter.filter';
 
 import { EventManager, Events } from '@/core/types/events';
@@ -17,7 +17,7 @@ import { SignUpBody } from './client-sign-up.controller';
 
 describe('ClientSignUp (E2E)', () => {
   let app: INestApplication;
-  let userRepository: UserRepository;
+  let userRepository: UsersRepository;
   let eventManager: EventManager;
 
   beforeAll(async () => {
@@ -29,7 +29,7 @@ describe('ClientSignUp (E2E)', () => {
 
     app.useGlobalFilters(new DefaultExceptionFilter());
 
-    userRepository = moduleRef.get(UserRepository);
+    userRepository = moduleRef.get(UsersRepository);
 
     eventManager = moduleRef.get(EventManager);
     eventManager.clearSubscriptions();

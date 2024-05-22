@@ -10,7 +10,7 @@ import { Password } from '../../enterprise/entities/value-objects/password';
 import { Encrypter } from '../gateways/cryptography/encrypter';
 import { Hasher } from '../gateways/cryptography/hasher';
 import { SignUpInvitesRepository } from '../gateways/repositories/sign-up-invites.repository';
-import { UserRepository } from '../gateways/repositories/user-repository';
+import { UsersRepository } from '../gateways/repositories/user-repository';
 import { LoginResponse } from './login';
 import { Injectable } from '@nestjs/common';
 
@@ -39,7 +39,7 @@ export class FinishSignUpInviteUseCase
 {
   constructor(
     private readonly signUpInvitesRepository: SignUpInvitesRepository,
-    private readonly userRepository: UserRepository,
+    private readonly userRepository: UsersRepository,
     private readonly hasher: Hasher,
     private readonly encrypter: Encrypter,
     private readonly eventManager: EventManager,

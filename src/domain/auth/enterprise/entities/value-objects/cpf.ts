@@ -15,6 +15,10 @@ export class CPF extends ValueObject<{ value: string }> {
     return new CPF({ value: cpf });
   }
 
+  public static restore(cpf: string): CPF {
+    return new CPF({ value: cpf });
+  }
+
   private static isValid(value: string): boolean {
     return cpf.isValid(value);
   }
