@@ -61,6 +61,22 @@ describe('MongoDbUsersRepository', () => {
       expect(savedUser?.isConfirmed).toEqual(user.isConfirmed);
       expect(savedUser?.signUpInviteId).toEqual(user.signUpInviteId);
     });
+
+    it('should update an existing user', async () => {
+      const user = makeUser();
+      await sut.save(user);
+
+      expect(user.signUpInviteId).toBe(undefined);
+
+      user.setSignUpInviteId(new UniqueEntityID());
+      await sut.save(user);
+
+      const savedUser = await userModel.findById(user.id.toValue());
+
+      expect(savedUser).not.toBeNull();
+
+      expect(savedUser?.signUpInviteId).toBeTypeOf('string');
+    });
   });
 
   describe('findByEmail()', () => {

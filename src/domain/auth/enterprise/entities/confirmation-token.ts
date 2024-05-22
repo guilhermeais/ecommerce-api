@@ -3,7 +3,7 @@ import { UniqueEntityID } from '@/core/entities/unique-entity-id';
 import { Email } from './value-objects/email';
 
 export type ConfirmationTokenProps = {
-  expiresIn: number;
+  expiresIn?: number;
   userId: UniqueEntityID;
   email: Email;
   userName: string;
@@ -12,17 +12,20 @@ export type ConfirmationTokenProps = {
 };
 
 export class ConfirmationToken extends Entity<ConfirmationTokenProps> {
-  private constructor(props: ConfirmationTokenProps) {
-    super(props);
-  }
-
   public static create(props: ConfirmationTokenProps): ConfirmationToken {
     props!.createdAt = props.createdAt || new Date();
     props.used = props.used ?? false;
     return new ConfirmationToken(props);
   }
 
-  get expiresIn(): number {
+  public static restore(
+    props: ConfirmationTokenProps,
+    id: UniqueEntityID,
+  ): ConfirmationToken {
+    return new ConfirmationToken({ ...props }, id);
+  }
+
+  get expiresIn(): number | undefined {
     return this.props.expiresIn;
   }
 
@@ -47,6 +50,7 @@ export class ConfirmationToken extends Entity<ConfirmationTokenProps> {
   }
 
   isExpired(now = new Date()): boolean {
+    if (!this.expiresIn) return false;
     return now > new Date(this.createdAt.getTime() + this.expiresIn);
   }
 

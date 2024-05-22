@@ -25,7 +25,6 @@ export class MongoDbUserMapper {
   }
 
   static toDomain(user: MongoUserModel): User {
-    console.log(user);
     return User.restore(
       {
         cpf: CPF.restore(user.cpf),

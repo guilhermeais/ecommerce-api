@@ -2,13 +2,14 @@ import { ConfirmationTokensRepository } from '@/domain/auth/application/gateways
 import { SignUpInvitesRepository } from '@/domain/auth/application/gateways/repositories/sign-up-invites.repository';
 import { UsersRepository } from '@/domain/auth/application/gateways/repositories/user-repository';
 import { Module } from '@nestjs/common';
-import { InMemoryConfirmationTokensRepository } from './in-memory/repositories/in-memory-confirmation-tokens.repository';
 import { InMemorySignUpInvitesRepository } from './in-memory/repositories/in-memory-sign-up-tokens.repository';
 import {
   AUTH_MONGOOSE_CONNECTION_PROVIDER,
   AuthMongooseConnectionFactory,
 } from './mongodb/auth/auth-mongoose-connection.provider';
+import { MongoDbConfirmationTokensRepository } from './mongodb/auth/repositories/mongodb-confirmation-tokens.repository';
 import { MongoDbUsersRepository } from './mongodb/auth/repositories/mongodb-users.repository';
+import { MongoConfirmationTokenModelProvider } from './mongodb/auth/schemas/confirmation-token.model';
 import { MongoUserModelProvider } from './mongodb/auth/schemas/user.model';
 
 @Module({
@@ -19,7 +20,7 @@ import { MongoUserModelProvider } from './mongodb/auth/schemas/user.model';
     },
     {
       provide: ConfirmationTokensRepository,
-      useClass: InMemoryConfirmationTokensRepository,
+      useClass: MongoDbConfirmationTokensRepository,
     },
     {
       provide: SignUpInvitesRepository,
@@ -27,6 +28,7 @@ import { MongoUserModelProvider } from './mongodb/auth/schemas/user.model';
     },
     AuthMongooseConnectionFactory,
     MongoUserModelProvider,
+    MongoConfirmationTokenModelProvider,
   ],
   exports: [
     UsersRepository,

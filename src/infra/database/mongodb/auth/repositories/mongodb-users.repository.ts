@@ -3,12 +3,13 @@ import { UsersRepository } from '@/domain/auth/application/gateways/repositories
 import { User } from '@/domain/auth/enterprise/entities/user';
 import { Email } from '@/domain/auth/enterprise/entities/value-objects/email';
 import { MongoUserModel } from '../schemas/user.model';
-import { Inject } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { EnvService } from '@/infra/env/env.service';
 import { Model } from 'mongoose';
 import { Logger } from '@/shared/logger';
 import { MongoDbUserMapper } from '../mappers/mongodb-user.mapper';
 
+@Injectable()
 export class MongoDbUsersRepository implements UsersRepository {
   constructor(
     @Inject(MongoUserModel.COLLECTION_NAME)
