@@ -102,4 +102,12 @@ export class SignUpInvite extends Entity<SignUpInviteProps> {
   get sentBy(): User {
     return this.props.sentBy;
   }
+
+  get expiresIn() {
+    return this.props.expiresIn;
+  }
+
+  get createdAt() {
+    return this.props.createdAt!;
+  }
 }

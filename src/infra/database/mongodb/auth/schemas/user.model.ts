@@ -12,7 +12,7 @@ export class MongoAddressModel {
 }
 
 export class MongoUserModel {
-  static COLLECTION_NAME = 'users';
+  static COLLECTION_NAME = 'users' as const;
 
   _id!: string;
   id!: string;
