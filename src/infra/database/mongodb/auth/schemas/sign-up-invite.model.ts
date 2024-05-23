@@ -33,6 +33,7 @@ export const MongoSignUpInviteSchema = new Schema<MongoSignUpInviteModel>(
     sentBy: {
       type: Schema.Types.ObjectId,
       ref: MongoUserModel.COLLECTION_NAME,
+      virtual: true,
     },
     sentById: {
       type: String,

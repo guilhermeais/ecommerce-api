@@ -11,6 +11,7 @@ import request from 'supertest';
 import { makeConfirmationToken } from 'test/auth/enterprise/entities/make-confirmation-token';
 import { makeUser } from 'test/auth/enterprise/entities/make-user';
 import { makeTestingApp } from 'test/make-testing-app';
+import { randomUUID } from 'crypto';
 
 describe('ConfirmAccountController (E2E)', () => {
   let app: INestApplication;
@@ -147,7 +148,7 @@ describe('ConfirmAccountController (E2E)', () => {
       await userRepository.save(user);
 
       const response = await request(app.getHttpServer())
-        .post(`/sign-up/1/confirm`)
+        .post(`/sign-up/${randomUUID()}/confirm`)
         .set('Authorization', `Bearer ${accessToken}`)
         .send();
 

@@ -1,15 +1,15 @@
 import { EventManager } from '@/core/types/events';
 import { SignUpInvitesRepository } from '@/domain/auth/application/gateways/repositories/sign-up-invites.repository';
+import { Role } from '@/domain/auth/enterprise/entities/enums/role';
 import { CryptographyModule } from '@/infra/cryptography/cryptography.module';
 import { DatabaseModule } from '@/infra/database/database.module';
 import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
+import { SignUpInviteFactory } from 'test/auth/enterprise/entities/make-sign-up-invite';
 import { UserFactory } from 'test/auth/enterprise/entities/make-user';
 import { makeTestingApp } from 'test/make-testing-app';
 import { DefaultExceptionFilter } from '../../filters/default-exception-filter.filter';
 import { ListSignUpInvitesQuery } from './list-sign-up-invites.controller';
-import { Role } from '@/domain/auth/enterprise/entities/enums/role';
-import { makeSignUpInvite } from 'test/auth/enterprise/entities/make-sign-up-invite';
 
 export function makeListSignUpInvitesQuery(
   modifications?: Partial<ListSignUpInvitesQuery>,
@@ -26,11 +26,12 @@ describe('ListSignUpInvitesController (E2E)', () => {
   let signUpInvitesRepository: SignUpInvitesRepository;
   let eventManager: EventManager;
   let userFactory: UserFactory;
+  let signUpInviteFactory: SignUpInviteFactory;
 
   beforeAll(async () => {
     const moduleRef = await makeTestingApp({
       imports: [DatabaseModule, CryptographyModule],
-      providers: [UserFactory],
+      providers: [UserFactory, SignUpInviteFactory],
     }).compile();
 
     app = moduleRef.createNestApplication();
@@ -40,6 +41,7 @@ describe('ListSignUpInvitesController (E2E)', () => {
     signUpInvitesRepository = moduleRef.get(SignUpInvitesRepository);
     eventManager = moduleRef.get(EventManager);
     userFactory = moduleRef.get(UserFactory);
+    signUpInviteFactory = moduleRef.get(SignUpInviteFactory);
 
     await app.init();
   });
@@ -77,12 +79,10 @@ describe('ListSignUpInvitesController (E2E)', () => {
         role: Role.MASTER,
       });
 
-      const invites = await Promise.all(
-        Array.from({ length: 15 }).map(() => makeSignUpInvite()),
-      );
-
       await Promise.all(
-        invites.map((invite) => signUpInvitesRepository.save(invite)),
+        Array.from({ length: 15 }).map(() =>
+          signUpInviteFactory.makeSignUpInvite(),
+        ),
       );
 
       const query = makeListSignUpInvitesQuery({

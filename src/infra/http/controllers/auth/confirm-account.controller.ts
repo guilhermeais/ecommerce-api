@@ -3,6 +3,8 @@ import { User } from '@/domain/auth/enterprise/entities/user';
 import { CurrentUser } from '@/infra/auth/current-user.decorator';
 import { Logger } from '@/shared/logger';
 import { Controller, Param, Post } from '@nestjs/common';
+import { z } from 'zod';
+import { ZodValidationPipe } from '../../pipes/zod-validation.pipe';
 
 @Controller('/sign-up/:confirmationId/confirm')
 export class ConfirmAccountController {
@@ -13,7 +15,19 @@ export class ConfirmAccountController {
 
   @Post()
   async handle(
-    @Param('confirmationId') confirmationId: string,
+    @Param(
+      'confirmationId',
+      new ZodValidationPipe(
+        z
+          .string({
+            message: 'confirmationId é obrigatório.',
+          })
+          .uuid({
+            message: 'confirmationId deve ser um UUID.',
+          }),
+      ),
+    )
+    confirmationId: string,
     @CurrentUser() user: User,
   ): Promise<void> {
     try {
