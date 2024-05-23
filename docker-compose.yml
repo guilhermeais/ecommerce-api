@@ -1,0 +1,39 @@
+services:
+  api:
+    container_name: ecommerce-api
+    image: ecommerce-api-dev
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: dev
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+      - PORT=3000
+      - MONGO_URI=mongodb://root:root@mongodb:27017
+    ports:
+      - 3000:3000
+    networks:
+      - nest
+    depends_on:
+      - mongodb
+    command: npx nest start --watch
+  mongodb:
+    container_name: mongodb
+    image: mongo
+    volumes:
+      - .mongodb:/data/db
+    ports:
+      - 27017:27017
+    networks:
+      - nest
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+    command: mongod --auth
+networks:
+  nest:
+    driver: bridge
