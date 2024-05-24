@@ -26,6 +26,9 @@ export abstract class Entity<Props> {
   }
 
   public toProps() {
-    return structuredClone(this.props);
+    return structuredClone({
+      ...this.props,
+      id: this.id.toString(),
+    });
   }
 }
