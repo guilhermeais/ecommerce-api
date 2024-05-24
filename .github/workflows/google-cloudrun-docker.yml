@@ -109,6 +109,8 @@ jobs:
           env_vars: |-
              APP_NAME=PiaLabs Ecommerce
              APP_EMAIL=guilhermeteixeiraais@gmail.com
+             ACCOUNT_CONFIRMATION_URL=http://localhost:3000/confirm
+             FINISH_SIGNUP_INVITE_URL=http://localhost:3000/finish-signup
 
       # If required, use the Cloud Run url output in later steps
       - name: Show Output
