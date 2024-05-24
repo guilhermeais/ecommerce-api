@@ -22,5 +22,5 @@
 
 ## Requisitos
 
-- 🟩 Um usuário logado deve conseguir visualizar suas informações
-  - 🟩 Deve retornar um erro de não autenticado caso o usuário não esteja logado
+- ❎ Um usuário logado deve conseguir visualizar suas informações
+  - ❎ Deve retornar um erro de não autenticado caso o usuário não esteja logado
