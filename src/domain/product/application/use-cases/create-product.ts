@@ -38,7 +38,7 @@ export class CreateProductUseCase
         `Create product ${request.name} - ${request.price}: ${JSON.stringify(request, null, 2)}`,
       );
 
-      const image = await this.uploadProductImage(request);
+      const imageUrl = await this.uploadProductImage(request);
 
       const subCategoryId = new UniqueEntityID(request.subCategoryId);
 
@@ -48,7 +48,7 @@ export class CreateProductUseCase
         price: request.price,
         isShown: request.isShown,
         subCategoryId,
-        image,
+        image: imageUrl,
       });
 
       await this.productsRepository.save(product);
