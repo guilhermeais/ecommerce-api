@@ -17,6 +17,7 @@ export default defineConfig({
         '**/**/in-memory**',
         '**/**/fake-**',
         '**/test/**',
+        '**/**/**spec**',
       ],
       reporter: ['text', 'json-summary', 'json'],
       reportOnFailure: true,
