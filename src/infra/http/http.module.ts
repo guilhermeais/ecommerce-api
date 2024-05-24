@@ -14,6 +14,7 @@ import { FinishSignUpInviteController } from './controllers/auth/finish-sign-up-
 import { FinishSignUpInviteUseCase } from '@/domain/auth/application/use-cases/finish-sign-up-invite';
 import { ListSignUpInvitesController } from './controllers/auth/list-sign-up-invites.controller';
 import { ListSignUpInvitesUseCase } from '@/domain/auth/application/use-cases/list-signup-invites';
+import { GetLoggedUserController } from './controllers/auth/get-logged-user.controller';
 
 @Module({
   imports: [EventsModule, DatabaseModule, CryptographyModule],
@@ -24,6 +25,7 @@ import { ListSignUpInvitesUseCase } from '@/domain/auth/application/use-cases/li
     CreateSignUpInviteController,
     FinishSignUpInviteController,
     ListSignUpInvitesController,
+    GetLoggedUserController,
   ],
   providers: [
     ClientSignUpUseCase,
