@@ -83,7 +83,7 @@ export class NodeMailerEmailSender implements EmailSender {
       const info = await this.transporter.sendMail({
         from: this.env.get('APP_EMAIL'),
         subject: request.subject,
-        to: 'guilhermeteixeiraais@gmail.com',
+        to: request.to,
         html,
         messageId,
       });
