@@ -105,7 +105,10 @@ jobs:
               GOOGLE_CLIENT_ID=GOOGLE_CLIENT_ID:latest
               GOOGLE_CLIENT_SECRET=GOOGLE_CLIENT_SECRET:latest
               GOOGLE_REFRESH_TOKEN=GOOGLE_REFRESH_TOKEN:latest
-              
+              MONGO_URI=MONGO_URI:latest    
+          env_vars: |-
+             APP_NAME=PiaLabs Ecommerce
+             APP_EMAIL=guilhermeteixeiraais@gmail.com
 
       # If required, use the Cloud Run url output in later steps
       - name: Show Output
