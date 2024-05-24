@@ -19,4 +19,5 @@ Este módulo lida com a autenticação do usuário administrador e do cliente no
 - ❎ [Login](./requirements/auth/login.md)
 - ❎ [Convite para cadastro de administrador](./requirements/auth/signup-invite.md)
 - ❎ [Conclusão do convite para cadastro de administrador](./requirements/auth/finish-signup-invite.md)
-- 🟩 [Lista de convites para cadastro de administradores](./requirements/auth/list-signup-invites.md)
+- ❎ [Lista de convites para cadastro de administradores](./requirements/auth/list-signup-invites.md)
+- 🟩 [Obter usuário logado](./requirements/auth/get-logged-user.md)
