@@ -2,7 +2,7 @@ name: Pull Request Validator (Tests & Coverage)
 
 on:
   pull_request:
-    branches: [master]
+    branches: [master, main]
 
 jobs:
   test:
