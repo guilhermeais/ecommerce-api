@@ -37,6 +37,7 @@ const CreateProductBodySchema = z.object({
   price: z
     .number({
       message: 'Preço do produto é obrigatório!',
+      coerce: true,
     })
     .positive({
       message: 'Preço do produto deve ser positivo!',
@@ -45,7 +46,9 @@ const CreateProductBodySchema = z.object({
       message:
         'Preço do produto deve ser um número decimal com duas casas decimais!',
     }),
-  isShown: z.boolean().optional(),
+  isShown: z
+    .preprocess((arg) => (arg as string).toLowerCase() === 'true', z.boolean())
+    .optional(),
   subCategoryId: z
     .string({
       message: 'ID da subcategoria deve ser uma string!',
@@ -68,10 +71,10 @@ export class CreateProductController {
   @Post()
   @UseInterceptors(FileInterceptor('image'))
   async handle(
+    @CurrentUser() currentUser: User,
     @Body(new ZodValidationPipe(CreateProductBodySchema))
     body: CreateProductBody,
     @UploadedFile(
-      'image',
       new ParseFilePipe({
         validators: [
           new MaxFileSizeValidator({
@@ -82,13 +85,13 @@ export class CreateProductController {
             fileType: '.(png|jpg|jpeg)',
           }),
         ],
+        fileIsRequired: false,
       }),
     )
-    image: Express.Multer.File,
-    @CurrentUser() currentUser: User,
+    image?: Express.Multer.File,
   ): Promise<CreateProductResponse> {
     try {
-      const imageFile: File = image?.buffer && {
+      const imageFile: File | undefined = image?.buffer && {
         body: image.buffer,
         name: image.originalname,
         type: image.mimetype,
@@ -102,7 +105,7 @@ export class CreateProductController {
 
       this.logger.log(
         CreateProductController.name,
-        `User ${currentUser.id.toString()} - ${currentUser.name} Creating product with: ${JSON.stringify(body)} and image ${image.filename}.`,
+        `User ${currentUser.id.toString()} - ${currentUser.name} Creating product with: ${JSON.stringify(body)} and image ${image?.filename}.`,
       );
 
       const result = await this.createProcutUseCase.execute({

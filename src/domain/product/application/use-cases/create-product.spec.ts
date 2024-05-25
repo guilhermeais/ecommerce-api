@@ -4,7 +4,7 @@ import { InMemoryProductsRepository } from '@/infra/database/in-memory/repositor
 import { Logger } from '@/shared/logger';
 import { faker } from '@faker-js/faker';
 import { FakeEventManager } from 'test/core/type/event/fake-event-manager';
-import { FakeStorageGateway } from 'test/products/application/gateways/storage/fake-storage';
+import { FakeStorageGateway } from '@/infra/storage/fake-storage';
 import { makeCategory } from 'test/products/enterprise/entities/make-category';
 import { makeFakeLogger } from 'test/shared/logger.mock';
 import { Product } from '../../enterprise/entities/product';

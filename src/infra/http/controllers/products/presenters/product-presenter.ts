@@ -15,6 +15,10 @@ export type ProductHTTPResponse = {
     };
   };
   image?: string;
+  createdBy?: {
+    id: string;
+    name: string;
+  };
 };
 
 export class ProductPresenter {
@@ -33,6 +37,10 @@ export class ProductPresenter {
           id: product.subCategory.rootCategory.id.toString(),
           name: product.subCategory.rootCategory.name,
         },
+      },
+      createdBy: {
+        id: product.createdBy.id.toString(),
+        name: product.createdBy.name,
       },
     };
   }

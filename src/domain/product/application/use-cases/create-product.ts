@@ -48,7 +48,14 @@ export class CreateProductUseCase
 
       this.logger.debug(
         CreateProductUseCase.name,
-        `Create product ${request.name} - ${request.price}: ${JSON.stringify(request, null, 2)}`,
+        `Create product ${request.name} - ${request.price}: ${JSON.stringify(
+          {
+            ...request,
+            image: '***',
+          },
+          null,
+          2,
+        )}`,
       );
 
       const imageUrl = await this.uploadProductImage(request);
@@ -65,7 +72,10 @@ export class CreateProductUseCase
         }
       }
 
-      const createdBy = CreatedBy.create(request.createdBy);
+      const createdBy = CreatedBy.restore(
+        request.createdBy,
+        request.createdBy!.id!,
+      );
 
       const product = Product.create({
         name: request.name,

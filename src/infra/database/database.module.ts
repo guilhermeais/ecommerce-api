@@ -1,7 +1,11 @@
 import { ConfirmationTokensRepository } from '@/domain/auth/application/gateways/repositories/confirmation-tokens-repository';
 import { SignUpInvitesRepository } from '@/domain/auth/application/gateways/repositories/sign-up-invites.repository';
 import { UsersRepository } from '@/domain/auth/application/gateways/repositories/user-repository';
+import { CategoriesRepository } from '@/domain/product/application/gateways/repositories/categories-repository';
+import { ProductsRepository } from '@/domain/product/application/gateways/repositories/products-repository';
 import { Module } from '@nestjs/common';
+import { InMemoryCategoriesRepository } from './in-memory/repositories/products/in-memory-categories.repository';
+import { InMemoryProductsRepository } from './in-memory/repositories/products/in-memory-products.repository';
 import {
   AUTH_MONGOOSE_CONNECTION_PROVIDER,
   AuthMongooseConnectionFactory,
@@ -27,16 +31,27 @@ import { MongoUserModelProvider } from './mongodb/auth/schemas/user.model';
       provide: SignUpInvitesRepository,
       useClass: MongoDbSignUpInvitesRepository,
     },
+    {
+      provide: CategoriesRepository,
+      useClass: InMemoryCategoriesRepository,
+    },
+    {
+      provide: ProductsRepository,
+      useClass: InMemoryProductsRepository,
+    },
     AuthMongooseConnectionFactory,
     MongoUserModelProvider,
     MongoConfirmationTokenModelProvider,
     MongoSignUpModelProvider,
   ],
   exports: [
+    AUTH_MONGOOSE_CONNECTION_PROVIDER,
     UsersRepository,
     ConfirmationTokensRepository,
     SignUpInvitesRepository,
-    AUTH_MONGOOSE_CONNECTION_PROVIDER,
+
+    ProductsRepository,
+    CategoriesRepository,
   ],
 })
 export class DatabaseModule {}
