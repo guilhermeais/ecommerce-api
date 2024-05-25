@@ -7,6 +7,9 @@ import { ProductsRepository } from '../gateways/repositories/products-repository
 import { File } from '../gateways/storage/file';
 import { StorageGateway } from '../gateways/storage/storage-gateway';
 import { Injectable } from '@nestjs/common';
+import { CategoriesRepository } from '../gateways/repositories/categories-repository';
+import { EntityNotFoundError } from '@/core/errors/commom/entity-not-found-error';
+import { Category } from '../../enterprise/entities/category';
 
 export type CreateProductRequest = {
   name: string;
@@ -28,6 +31,7 @@ export class CreateProductUseCase
     private readonly storageGateway: StorageGateway,
     private readonly logger: Logger,
     private readonly eventManager: EventManager,
+    private readonly categoriesRepository: CategoriesRepository,
   ) {}
 
   async execute(request: CreateProductRequest): Promise<Product> {
@@ -44,14 +48,24 @@ export class CreateProductUseCase
 
       const imageUrl = await this.uploadProductImage(request);
 
-      const subCategoryId = new UniqueEntityID(request.subCategoryId);
+      let subCategory: Category | undefined | null = undefined;
+
+      if (request.subCategoryId) {
+        subCategory = await this.categoriesRepository.findById(
+          new UniqueEntityID(request.subCategoryId),
+        );
+
+        if (!subCategory) {
+          throw new EntityNotFoundError('Categoria', request.subCategoryId);
+        }
+      }
 
       const product = Product.create({
         name: request.name,
         description: request.description,
         price: request.price,
         isShown: request.isShown,
-        subCategoryId,
+        subCategory,
         image: imageUrl,
       });
 

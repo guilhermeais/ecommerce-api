@@ -1,12 +1,13 @@
 import { Entity } from '@/core/entities/entity';
 import { UniqueEntityID } from '@/core/entities/unique-entity-id';
+import { Category } from './category';
 
 export type ProductProps = {
   name: string;
   description?: string;
   price: number;
   isShown?: boolean;
-  subCategoryId: UniqueEntityID;
+  subCategory?: Category;
   image?: string;
 };
 
@@ -35,8 +36,8 @@ export class Product extends Entity<ProductProps> {
     return this.props.isShown;
   }
 
-  get subCategoryId() {
-    return this.props.subCategoryId;
+  get subCategory() {
+    return this.props.subCategory;
   }
 
   get image() {
