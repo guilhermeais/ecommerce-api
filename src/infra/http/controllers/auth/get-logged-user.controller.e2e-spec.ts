@@ -6,7 +6,7 @@ import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
 import { UserFactory } from 'test/auth/enterprise/entities/make-user';
 import { makeTestingApp } from 'test/make-testing-app';
-import { UserPresenter } from '../presenters/user-presenter';
+import { UserPresenter } from './presenters/user-presenter';
 
 describe('GetLoggedUserController (E2E)', () => {
   let app: INestApplication;

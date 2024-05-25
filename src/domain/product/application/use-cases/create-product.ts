@@ -6,6 +6,7 @@ import { Product } from '../../enterprise/entities/product';
 import { ProductsRepository } from '../gateways/repositories/products-repository';
 import { File } from '../gateways/storage/file';
 import { StorageGateway } from '../gateways/storage/storage-gateway';
+import { Injectable } from '@nestjs/common';
 
 export type CreateProductRequest = {
   name: string;
@@ -18,6 +19,7 @@ export type CreateProductRequest = {
 
 export type CreateProductResponse = Product;
 
+@Injectable()
 export class CreateProductUseCase
   implements UseCase<CreateProductRequest, CreateProductResponse>
 {
