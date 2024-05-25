@@ -12,6 +12,7 @@ import { CategoriesRepository } from '../gateways/repositories/categories-reposi
 import { ProductsRepository } from '../gateways/repositories/products-repository';
 import { StorageGateway } from '../gateways/storage/storage-gateway';
 import { CreateProductRequest, CreateProductUseCase } from './create-product';
+import { UniqueEntityID } from '@/core/entities/unique-entity-id';
 
 describe('CreateProduct use case', () => {
   let sut: CreateProductUseCase;
@@ -51,6 +52,11 @@ describe('CreateProduct use case', () => {
       },
       price: Number(faker.commerce.price()),
       subCategoryId: faker.string.uuid(),
+      createdBy: {
+        id: new UniqueEntityID(faker.string.uuid()),
+        email: faker.internet.email(),
+        name: faker.person.fullName(),
+      },
       ...modifications,
     };
   }

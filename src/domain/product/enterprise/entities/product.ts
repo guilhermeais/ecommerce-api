@@ -1,6 +1,7 @@
 import { Entity } from '@/core/entities/entity';
 import { UniqueEntityID } from '@/core/entities/unique-entity-id';
 import { Category } from './category';
+import { CreatedBy } from './created-by';
 
 export type ProductProps = {
   name: string;
@@ -9,6 +10,7 @@ export type ProductProps = {
   isShown?: boolean;
   subCategory?: Category;
   image?: string;
+  createdBy: CreatedBy;
 };
 
 export class Product extends Entity<ProductProps> {
@@ -32,8 +34,8 @@ export class Product extends Entity<ProductProps> {
     return this.props.price;
   }
 
-  get isShown() {
-    return this.props.isShown;
+  get isShown(): boolean {
+    return !!this.props.isShown;
   }
 
   get subCategory() {
@@ -42,5 +44,9 @@ export class Product extends Entity<ProductProps> {
 
   get image() {
     return this.props.image;
+  }
+
+  get createdBy() {
+    return this.props.createdBy;
   }
 }

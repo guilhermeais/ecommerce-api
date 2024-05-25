@@ -1,23 +1,28 @@
 import { UniqueEntityID } from '@/core/entities/unique-entity-id';
+import { EntityNotFoundError } from '@/core/errors/commom/entity-not-found-error';
 import { EventManager, Events } from '@/core/types/events';
 import { UseCase } from '@/core/types/use-case';
 import { Logger } from '@/shared/logger';
+import { Injectable } from '@nestjs/common';
+import { Category } from '../../enterprise/entities/category';
 import { Product } from '../../enterprise/entities/product';
+import {
+  CreatedBy,
+  CreatedByProps,
+} from '../../enterprise/entities/created-by';
+import { CategoriesRepository } from '../gateways/repositories/categories-repository';
 import { ProductsRepository } from '../gateways/repositories/products-repository';
 import { File } from '../gateways/storage/file';
 import { StorageGateway } from '../gateways/storage/storage-gateway';
-import { Injectable } from '@nestjs/common';
-import { CategoriesRepository } from '../gateways/repositories/categories-repository';
-import { EntityNotFoundError } from '@/core/errors/commom/entity-not-found-error';
-import { Category } from '../../enterprise/entities/category';
 
 export type CreateProductRequest = {
   name: string;
-  description: string;
+  description?: string;
   price: number;
-  isShown: boolean;
-  subCategoryId: string;
-  image: File;
+  isShown?: boolean;
+  subCategoryId?: string;
+  image?: File;
+  createdBy: CreatedByProps;
 };
 
 export type CreateProductResponse = Product;
@@ -60,6 +65,8 @@ export class CreateProductUseCase
         }
       }
 
+      const createdBy = CreatedBy.create(request.createdBy);
+
       const product = Product.create({
         name: request.name,
         description: request.description,
@@ -67,6 +74,7 @@ export class CreateProductUseCase
         isShown: request.isShown,
         subCategory,
         image: imageUrl,
+        createdBy,
       });
 
       await this.productsRepository.save(product);
