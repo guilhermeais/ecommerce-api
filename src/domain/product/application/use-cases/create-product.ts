@@ -1,10 +1,11 @@
+import { UniqueEntityID } from '@/core/entities/unique-entity-id';
+import { EventManager, Events } from '@/core/types/events';
 import { UseCase } from '@/core/types/use-case';
+import { Logger } from '@/shared/logger';
 import { Product } from '../../enterprise/entities/product';
+import { ProductsRepository } from '../gateways/repositories/products-repository';
 import { File } from '../gateways/storage/file';
 import { StorageGateway } from '../gateways/storage/storage-gateway';
-import { ProductsRepository } from '../gateways/repositories/products-repository';
-import { Logger } from '@/shared/logger';
-import { UniqueEntityID } from '@/core/entities/unique-entity-id';
 
 export type CreateProductRequest = {
   name: string;
@@ -21,9 +22,10 @@ export class CreateProductUseCase
   implements UseCase<CreateProductRequest, CreateProductResponse>
 {
   constructor(
-    private readonly storageGateway: StorageGateway,
     private readonly productsRepository: ProductsRepository,
+    private readonly storageGateway: StorageGateway,
     private readonly logger: Logger,
+    private readonly eventManager: EventManager,
   ) {}
 
   async execute(request: CreateProductRequest): Promise<Product> {
@@ -57,6 +59,8 @@ export class CreateProductUseCase
         CreateProductUseCase.name,
         `Product ${request.name} - ${request.price} created!`,
       );
+
+      await this.eventManager.publish(Events.PRODUCT_CREATED, product);
 
       return product;
     } catch (error: any) {
