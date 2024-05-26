@@ -3,14 +3,13 @@ import {
   StorageGateway,
   UploadResponse,
 } from '@/domain/product/application/gateways/storage/storage-gateway';
-import { faker } from '@faker-js/faker';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class FakeStorageGateway implements StorageGateway {
-  #files: File[] = [];
+  #files: (File & { url: string })[] = [];
   async upload(file: File): Promise<UploadResponse> {
-    const url = faker.internet.url();
+    const url = `${file.name}.${file.type}`;
     const newFile = {
       ...file,
       url,
@@ -21,5 +20,9 @@ export class FakeStorageGateway implements StorageGateway {
     return {
       url,
     };
+  }
+
+  async delete(url: string): Promise<void> {
+    this.#files = this.#files.filter((file) => file.url !== url);
   }
 }

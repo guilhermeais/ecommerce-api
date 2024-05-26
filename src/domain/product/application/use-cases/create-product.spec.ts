@@ -13,6 +13,7 @@ import { ProductsRepository } from '../gateways/repositories/products-repository
 import { StorageGateway } from '../gateways/storage/storage-gateway';
 import { CreateProductRequest, CreateProductUseCase } from './create-product';
 import { UniqueEntityID } from '@/core/entities/unique-entity-id';
+import { EntityNotFoundError } from '@/core/errors/commom/entity-not-found-error';
 
 describe('CreateProduct use case', () => {
   let sut: CreateProductUseCase;
@@ -132,5 +133,11 @@ describe('CreateProduct use case', () => {
     expect(productOnRepo).toBeDefined();
   });
 
-  it('should throw if the provided category does not exists', async () => {});
+  it('should throw if the provided category does not exists', async () => {
+    const request = makeCreateProductUseCaseRequest();
+
+    await expect(sut.execute(request)).rejects.toThrow(
+      new EntityNotFoundError('Categoria', request.subCategoryId),
+    );
+  });
 });

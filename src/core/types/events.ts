@@ -8,6 +8,7 @@ export enum Events {
   CONFIRMATION_TOKEN_CREATED = 'confirmationToken.created',
   SIGN_UP_INVITE_CREATED = 'signUpInvite.created',
   PRODUCT_CREATED = 'product.created',
+  PRODUCT_UPDATED = 'product.updated',
 }
 
 export type EventsMap = {
@@ -18,6 +19,7 @@ export type EventsMap = {
   [Events.SIGN_UP_INVITE_CREATED]: SignUpInvite;
 
   [Events.PRODUCT_CREATED]: Product;
+  [Events.PRODUCT_UPDATED]: Product;
 };
 
 export abstract class EventManager {

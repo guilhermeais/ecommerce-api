@@ -7,4 +7,5 @@ export type UploadResponse = {
 
 export abstract class StorageGateway {
   abstract upload(file: File): Promise<UploadResponse>;
+  abstract delete(url: string): Promise<void>;
 }

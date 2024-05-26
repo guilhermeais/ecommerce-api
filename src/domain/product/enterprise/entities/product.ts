@@ -11,6 +11,7 @@ export type ProductProps = {
   subCategory?: Category;
   image?: string;
   createdBy: CreatedBy;
+  updatedBy?: CreatedBy;
 };
 
 export class Product extends Entity<ProductProps> {
@@ -26,27 +27,59 @@ export class Product extends Entity<ProductProps> {
     return this.props.name;
   }
 
+  set name(name: string) {
+    this.props.name = name;
+  }
+
   get description() {
     return this.props.description;
+  }
+
+  set description(description: string) {
+    this.props.description = description;
   }
 
   get price() {
     return this.props.price;
   }
 
+  set price(price: number) {
+    this.props.price = price;
+  }
+
   get isShown(): boolean {
     return !!this.props.isShown;
+  }
+
+  set isShown(isShown: boolean) {
+    this.props.isShown = isShown;
   }
 
   get subCategory() {
     return this.props.subCategory;
   }
 
+  set subCategory(subCategory: Category) {
+    this.props.subCategory = subCategory;
+  }
+
   get image() {
     return this.props.image;
   }
 
+  set image(image) {
+    this.props.image = image;
+  }
+
   get createdBy() {
     return this.props.createdBy;
+  }
+
+  get updatedBy() {
+    return this.props.updatedBy;
+  }
+
+  set updatedBy(updatedBy: CreatedBy) {
+    this.props.updatedBy = updatedBy;
   }
 }
