@@ -1,7 +1,7 @@
 import { Role } from '@/domain/auth/enterprise/entities/enums/role';
 import { User } from '@/domain/auth/enterprise/entities/user';
 import { File } from '@/domain/product/application/gateways/storage/file';
-import { CreateProductUseCase } from '@/domain/product/application/use-cases/create-product';
+import { UpdateProductUseCase } from '@/domain/product/application/use-cases/update-product';
 import { CreatedByProps } from '@/domain/product/enterprise/entities/created-by';
 import { CurrentUser } from '@/infra/auth/current-user.decorator';
 import { Roles } from '@/infra/auth/roles.decorator';
@@ -10,24 +10,24 @@ import {
   Body,
   Controller,
   FileTypeValidator,
+  HttpCode,
   MaxFileSizeValidator,
+  Param,
   ParseFilePipe,
-  Post,
+  Patch,
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { z } from 'zod';
 import { ZodValidationPipe } from '../../pipes/zod-validation.pipe';
-import {
-  ProductHTTPResponse,
-  ProductPresenter,
-} from './presenters/product-presenter';
 
-const CreateProductBodySchema = z.object({
-  name: z.string({
-    message: 'Nome do produto é obrigatório!',
-  }),
+const UpdateProductBodySchema = z.object({
+  name: z
+    .string({
+      message: 'Nome do produto é obrigatório!',
+    })
+    .optional(),
   description: z
     .string({
       message: 'Descrição do produto deve ser uma string!',
@@ -44,35 +44,36 @@ const CreateProductBodySchema = z.object({
     .refine((value) => Number(value.toFixed(2)) === value, {
       message:
         'Preço do produto deve ser um número decimal com duas casas decimais!',
-    }),
+    })
+    .optional(),
   isShown: z
     .preprocess((arg) => (arg as string).toLowerCase() === 'true', z.boolean())
     .optional(),
   subCategoryId: z
-    .string({
-      message: 'ID da subcategoria deve ser uma string!',
-    })
+    .string({ message: 'ID da subcategoria deve ser uma string!' })
     .optional(),
 });
 
-export type CreateProductBody = z.infer<typeof CreateProductBodySchema>;
+export type UpdateProductBody = z.infer<typeof UpdateProductBodySchema>;
 
-export type CreateProductResponse = ProductHTTPResponse;
+export type UpdateProductResponse = void;
 
 @Controller('/admin/products')
-export class CreateProductController {
+export class UpdateProductController {
   constructor(
-    private readonly createProcutUseCase: CreateProductUseCase,
+    private readonly updateProcutUseCase: UpdateProductUseCase,
     private readonly logger: Logger,
   ) {}
 
   @Roles(Role.MASTER, Role.ADMIN)
-  @Post()
+  @Patch('/:id')
   @UseInterceptors(FileInterceptor('image'))
+  @HttpCode(201)
   async handle(
     @CurrentUser() currentUser: User,
-    @Body(new ZodValidationPipe(CreateProductBodySchema))
-    body: CreateProductBody,
+    @Body(new ZodValidationPipe(UpdateProductBodySchema))
+    body: UpdateProductBody,
+    @Param('id') id: string,
     @UploadedFile(
       new ParseFilePipe({
         validators: [
@@ -88,7 +89,7 @@ export class CreateProductController {
       }),
     )
     image?: Express.Multer.File,
-  ): Promise<CreateProductResponse> {
+  ): Promise<UpdateProductResponse> {
     try {
       const imageFile: File | undefined = image?.buffer && {
         body: image.buffer,
@@ -96,33 +97,32 @@ export class CreateProductController {
         type: image.mimetype,
       };
 
-      const createdBy: CreatedByProps = {
+      const updatedBy: CreatedByProps = {
         email: currentUser.email.value,
         name: currentUser.name,
         id: currentUser.id,
       };
 
       this.logger.log(
-        CreateProductController.name,
-        `User ${currentUser.id.toString()} - ${currentUser.name} Creating product with: ${JSON.stringify(body)} and image ${image?.filename}.`,
+        UpdateProductController.name,
+        `User ${currentUser.id.toString()} - ${currentUser.name} Updating product ${id} with: ${JSON.stringify(body)} and image ${image?.filename}.`,
       );
 
-      const result = await this.createProcutUseCase.execute({
-        createdBy,
-        image: imageFile,
+      await this.updateProcutUseCase.execute({
+        id,
+        updatedBy,
+        ...(imageFile && { image: imageFile }),
         ...body,
       });
 
       this.logger.log(
-        CreateProductController.name,
-        `User ${currentUser.id.toString()} - ${currentUser.name} Created product with: ${JSON.stringify(body)}`,
+        UpdateProductController.name,
+        `User ${currentUser.id.toString()} - ${currentUser.name} updated product ${id} with: ${JSON.stringify(body)}`,
       );
-
-      return ProductPresenter.toHTTP(result);
     } catch (error: any) {
       this.logger.error(
-        CreateProductController.name,
-        `Error creating product: ${JSON.stringify(body)}: ${error.message}`,
+        UpdateProductController.name,
+        `Error on updating product: ${JSON.stringify(body)}: ${error.message}`,
         error.stack,
       );
 

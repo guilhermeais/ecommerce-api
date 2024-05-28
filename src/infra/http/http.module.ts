@@ -5,6 +5,7 @@ import { FinishSignUpInviteUseCase } from '@/domain/auth/application/use-cases/f
 import { ListSignUpInvitesUseCase } from '@/domain/auth/application/use-cases/list-signup-invites';
 import { LoginUseCase } from '@/domain/auth/application/use-cases/login';
 import { CreateProductUseCase } from '@/domain/product/application/use-cases/create-product';
+import { UpdateProductUseCase } from '@/domain/product/application/use-cases/update-product';
 import { CryptographyModule } from '@/infra/cryptography/cryptography.module';
 import { DatabaseModule } from '@/infra/database/database.module';
 import { EventsModule } from '@/infra/events/events.module';
@@ -18,6 +19,7 @@ import { GetLoggedUserController } from './controllers/auth/get-logged-user.cont
 import { ListSignUpInvitesController } from './controllers/auth/list-sign-up-invites.controller';
 import { LoginController } from './controllers/auth/login.controller';
 import { CreateProductController } from './controllers/products/create-product.controller';
+import { UpdateProductController } from './controllers/products/update-product.controller';
 
 @Module({
   imports: [EventsModule, DatabaseModule, CryptographyModule, StorageModule],
@@ -31,6 +33,7 @@ import { CreateProductController } from './controllers/products/create-product.c
     GetLoggedUserController,
 
     CreateProductController,
+    UpdateProductController,
   ],
   providers: [
     ClientSignUpUseCase,
@@ -41,6 +44,7 @@ import { CreateProductController } from './controllers/products/create-product.c
     ListSignUpInvitesUseCase,
 
     CreateProductUseCase,
+    UpdateProductUseCase,
   ],
 })
 export class HttpModule {}

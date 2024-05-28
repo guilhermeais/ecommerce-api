@@ -1,8 +1,10 @@
 import { UniqueEntityID } from '@/core/entities/unique-entity-id';
 import { EntityNotFoundError } from '@/core/errors/commom/entity-not-found-error';
+import { NullOrUndefined, Partial } from '@/core/types/deep-partial';
 import { EventManager, Events } from '@/core/types/events';
 import { UseCase } from '@/core/types/use-case';
 import { Logger } from '@/shared/logger';
+import { Injectable } from '@nestjs/common';
 import {
   CreatedBy,
   CreatedByProps,
@@ -11,6 +13,7 @@ import { CategoriesRepository } from '../gateways/repositories/categories-reposi
 import { ProductsRepository } from '../gateways/repositories/products-repository';
 import { File } from '../gateways/storage/file';
 import { StorageGateway } from '../gateways/storage/storage-gateway';
+import { Category } from '../../enterprise/entities/category';
 
 export type UpdateProductRequest = {
   id: string;
@@ -26,6 +29,7 @@ export type UpdateProductRequest = {
 
 export type UpdateProductResponse = void;
 
+@Injectable()
 export class UpdateProductUseCase
   implements UseCase<UpdateProductRequest, UpdateProductResponse>
 {
@@ -71,21 +75,25 @@ export class UpdateProductUseCase
         throw new EntityNotFoundError('Produto', request.id);
       }
 
-      if (newSubCategoryId) {
+      if (newSubCategoryId !== undefined) {
         this.logger.log(
           UpdateProductUseCase.name,
           `Updating product ${request.id} ${request.name} with new subcategory ${newSubCategoryId}`,
         );
-        const newCategory = await this.categoriesRepository.findById(
-          new UniqueEntityID(request.subCategoryId),
-        );
+        let newCategory: NullOrUndefined<Category> = null;
 
-        if (!newCategory) {
-          this.logger.log(
-            UpdateProductUseCase.name,
-            `Product ${request.id} ${request.name} updated with new subcategory ${newSubCategoryId}`,
+        if (newSubCategoryId) {
+          newCategory = await this.categoriesRepository.findById(
+            new UniqueEntityID(newSubCategoryId),
           );
-          throw new EntityNotFoundError('Categoria', request.subCategoryId);
+
+          if (!newCategory) {
+            this.logger.log(
+              UpdateProductUseCase.name,
+              `Product ${request.id} ${request.name} updated with new subcategory ${newSubCategoryId}`,
+            );
+            throw new EntityNotFoundError('Categoria', newSubCategoryId);
+          }
         }
 
         product.subCategory = newCategory;
@@ -120,12 +128,12 @@ export class UpdateProductUseCase
         );
       }
 
+      Object.assign(product, restOfRequest);
+
       product.updatedBy = CreatedBy.restore(
         request.updatedBy,
         request.updatedBy.id,
       );
-
-      Object.assign(product, restOfRequest);
 
       await this.productsRepository.save(product);
 

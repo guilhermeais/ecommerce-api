@@ -1,6 +1,6 @@
 import { UniqueEntityID } from '@/core/entities/unique-entity-id';
 import { EntityNotFoundError } from '@/core/errors/commom/entity-not-found-error';
-import { EventManager } from '@/core/types/events';
+import { EventManager, Events } from '@/core/types/events';
 import { InMemoryCategoriesRepository } from '@/infra/database/in-memory/repositories/products/in-memory-categories.repository';
 import { InMemoryProductsRepository } from '@/infra/database/in-memory/repositories/products/in-memory-products.repository';
 import { FakeStorageGateway } from '@/infra/storage/fake-storage';
@@ -10,6 +10,7 @@ import { FakeEventManager } from 'test/core/type/event/fake-event-manager';
 import { makeCategory } from 'test/products/enterprise/entities/make-category';
 import { makeProduct } from 'test/products/enterprise/entities/make-product';
 import { makeFakeLogger } from 'test/shared/logger.mock';
+import { Product } from '../../enterprise/entities/product';
 import { CategoriesRepository } from '../gateways/repositories/categories-repository';
 import { ProductsRepository } from '../gateways/repositories/products-repository';
 import { StorageGateway } from '../gateways/storage/storage-gateway';
@@ -179,6 +180,10 @@ describe('UpdateProduct use case', () => {
         },
       };
 
+      const productUpdatedEventPromise = new Promise<Product>((resolve) => {
+        eventManager.subscribe(Events.PRODUCT_UPDATED, resolve);
+      });
+
       await sut.execute(request);
 
       const updatedProduct = await productsRepository.findById(
@@ -186,6 +191,10 @@ describe('UpdateProduct use case', () => {
       );
 
       expect(updatedProduct[field]).toEqual(value);
+
+      const updatedProductEvent = await productUpdatedEventPromise;
+      expect(updatedProduct.id).toBe(updatedProductEvent.id);
+      expect(updatedProductEvent[field]).toEqual(value);
     },
   );
 });

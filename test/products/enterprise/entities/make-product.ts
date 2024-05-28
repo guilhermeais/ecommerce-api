@@ -1,11 +1,13 @@
 import { UniqueEntityID } from '@/core/entities/unique-entity-id';
+import { ProductsRepository } from '@/domain/product/application/gateways/repositories/products-repository';
 import { CreatedBy } from '@/domain/product/enterprise/entities/created-by';
 import {
   Product,
   ProductProps,
 } from '@/domain/product/enterprise/entities/product';
 import { faker } from '@faker-js/faker';
-import { makeCategory } from './make-category';
+import { Injectable } from '@nestjs/common';
+import { CategoryFactory, makeCategory } from './make-category';
 
 export function makeProduct(modifications?: Partial<ProductProps>): Product {
   return Product.create({
@@ -23,4 +25,27 @@ export function makeProduct(modifications?: Partial<ProductProps>): Product {
     updatedBy: null,
     ...modifications,
   });
+}
+
+@Injectable()
+export class ProductFactory {
+  constructor(
+    private readonly productsRepository: ProductsRepository,
+    private readonly categoryFactory: CategoryFactory,
+  ) {}
+
+  async makeProduct(modifications?: Partial<ProductProps>): Promise<Product> {
+    const category =
+      modifications?.subCategory ??
+      (await this.categoryFactory.makeCategory()).category;
+
+    const product = makeProduct({
+      subCategory: category,
+      ...modifications,
+    });
+
+    await this.productsRepository.save(product);
+
+    return product;
+  }
 }
