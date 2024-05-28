@@ -15,6 +15,6 @@
 
 ## Requisitos
 
-- 🟩 Um administrador deve conseguir cadastrar um produto.
-  - 🟩 A imagem do produto deve ser salva em algum storage, depois, a URL desse storage ficara no produto.
-  - 🟩 Deve ser emitido um evento ao criar um produto novo
+- ❎ Um administrador deve conseguir cadastrar um produto.
+  - ❎ A imagem do produto deve ser salva em algum storage, depois, a URL desse storage ficara no produto.
+  - ❎ Deve ser emitido um evento ao criar um produto novo
