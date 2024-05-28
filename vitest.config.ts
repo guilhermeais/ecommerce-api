@@ -8,6 +8,7 @@ export default defineConfig({
     root: './',
     passWithNoTests: true,
     coverage: {
+      provider: 'v8',
       exclude: [
         '**/**/*.module.ts',
         'infra/database/mongodb/auth/schemas',
