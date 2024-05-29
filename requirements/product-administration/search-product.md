@@ -31,4 +31,4 @@
 
 ## Requisitos
 
-- 🟩 Um administrador deve conseguir visualizar um produto especifico
+- ❎ Um administrador deve conseguir visualizar um produto especifico
