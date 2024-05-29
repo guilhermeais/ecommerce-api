@@ -42,4 +42,4 @@
 
 ## Requisitos
 
-- 🟩 Um administrador deve conseguir listar os produtos
+- ❎ Um administrador deve conseguir listar os produtos
