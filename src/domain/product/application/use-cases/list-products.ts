@@ -5,6 +5,7 @@ import { Product } from '../../enterprise/entities/product';
 import { ProductsRepository } from '../gateways/repositories/products-repository';
 import { UniqueEntityID } from '@/core/entities/unique-entity-id';
 import { NullOrUndefined } from '@/core/types/deep-partial';
+import { Injectable } from '@nestjs/common';
 
 export type ListProductsRequest = PaginatedRequest<
   NullOrUndefined<{
@@ -16,6 +17,7 @@ export type ListProductsRequest = PaginatedRequest<
 
 export type ListProductsResponse = PaginatedResponse<Product>;
 
+@Injectable()
 export class ListProductsUseCase
   implements UseCase<ListProductsRequest, ListProductsResponse>
 {

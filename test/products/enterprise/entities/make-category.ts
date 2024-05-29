@@ -20,7 +20,7 @@ export class CategoryFactory {
   constructor(private readonly categoriesRepository: CategoriesRepository) {}
 
   async makeCategory(
-    modifications?: CategoryProps,
+    modifications?: Partial<CategoryProps>,
   ): Promise<{ category: Category }> {
     const category = makeCategory(modifications);
 

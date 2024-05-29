@@ -1,6 +1,5 @@
 import { Entity } from '@/core/entities/entity';
 import { UniqueEntityID } from '@/core/entities/unique-entity-id';
-import { NullOrUndefined, Partial } from '@/core/types/deep-partial';
 import { Category } from './category';
 import { CreatedBy } from './created-by';
 
@@ -61,7 +60,7 @@ export class Product extends Entity<ProductProps> {
     return this.props.subCategory!;
   }
 
-  set subCategory(subCategory: NullOrUndefined<Category>) {
+  set subCategory(subCategory: Category) {
     this.props.subCategory = subCategory;
   }
 
