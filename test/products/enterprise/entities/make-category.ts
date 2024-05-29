@@ -6,7 +6,7 @@ import {
 import { faker } from '@faker-js/faker';
 import { Injectable } from '@nestjs/common';
 
-export function makeCategory(modifications?: CategoryProps): Category {
+export function makeCategory(modifications?: Partial<CategoryProps>): Category {
   return Category.create({
     name: faker.commerce.department(),
     description: faker.lorem.sentence(),

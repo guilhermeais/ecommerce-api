@@ -1,5 +1,7 @@
 export type Partial<T> = { [P in keyof T]?: NullOrUndefined<T[P]> };
-export type NullOrUndefined<T> = T | null | undefined;
+export type NullOrUndefined<T> = {
+  [K in keyof T]?: T[K] | null | undefined;
+};
 
 export type DeepPartial<T> = {
   [P in keyof T]?: T[P] extends (infer U)[]

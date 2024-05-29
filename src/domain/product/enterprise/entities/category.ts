@@ -25,6 +25,6 @@ export class Category extends Entity<CategoryProps> {
   }
 
   get rootCategory() {
-    return structuredClone(this.props.rootCategory);
+    return this.props.rootCategory;
   }
 }

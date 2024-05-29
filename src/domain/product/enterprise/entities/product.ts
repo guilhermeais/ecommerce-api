@@ -1,8 +1,8 @@
 import { Entity } from '@/core/entities/entity';
 import { UniqueEntityID } from '@/core/entities/unique-entity-id';
+import { NullOrUndefined, Partial } from '@/core/types/deep-partial';
 import { Category } from './category';
 import { CreatedBy } from './created-by';
-import { NullOrUndefined, Partial } from '@/core/types/deep-partial';
 
 export type ProductProps = {
   name: string;
@@ -81,7 +81,11 @@ export class Product extends Entity<ProductProps> {
     return this.props.updatedBy!;
   }
 
-  set updatedBy(updatedBy: CreatedBy) {
+  set updatedBy(updatedBy: NullOrUndefined<CreatedBy>) {
     this.props.updatedBy = updatedBy;
+  }
+
+  get category() {
+    return this.props.subCategory!.rootCategory;
   }
 }
