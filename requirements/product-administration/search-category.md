@@ -15,14 +15,7 @@
         // opcional
         "id": "string",
         "name": "string"
-      },
-      "categories": [
-        // opcional
-        {
-          "id": "string",
-          "name": ""
-        }
-      ]
+      }
     }
   ]
 }
