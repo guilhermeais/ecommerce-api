@@ -19,6 +19,10 @@ export type ProductHTTPResponse = {
     id: string;
     name: string;
   };
+  updatedBy?: {
+    id: string;
+    name: string;
+  };
 };
 
 export class ProductPresenter {
@@ -41,6 +45,10 @@ export class ProductPresenter {
       createdBy: {
         id: product.createdBy.id.toString(),
         name: product.createdBy.name,
+      },
+      updatedBy: product.updatedBy && {
+        id: product.updatedBy.id.toString(),
+        name: product.updatedBy.name,
       },
     };
   }

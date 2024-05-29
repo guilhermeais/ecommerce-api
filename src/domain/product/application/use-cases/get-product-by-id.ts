@@ -5,6 +5,7 @@ import { UseCase } from '@/core/types/use-case';
 import { Logger } from '@/shared/logger';
 import { Product } from '../../enterprise/entities/product';
 import { ProductsRepository } from '../gateways/repositories/products-repository';
+import { Injectable } from '@nestjs/common';
 
 export type GetProductByIdRequest = {
   id: string;
@@ -12,6 +13,7 @@ export type GetProductByIdRequest = {
 
 export type GetProductByIdResponse = Product;
 
+@Injectable()
 export class GetProductByIdUseCase
   implements UseCase<GetProductByIdRequest, GetProductByIdResponse>
 {
