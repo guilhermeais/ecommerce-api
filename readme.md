@@ -34,5 +34,6 @@ Este módulo lida com a administração dos produtos realizadas por um administr
 - 🟩 [Apagar Categoria de Produto](./requirements/product-administration/delete-category.md)
 
 - ❎ [Cadastro de Produtos](./requirements/product-administration/create-product.md)
-- 🟩 [Busca de Produtos](./requirements/product-administration/search-product.md)
+- 🟩 [Busca de Produtos](./requirements/product-administration/search-products.md)
+- 🟩 [Busca de Produto](./requirements/product-administration/search-product.md)
 - ❎ [Atualização de Produtos](./requirements/product-administration/update-product.md)
