@@ -52,8 +52,9 @@ export class ListCategoriesUseCase
 
       const result = await this.categoriesRepository.list({
         ...request,
-        rootCategoryId:
-          request.rootCategoryId && new UniqueEntityID(request.rootCategoryId),
+        rootCategoryId: request.rootCategoryId
+          ? new UniqueEntityID(request.rootCategoryId)
+          : null,
       });
 
       this.logger.log(

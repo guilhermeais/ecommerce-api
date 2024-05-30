@@ -1,6 +1,6 @@
 import { Provider } from '@nestjs/common';
 import { Mongoose, Schema } from 'mongoose';
-import { AUTH_MONGOOSE_CONNECTION_PROVIDER } from '../auth-mongoose-connection.provider';
+import { MONGOOSE_CONNECTION_PROVIDER } from '../../mongoose-connection.provider';
 
 export class MongoAddressModel {
   cep!: string;
@@ -46,7 +46,7 @@ export const MongoConfirmationTokenSchema =
 
 export const MongoConfirmationTokenModelProvider: Provider = {
   provide: MongoConfirmationTokenModel.COLLECTION_NAME,
-  inject: [AUTH_MONGOOSE_CONNECTION_PROVIDER],
+  inject: [MONGOOSE_CONNECTION_PROVIDER],
   useFactory: (mongoose: Mongoose) =>
     mongoose.model(
       MongoConfirmationTokenModel.COLLECTION_NAME,

@@ -1,5 +1,5 @@
 import { UniqueEntityID } from '@/core/entities/unique-entity-id';
-import { NullOrUndefined } from '@/core/types/deep-partial';
+import { Partial } from '@/core/types/deep-partial';
 import { PaginatedRequest, PaginatedResponse } from '@/core/types/pagination';
 import { Repository } from '@/core/types/repository';
 import { Product } from '@/domain/product/enterprise/entities/product';
@@ -13,7 +13,7 @@ export abstract class ProductsRepository implements Repository<Product> {
 
   abstract list(
     request: PaginatedRequest<
-      NullOrUndefined<{
+      Partial<{
         name: string;
         categoryId: UniqueEntityID;
         subCategoryId: UniqueEntityID;

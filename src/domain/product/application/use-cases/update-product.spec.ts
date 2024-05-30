@@ -96,14 +96,14 @@ describe('UpdateProduct use case', () => {
     );
 
     expect(updatedProduct).not.toBeNull();
-    expect(updatedProduct?.name).toBe(product.name);
-    expect(updatedProduct?.description).toBe(product.description);
-    expect(updatedProduct?.price).toBe(product.price);
-    expect(updatedProduct?.isShown).toBe(product.isShown);
-    expect(updatedProduct?.subCategory.id.toString()).toBe(
+    expect(updatedProduct!.name).toBe(product.name);
+    expect(updatedProduct!.description).toBe(product.description);
+    expect(updatedProduct!.price).toBe(product.price);
+    expect(updatedProduct!.isShown).toBe(product.isShown);
+    expect(updatedProduct!.subCategory!.id!.toString()).toBe(
       request.subCategoryId,
     );
-    expect(updatedProduct?.image).toEqual(product.image);
+    expect(updatedProduct!.image).toEqual(product.image);
   });
 
   it('should update the product with a new image', async () => {
@@ -133,14 +133,14 @@ describe('UpdateProduct use case', () => {
     );
 
     expect(updatedProduct).not.toBeNull();
-    expect(updatedProduct?.name).toBe(product.name);
-    expect(updatedProduct?.description).toBe(product.description);
-    expect(updatedProduct?.price).toBe(product.price);
-    expect(updatedProduct?.isShown).toBe(product.isShown);
-    expect(updatedProduct?.subCategory.id.toString()).toBe(
-      product.subCategory.id.toString(),
+    expect(updatedProduct!.name).toBe(product.name);
+    expect(updatedProduct!.description).toBe(product.description);
+    expect(updatedProduct!.price).toBe(product.price);
+    expect(updatedProduct!.isShown).toBe(product.isShown);
+    expect(updatedProduct!.subCategory!.id.toString()).toBe(
+      product.subCategory!.id.toString(),
     );
-    expect(updatedProduct?.image).toBeDefined();
+    expect(updatedProduct!.image).toBeDefined();
   });
 
   it.each([
@@ -190,10 +190,10 @@ describe('UpdateProduct use case', () => {
         new UniqueEntityID(request.id),
       );
 
-      expect(updatedProduct[field]).toEqual(value);
+      expect(updatedProduct![field]).toEqual(value);
 
       const updatedProductEvent = await productUpdatedEventPromise;
-      expect(updatedProduct.id).toBe(updatedProductEvent.id);
+      expect(updatedProduct!.id).toBe(updatedProductEvent.id);
       expect(updatedProductEvent[field]).toEqual(value);
     },
   );

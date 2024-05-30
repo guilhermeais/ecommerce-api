@@ -7,9 +7,9 @@ import { Injectable } from '@nestjs/common';
 import { Category } from '../../enterprise/entities/category';
 import { Product } from '../../enterprise/entities/product';
 import {
-  CreatedBy,
-  CreatedByProps,
-} from '../../enterprise/entities/created-by';
+  Administrator,
+  AdministratorProps,
+} from '../../enterprise/entities/responsable';
 import { CategoriesRepository } from '../gateways/repositories/categories-repository';
 import { ProductsRepository } from '../gateways/repositories/products-repository';
 import { File } from '../gateways/storage/file';
@@ -22,7 +22,7 @@ export type CreateProductRequest = {
   isShown?: boolean;
   subCategoryId?: string;
   image?: File;
-  createdBy: CreatedByProps;
+  createdBy: AdministratorProps;
 };
 
 export type CreateProductResponse = Product;
@@ -72,7 +72,7 @@ export class CreateProductUseCase
         }
       }
 
-      const createdBy = CreatedBy.restore(
+      const createdBy = Administrator.restore(
         request.createdBy,
         request.createdBy!.id!,
       );

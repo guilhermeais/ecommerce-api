@@ -7,9 +7,9 @@ import { Module } from '@nestjs/common';
 import { InMemoryCategoriesRepository } from './in-memory/repositories/products/in-memory-categories.repository';
 import { InMemoryProductsRepository } from './in-memory/repositories/products/in-memory-products.repository';
 import {
-  AUTH_MONGOOSE_CONNECTION_PROVIDER,
-  AuthMongooseConnectionFactory,
-} from './mongodb/auth/auth-mongoose-connection.provider';
+  MONGOOSE_CONNECTION_PROVIDER,
+  MongooseConnectionFactory,
+} from './mongodb/mongoose-connection.provider';
 import { MongoDbConfirmationTokensRepository } from './mongodb/auth/repositories/mongodb-confirmation-tokens.repository';
 import { MongoDbSignUpInvitesRepository } from './mongodb/auth/repositories/mongodb-signup-invites.repository';
 import { MongoDbUsersRepository } from './mongodb/auth/repositories/mongodb-users.repository';
@@ -39,13 +39,13 @@ import { MongoUserModelProvider } from './mongodb/auth/schemas/user.model';
       provide: ProductsRepository,
       useClass: InMemoryProductsRepository,
     },
-    AuthMongooseConnectionFactory,
+    MongooseConnectionFactory,
     MongoUserModelProvider,
     MongoConfirmationTokenModelProvider,
     MongoSignUpModelProvider,
   ],
   exports: [
-    AUTH_MONGOOSE_CONNECTION_PROVIDER,
+    MONGOOSE_CONNECTION_PROVIDER,
     UsersRepository,
     ConfirmationTokensRepository,
     SignUpInvitesRepository,

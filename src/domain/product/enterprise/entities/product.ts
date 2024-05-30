@@ -1,18 +1,19 @@
 import { Entity } from '@/core/entities/entity';
 import { UniqueEntityID } from '@/core/entities/unique-entity-id';
+import { NullOrUndefined } from '@/core/types/deep-partial';
 import { Category } from './category';
-import { CreatedBy } from './created-by';
+import { Administrator } from './responsable';
 
 export type ProductProps = {
   name: string;
-  createdBy: CreatedBy;
+  createdBy: Administrator;
   price: number;
 } & Partial<{
   description?: string;
   isShown?: boolean;
-  subCategory?: Category;
+  subCategory?: NullOrUndefined<Category>;
   image?: string;
-  updatedBy?: CreatedBy;
+  updatedBy?: Administrator;
 }>;
 
 export class Product extends Entity<ProductProps> {
@@ -60,7 +61,7 @@ export class Product extends Entity<ProductProps> {
     return this.props.subCategory!;
   }
 
-  set subCategory(subCategory: Category) {
+  set subCategory(subCategory: NullOrUndefined<Category>) {
     this.props.subCategory = subCategory;
   }
 
@@ -80,7 +81,7 @@ export class Product extends Entity<ProductProps> {
     return this.props.updatedBy!;
   }
 
-  set updatedBy(updatedBy: NullOrUndefined<CreatedBy>) {
+  set updatedBy(updatedBy: Administrator) {
     this.props.updatedBy = updatedBy;
   }
 

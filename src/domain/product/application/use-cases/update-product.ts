@@ -6,9 +6,9 @@ import { UseCase } from '@/core/types/use-case';
 import { Logger } from '@/shared/logger';
 import { Injectable } from '@nestjs/common';
 import {
-  CreatedBy,
-  CreatedByProps,
-} from '../../enterprise/entities/created-by';
+  Administrator,
+  AdministratorProps,
+} from '../../enterprise/entities/responsable';
 import { CategoriesRepository } from '../gateways/repositories/categories-repository';
 import { ProductsRepository } from '../gateways/repositories/products-repository';
 import { File } from '../gateways/storage/file';
@@ -17,7 +17,7 @@ import { Category } from '../../enterprise/entities/category';
 
 export type UpdateProductRequest = {
   id: string;
-  updatedBy: CreatedByProps;
+  updatedBy: AdministratorProps;
 } & Partial<{
   name: string;
   description: string;
@@ -130,7 +130,7 @@ export class UpdateProductUseCase
 
       Object.assign(product, restOfRequest);
 
-      product.updatedBy = CreatedBy.restore(
+      product.updatedBy = Administrator.restore(
         request.updatedBy,
         request.updatedBy.id,
       );

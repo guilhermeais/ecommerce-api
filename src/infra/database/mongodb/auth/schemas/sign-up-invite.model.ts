@@ -1,7 +1,7 @@
 import { SignUpInviteStatus } from '@/domain/auth/enterprise/entities/enums/signup-invite-status';
 import { Provider } from '@nestjs/common';
 import { Mongoose, Schema } from 'mongoose';
-import { AUTH_MONGOOSE_CONNECTION_PROVIDER } from '../auth-mongoose-connection.provider';
+import { MONGOOSE_CONNECTION_PROVIDER } from '../../mongoose-connection.provider';
 import { MongoUserModel } from './user.model';
 
 export class MongoSignUpInviteModel {
@@ -52,7 +52,7 @@ export const MongoSignUpInviteSchema = new Schema<MongoSignUpInviteModel>(
 
 export const MongoSignUpModelProvider: Provider = {
   provide: MongoSignUpInviteModel.COLLECTION_NAME,
-  inject: [AUTH_MONGOOSE_CONNECTION_PROVIDER],
+  inject: [MONGOOSE_CONNECTION_PROVIDER],
   useFactory: (mongoose: Mongoose) =>
     mongoose.model(
       MongoSignUpInviteModel.COLLECTION_NAME,

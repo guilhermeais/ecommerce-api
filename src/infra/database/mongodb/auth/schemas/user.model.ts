@@ -1,7 +1,7 @@
 import { Role } from '@/domain/auth/enterprise/entities/enums/role';
 import { Provider } from '@nestjs/common';
 import { Mongoose, Schema } from 'mongoose';
-import { AUTH_MONGOOSE_CONNECTION_PROVIDER } from '../auth-mongoose-connection.provider';
+import { MONGOOSE_CONNECTION_PROVIDER } from '../../mongoose-connection.provider';
 
 export class MongoAddressModel {
   cep!: string;
@@ -63,7 +63,7 @@ export const MongoUserSchema = new Schema<MongoUserModel>(
 
 export const MongoUserModelProvider: Provider = {
   provide: MongoUserModel.COLLECTION_NAME,
-  inject: [AUTH_MONGOOSE_CONNECTION_PROVIDER],
+  inject: [MONGOOSE_CONNECTION_PROVIDER],
   useFactory: (mongoose: Mongoose) =>
     mongoose.model(MongoUserModel.COLLECTION_NAME, MongoUserSchema),
 };
