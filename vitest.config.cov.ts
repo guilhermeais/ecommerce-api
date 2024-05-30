@@ -18,6 +18,7 @@ export default mergeConfig(
           '**/**/fake-**',
           '**/test/**',
           '**/**/**spec**',
+          '**/**/infra',
         ],
         reporter: ['text', 'json-summary', 'json'],
         reportOnFailure: true,
