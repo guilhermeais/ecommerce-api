@@ -32,4 +32,4 @@
 
 ## Requisitos
 
-- 🟩 Um administrador deve conseguir buscar uma categoria.
+- ❎ Um administrador deve conseguir buscar uma categoria.

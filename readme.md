@@ -24,12 +24,12 @@ Este módulo lida com a autenticação do usuário administrador e do cliente no
 
 ### Administração de Produtos 📦🏷️
 
-![Progresso](https://img.shields.io/badge/Progresso-62.5%25-green)
+![Progresso](https://img.shields.io/badge/Progresso-75%25-green)
 
 Este módulo lida com a administração dos produtos realizadas por um administrador.
 
 - ❎ [Criar Categoria de Produto](./requirements/product-administration/create-category.md)
-- 🟩 [Buscar Categoria de Produto](./requirements/product-administration/search-category.md)
+- ❎ [Buscar Categoria de Produto](./requirements/product-administration/search-category.md)
 - 🟩 [Atualiza Categoria de Produto](./requirements/product-administration/update-category.md)
 - 🟩 [Apagar Categoria de Produto](./requirements/product-administration/delete-category.md)
 
