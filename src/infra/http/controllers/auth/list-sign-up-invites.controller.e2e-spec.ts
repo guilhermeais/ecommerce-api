@@ -10,6 +10,7 @@ import { UserFactory } from 'test/auth/enterprise/entities/make-user';
 import { makeTestingApp } from 'test/make-testing-app';
 import { DefaultExceptionFilter } from '../../filters/default-exception-filter.filter';
 import { ListSignUpInvitesQuery } from './list-sign-up-invites.controller';
+import { SignUpInvitePresenter } from '../presenters/sign-up-invite-presenter';
 
 export function makeListSignUpInvitesQuery(
   modifications?: Partial<ListSignUpInvitesQuery>,
@@ -79,9 +80,11 @@ describe('ListSignUpInvitesController (E2E)', () => {
         role: Role.MASTER,
       });
 
-      await Promise.all(
-        Array.from({ length: 15 }).map(() =>
-          signUpInviteFactory.makeSignUpInvite(),
+      const signupInvites = await Promise.all(
+        Array.from({ length: 15 }).map((_, i) =>
+          signUpInviteFactory.makeSignUpInvite({
+            createdAt: new Date(2021, 1, i + 1),
+          }),
         ),
       );
 
@@ -104,6 +107,10 @@ describe('ListSignUpInvitesController (E2E)', () => {
       });
 
       expect(response.body.items).toHaveLength(5);
+
+      expect(response.body.items).toEqual(
+        signupInvites.slice(0, 5).map(SignUpInvitePresenter.toHTTP),
+      );
 
       const lastPage = await request(app.getHttpServer())
         .get('/admin/sign-up/invites')
