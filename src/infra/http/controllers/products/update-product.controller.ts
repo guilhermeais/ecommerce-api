@@ -2,7 +2,7 @@ import { Role } from '@/domain/auth/enterprise/entities/enums/role';
 import { User } from '@/domain/auth/enterprise/entities/user';
 import { File } from '@/domain/product/application/gateways/storage/file';
 import { UpdateProductUseCase } from '@/domain/product/application/use-cases/update-product';
-import { CreatedByProps } from '@/domain/product/enterprise/entities/created-by';
+import { AdministratorProps } from '@/domain/product/enterprise/entities/administrator';
 import { CurrentUser } from '@/infra/auth/current-user.decorator';
 import { Roles } from '@/infra/auth/roles.decorator';
 import { Logger } from '@/shared/logger';
@@ -97,7 +97,7 @@ export class UpdateProductController {
         type: image.mimetype,
       };
 
-      const updatedBy: CreatedByProps = {
+      const updatedBy: AdministratorProps = {
         email: currentUser.email.value,
         name: currentUser.name,
         id: currentUser.id,

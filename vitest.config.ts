@@ -7,22 +7,6 @@ export default defineConfig({
     globals: true,
     root: './',
     passWithNoTests: true,
-    coverage: {
-      provider: 'v8',
-      exclude: [
-        '**/**/*.module.ts',
-        'infra/database/mongodb/auth/schemas',
-        'src/infra/main.ts',
-        '**/**/errors/**',
-        'src/@types/**',
-        '**/**/in-memory**',
-        '**/**/fake-**',
-        '**/test/**',
-        '**/**/**spec**',
-      ],
-      reporter: ['text', 'json-summary', 'json'],
-      reportOnFailure: true,
-    },
   },
   plugins: [
     tsConfigPaths(),

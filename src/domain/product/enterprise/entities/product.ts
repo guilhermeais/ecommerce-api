@@ -2,7 +2,7 @@ import { Entity } from '@/core/entities/entity';
 import { UniqueEntityID } from '@/core/entities/unique-entity-id';
 import { NullOrUndefined } from '@/core/types/deep-partial';
 import { Category } from './category';
-import { Administrator } from './responsable';
+import { Administrator } from './administrator';
 
 export type ProductProps = {
   name: string;
@@ -13,7 +13,7 @@ export type ProductProps = {
   isShown?: boolean;
   subCategory?: NullOrUndefined<Category>;
   image?: string;
-  updatedBy?: Administrator;
+  updatedBy?: NullOrUndefined<Administrator>;
 }>;
 
 export class Product extends Entity<ProductProps> {

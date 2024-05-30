@@ -8,7 +8,7 @@ import { Injectable } from '@nestjs/common';
 import {
   Administrator,
   AdministratorProps,
-} from '../../enterprise/entities/responsable';
+} from '../../enterprise/entities/administrator';
 import { CategoriesRepository } from '../gateways/repositories/categories-repository';
 import { ProductsRepository } from '../gateways/repositories/products-repository';
 import { File } from '../gateways/storage/file';

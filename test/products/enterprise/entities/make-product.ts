@@ -1,6 +1,6 @@
 import { UniqueEntityID } from '@/core/entities/unique-entity-id';
 import { ProductsRepository } from '@/domain/product/application/gateways/repositories/products-repository';
-import { CreatedBy } from '@/domain/product/enterprise/entities/created-by';
+import { Administrator } from '@/domain/product/enterprise/entities/administrator';
 import {
   Product,
   ProductProps,
@@ -16,7 +16,7 @@ export function makeProduct(modifications?: Partial<ProductProps>): Product {
     description: faker.lorem.sentence(),
     image: faker.image.url(),
     isShown: false,
-    createdBy: CreatedBy.create({
+    createdBy: Administrator.create({
       email: faker.internet.email(),
       name: faker.person.fullName(),
       id: new UniqueEntityID(),
