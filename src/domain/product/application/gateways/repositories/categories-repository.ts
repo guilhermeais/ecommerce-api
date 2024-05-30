@@ -12,7 +12,7 @@ export abstract class CategoriesRepository implements Repository<Category> {
     request: PaginatedRequest<
       Partial<{
         name: string;
-        rootCategoryId: string;
+        rootCategoryId: UniqueEntityID;
       }>
     >,
   ): Promise<PaginatedResponse<Category>>;

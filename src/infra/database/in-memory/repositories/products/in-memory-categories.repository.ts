@@ -1,5 +1,4 @@
 import { UniqueEntityID } from '@/core/entities/unique-entity-id';
-import { Partial } from '@/core/types/deep-partial';
 import { PaginatedRequest, PaginatedResponse } from '@/core/types/pagination';
 import { CategoriesRepository } from '@/domain/product/application/gateways/repositories/categories-repository';
 import { Category } from '@/domain/product/enterprise/entities/category';
@@ -9,7 +8,7 @@ export class InMemoryCategoriesRepository implements CategoriesRepository {
 
   async list(
     request: PaginatedRequest<
-      Partial<{ name: string; rootCategoryId: string }>
+      Partial<{ name: string; rootCategoryId: UniqueEntityID }>
     >,
   ): Promise<PaginatedResponse<Category>> {
     const page = request.page - 1;
@@ -20,7 +19,7 @@ export class InMemoryCategoriesRepository implements CategoriesRepository {
     const categories = this.categories.filter((category) => {
       if (
         rootCategoryId &&
-        !category.rootCategory?.id?.equals(new UniqueEntityID(rootCategoryId))
+        !category.rootCategory?.id?.equals(rootCategoryId)
       ) {
         return false;
       }
@@ -36,7 +35,7 @@ export class InMemoryCategoriesRepository implements CategoriesRepository {
 
     return {
       items,
-      total: this.categories.length,
+      total: categories.length,
       pages,
       limit: request.limit,
       currentPage: request.page,

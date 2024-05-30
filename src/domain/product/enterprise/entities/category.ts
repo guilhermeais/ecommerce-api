@@ -8,12 +8,17 @@ export type CategoryProps = {
 };
 
 export class Category extends Entity<CategoryProps> {
-  public static create(props: CategoryProps) {
-    return new Category(props);
+  public static create(props: CategoryProps, createdAt = new Date()) {
+    return new Category(props, undefined, createdAt);
   }
 
-  public static restore(props: CategoryProps, id: UniqueEntityID) {
-    return new Category(props, id);
+  public static restore(
+    props: CategoryProps,
+    id: UniqueEntityID,
+    createdAt: Date,
+    updatedAt?: Date,
+  ) {
+    return new Category(props, id, createdAt, updatedAt);
   }
 
   get name() {

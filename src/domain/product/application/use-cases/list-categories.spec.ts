@@ -7,6 +7,7 @@ import {
 import { InMemoryCategoriesRepository } from '@/infra/database/in-memory/repositories/products/in-memory-categories.repository';
 import { makeFakeLogger } from 'test/shared/logger.mock';
 import { makeCategory } from 'test/products/enterprise/entities/make-category';
+import { EntityNotFoundError } from '@/core/errors/commom/entity-not-found-error';
 
 describe('ListCategoriesUseCase', () => {
   let sut: ListCategoriesUseCase;
@@ -83,7 +84,7 @@ describe('ListCategoriesUseCase', () => {
       makeListCategoriesRequest({ page: 1, limit: 10, name: nameToFilter }),
     );
 
-    expect(result.total).toEqual(16);
+    expect(result.total).toEqual(1);
     expect(result.pages).toEqual(1);
     expect(result.currentPage).toEqual(1);
     expect(result.limit).toEqual(10);
@@ -93,6 +94,7 @@ describe('ListCategoriesUseCase', () => {
 
   it('should list filtering by rootCategoryId', async () => {
     const rootCategory = makeCategory();
+    await categoriesRepository.save(rootCategory);
     const categoryToFound = makeCategory({ rootCategory });
     await Promise.all(
       Array.from({ length: 15 }).map(() =>
@@ -109,11 +111,25 @@ describe('ListCategoriesUseCase', () => {
       }),
     );
 
-    expect(result.total).toEqual(16);
+    expect(result.total).toEqual(1);
     expect(result.pages).toEqual(1);
     expect(result.currentPage).toEqual(1);
     expect(result.limit).toEqual(10);
     expect(result.items.length).toEqual(1);
     expect(result.items[0]).toEqual(categoryToFound);
+  });
+
+  it('should throw EntityNotFoundError if the root category does not exists', async () => {
+    await expect(
+      sut.execute(
+        makeListCategoriesRequest({
+          page: 1,
+          limit: 10,
+          rootCategoryId: 'invalid-id',
+        }),
+      ),
+    ).rejects.toThrowError(
+      new EntityNotFoundError('Categoria Pai', 'invalid-id'),
+    );
   });
 });

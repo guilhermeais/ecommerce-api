@@ -6,13 +6,19 @@ import {
 import { faker } from '@faker-js/faker';
 import { Injectable } from '@nestjs/common';
 
-export function makeCategory(modifications?: Partial<CategoryProps>): Category {
-  return Category.create({
-    name: faker.commerce.department(),
-    description: faker.lorem.sentence(),
-    rootCategory: undefined,
-    ...modifications,
-  });
+export function makeCategory(
+  modifications?: Partial<CategoryProps>,
+  createdAt?: Date,
+): Category {
+  return Category.create(
+    {
+      name: faker.commerce.department(),
+      description: faker.lorem.sentence(),
+      rootCategory: undefined,
+      ...modifications,
+    },
+    createdAt,
+  );
 }
 
 @Injectable()
@@ -21,8 +27,9 @@ export class CategoryFactory {
 
   async makeCategory(
     modifications?: Partial<CategoryProps>,
+    createdAt = new Date(),
   ): Promise<{ category: Category }> {
-    const category = makeCategory(modifications);
+    const category = makeCategory(modifications, createdAt);
 
     await this.categoriesRepository.save(category);
 

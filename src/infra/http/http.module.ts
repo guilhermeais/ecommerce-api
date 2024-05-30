@@ -7,6 +7,7 @@ import { LoginUseCase } from '@/domain/auth/application/use-cases/login';
 import { CreateCategoryUseCase } from '@/domain/product/application/use-cases/create-category';
 import { CreateProductUseCase } from '@/domain/product/application/use-cases/create-product';
 import { GetProductByIdUseCase } from '@/domain/product/application/use-cases/get-product-by-id';
+import { ListCategoriesUseCase } from '@/domain/product/application/use-cases/list-categories';
 import { ListProductsUseCase } from '@/domain/product/application/use-cases/list-products';
 import { UpdateProductUseCase } from '@/domain/product/application/use-cases/update-product';
 import { CryptographyModule } from '@/infra/cryptography/cryptography.module';
@@ -24,6 +25,7 @@ import { LoginController } from './controllers/auth/login.controller';
 import { CreateCategoryController } from './controllers/products/create-category.controller';
 import { CreateProductController } from './controllers/products/create-product.controller';
 import { GetProductByIdController } from './controllers/products/get-product-by-id.controller';
+import { ListCategoriesController } from './controllers/products/list-categories.controller';
 import { ListProductsController } from './controllers/products/list-products.controller';
 import { UpdateProductController } from './controllers/products/update-product.controller';
 
@@ -43,6 +45,7 @@ import { UpdateProductController } from './controllers/products/update-product.c
     ListProductsController,
     GetProductByIdController,
     CreateCategoryController,
+    ListCategoriesController,
   ],
   providers: [
     ClientSignUpUseCase,
@@ -57,6 +60,7 @@ import { UpdateProductController } from './controllers/products/update-product.c
     ListProductsUseCase,
     GetProductByIdUseCase,
     CreateCategoryUseCase,
+    ListCategoriesUseCase,
   ],
 })
 export class HttpModule {}

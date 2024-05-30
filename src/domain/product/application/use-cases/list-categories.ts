@@ -1,3 +1,4 @@
+import { UniqueEntityID } from '@/core/entities/unique-entity-id';
 import { Partial } from '@/core/types/deep-partial';
 import { PaginatedRequest, PaginatedResponse } from '@/core/types/pagination';
 import { UseCase } from '@/core/types/use-case';
@@ -5,6 +6,7 @@ import { Logger } from '@/shared/logger';
 import { Injectable } from '@nestjs/common';
 import { Category } from '../../enterprise/entities/category';
 import { CategoriesRepository } from '../gateways/repositories/categories-repository';
+import { EntityNotFoundError } from '@/core/errors/commom/entity-not-found-error';
 
 export type ListCategoriesRequest = PaginatedRequest<
   Partial<{
@@ -33,7 +35,26 @@ export class ListCategoriesUseCase
         `Listing categories with: ${JSON.stringify(request)}.`,
       );
 
-      const result = await this.categoriesRepository.list(request);
+      const rootCategoryId =
+        request.rootCategoryId && new UniqueEntityID(request.rootCategoryId);
+
+      if (rootCategoryId) {
+        const rootCategory =
+          await this.categoriesRepository.findById(rootCategoryId);
+
+        if (!rootCategory) {
+          throw new EntityNotFoundError(
+            'Categoria Pai',
+            rootCategoryId.toString(),
+          );
+        }
+      }
+
+      const result = await this.categoriesRepository.list({
+        ...request,
+        rootCategoryId:
+          request.rootCategoryId && new UniqueEntityID(request.rootCategoryId),
+      });
 
       this.logger.log(
         ListCategoriesUseCase.name,
