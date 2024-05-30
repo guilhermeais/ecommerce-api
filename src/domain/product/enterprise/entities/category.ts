@@ -25,8 +25,16 @@ export class Category extends Entity<CategoryProps> {
     return this.props.name;
   }
 
-  get description() {
+  set name(name: string) {
+    this.props.name = name;
+  }
+
+  get description(): string | undefined {
     return this.props.description;
+  }
+
+  set description(description: string) {
+    this.props.description = description;
   }
 
   get rootCategory() {
