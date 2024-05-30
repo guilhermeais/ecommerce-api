@@ -10,4 +10,4 @@
 ```
 
 ## Requisitos
-- 🟩 Um administrador deve conseguir atualizar uma categoria.
+- ❎ Um administrador deve conseguir atualizar uma categoria.
