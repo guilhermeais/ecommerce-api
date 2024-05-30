@@ -9,4 +9,4 @@
 ```
 
 ## Requisitos
-- 🟩 Um administrador deve conseguir apagar uma categoria.
+- ❎ Um administrador deve conseguir apagar uma categoria.
