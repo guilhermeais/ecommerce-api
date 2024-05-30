@@ -11,7 +11,7 @@ import { ZodValidationPipe } from '../../pipes/zod-validation.pipe';
 import {
   SignUpInviteHTTPResponse,
   SignUpInvitePresenter,
-} from '../presenters/sign-up-invite-presenter';
+} from './presenters/sign-up-invite-presenter';
 
 const ListSignUpInvitesQuerySchema = z.object({
   limit: z
