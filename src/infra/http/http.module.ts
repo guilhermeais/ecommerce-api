@@ -6,6 +6,7 @@ import { ListSignUpInvitesUseCase } from '@/domain/auth/application/use-cases/li
 import { LoginUseCase } from '@/domain/auth/application/use-cases/login';
 import { CreateCategoryUseCase } from '@/domain/product/application/use-cases/create-category';
 import { CreateProductUseCase } from '@/domain/product/application/use-cases/create-product';
+import { DeleteCategoryUseCase } from '@/domain/product/application/use-cases/delete-category';
 import { GetProductByIdUseCase } from '@/domain/product/application/use-cases/get-product-by-id';
 import { ListCategoriesUseCase } from '@/domain/product/application/use-cases/list-categories';
 import { ListProductsUseCase } from '@/domain/product/application/use-cases/list-products';
@@ -25,6 +26,7 @@ import { ListSignUpInvitesController } from './controllers/auth/list-sign-up-inv
 import { LoginController } from './controllers/auth/login.controller';
 import { CreateCategoryController } from './controllers/products/create-category.controller';
 import { CreateProductController } from './controllers/products/create-product.controller';
+import { DeleteCategoryController } from './controllers/products/delete-category.controller';
 import { GetProductByIdController } from './controllers/products/get-product-by-id.controller';
 import { ListCategoriesController } from './controllers/products/list-categories.controller';
 import { ListProductsController } from './controllers/products/list-products.controller';
@@ -49,6 +51,7 @@ import { UpdateProductController } from './controllers/products/update-product.c
     CreateCategoryController,
     ListCategoriesController,
     UpdateCategoryController,
+    DeleteCategoryController,
   ],
   providers: [
     ClientSignUpUseCase,
@@ -65,6 +68,7 @@ import { UpdateProductController } from './controllers/products/update-product.c
     CreateCategoryUseCase,
     ListCategoriesUseCase,
     UpdateCategoryUseCase,
+    DeleteCategoryUseCase,
   ],
 })
 export class HttpModule {}
