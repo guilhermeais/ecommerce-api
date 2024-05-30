@@ -1,7 +1,6 @@
 import { PaginatedResponse } from '@/core/types/pagination';
 import { ListSignUpInvitesUseCase } from '@/domain/auth/application/use-cases/list-signup-invites';
 import { Role } from '@/domain/auth/enterprise/entities/enums/role';
-import { SignUpInvite } from '@/domain/auth/enterprise/entities/signup-invite';
 import { User } from '@/domain/auth/enterprise/entities/user';
 import { CurrentUser } from '@/infra/auth/current-user.decorator';
 import { Roles } from '@/infra/auth/roles.decorator';
@@ -9,6 +8,10 @@ import { Logger } from '@/shared/logger';
 import { Controller, Get, Query } from '@nestjs/common';
 import { z } from 'zod';
 import { ZodValidationPipe } from '../../pipes/zod-validation.pipe';
+import {
+  SignUpInviteHTTPResponse,
+  SignUpInvitePresenter,
+} from '../presenters/sign-up-invite-presenter';
 
 const ListSignUpInvitesQuerySchema = z.object({
   limit: z
@@ -27,7 +30,8 @@ export type ListSignUpInvitesQuery = z.infer<
   typeof ListSignUpInvitesQuerySchema
 >;
 
-export type ListSignUpInvitesResponse = PaginatedResponse<SignUpInvite>;
+export type ListSignUpInvitesResponse =
+  PaginatedResponse<SignUpInviteHTTPResponse>;
 
 @Controller('/admin/sign-up/invites')
 export class ListSignUpInvitesController {
@@ -60,7 +64,10 @@ export class ListSignUpInvitesController {
         `User ${currentUser.id.toString()} - ${currentUser.name} found ${result.total} invites.`,
       );
 
-      return result;
+      return {
+        ...result,
+        items: result.items.map(SignUpInvitePresenter.toHTTP),
+      };
     } catch (error: any) {
       this.logger.error(
         ListSignUpInvitesController.name,
