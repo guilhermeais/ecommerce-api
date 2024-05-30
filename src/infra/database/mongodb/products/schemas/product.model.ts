@@ -10,15 +10,18 @@ export class MongoProductModel {
   _id!: string;
   id!: string;
   name!: string;
-  createdBy!: MongoAdministratorModel;
+  createdBy?: MongoAdministratorModel;
   createdById!: string;
   price!: number;
   description?: string;
   isShown?: boolean;
-  subCategoryId?: string;
+  subCategoryId?: string | null;
   subCategory?: MongoCategoryModel;
   image?: string;
+  updatedById?: string;
   updatedBy?: MongoAdministratorModel;
+  createdAt!: Date;
+  updatedAt?: Date;
 }
 
 export const MongoProductSchema = new Schema<MongoProductModel>(
@@ -51,6 +54,10 @@ export const MongoProductSchema = new Schema<MongoProductModel>(
     updatedBy: {
       type: Schema.Types.ObjectId,
       ref: MongoAdministratorModel.COLLECTION_NAME,
+      required: false,
+    },
+    updatedById: {
+      type: String,
       required: false,
     },
   },

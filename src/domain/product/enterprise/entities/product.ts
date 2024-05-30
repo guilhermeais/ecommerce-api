@@ -17,12 +17,17 @@ export type ProductProps = {
 }>;
 
 export class Product extends Entity<ProductProps> {
-  public static create(props: ProductProps) {
-    return new Product(props);
+  public static create(props: ProductProps, createdAt?: Date) {
+    return new Product(props, undefined, createdAt);
   }
 
-  public static restore(props: ProductProps, id: UniqueEntityID) {
-    return new Product(props, id);
+  public static restore(
+    props: ProductProps,
+    id: UniqueEntityID,
+    createdAt: Date,
+    updatedAt?: Date,
+  ) {
+    return new Product(props, id, createdAt, updatedAt);
   }
 
   get name() {

@@ -4,7 +4,6 @@ import { UsersRepository } from '@/domain/auth/application/gateways/repositories
 import { CategoriesRepository } from '@/domain/product/application/gateways/repositories/categories-repository';
 import { ProductsRepository } from '@/domain/product/application/gateways/repositories/products-repository';
 import { Module } from '@nestjs/common';
-import { InMemoryProductsRepository } from './in-memory/repositories/products/in-memory-products.repository';
 import { MongoDbConfirmationTokensRepository } from './mongodb/auth/repositories/mongodb-confirmation-tokens.repository';
 import { MongoDbSignUpInvitesRepository } from './mongodb/auth/repositories/mongodb-signup-invites.repository';
 import { MongoDbUsersRepository } from './mongodb/auth/repositories/mongodb-users.repository';
@@ -16,7 +15,9 @@ import {
   MongooseConnectionFactory,
 } from './mongodb/mongoose-connection.provider';
 import { MongoDbCategoriesRepository } from './mongodb/products/repositories/mongodb-categories.repository';
+import { MongoDbProductsRepository } from './mongodb/products/repositories/mongodb-products.repository';
 import { MongoCategoryModelProvider } from './mongodb/products/schemas/category.model';
+import { MongoProductModelProvider } from './mongodb/products/schemas/product.model';
 
 @Module({
   providers: [
@@ -38,13 +39,14 @@ import { MongoCategoryModelProvider } from './mongodb/products/schemas/category.
     },
     {
       provide: ProductsRepository,
-      useClass: InMemoryProductsRepository,
+      useClass: MongoDbProductsRepository,
     },
     MongooseConnectionFactory,
     MongoUserModelProvider,
     MongoConfirmationTokenModelProvider,
     MongoSignUpModelProvider,
     MongoCategoryModelProvider,
+    MongoProductModelProvider,
   ],
   exports: [
     MONGOOSE_CONNECTION_PROVIDER,

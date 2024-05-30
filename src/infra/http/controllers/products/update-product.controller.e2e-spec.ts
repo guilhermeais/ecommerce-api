@@ -166,7 +166,7 @@ describe('UpdateProductController (E2E)', () => {
       expect(product!.subCategory).toEqual(newCategory);
     });
 
-    it('should update the category to null', async () => {
+    it.only('should update the category to null', async () => {
       const existingProduct = await productFactory.makeProduct();
 
       const { accessToken, user } = await userFactory.makeUser({

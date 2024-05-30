@@ -132,7 +132,7 @@ export class UpdateProductUseCase
 
       product.updatedBy = Administrator.restore(
         request.updatedBy,
-        request.updatedBy.id,
+        request.updatedBy!.id!,
       );
 
       await this.productsRepository.save(product);

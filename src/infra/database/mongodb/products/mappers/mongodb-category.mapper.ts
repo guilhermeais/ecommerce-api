@@ -3,7 +3,7 @@ import { MongoCategoryModel } from '../schemas/category.model';
 import { UniqueEntityID } from '@/core/entities/unique-entity-id';
 
 export class MongoDbCategoryMapper {
-  static toPersistense(category: Category): MongoCategoryModel {
+  static toPersistence(category: Category): MongoCategoryModel {
     return {
       _id: category.id.toValue(),
       id: category.id.toValue(),

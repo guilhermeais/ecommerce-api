@@ -57,7 +57,7 @@ export class MongoDbCategoriesRepository implements CategoriesRepository {
         _id: category.id.toString(),
       });
 
-      const categoryModel = MongoDbCategoryMapper.toPersistense(category);
+      const categoryModel = MongoDbCategoryMapper.toPersistence(category);
 
       if (exists) {
         this.logger.log(
