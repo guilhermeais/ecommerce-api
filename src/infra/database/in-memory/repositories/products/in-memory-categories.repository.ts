@@ -61,4 +61,16 @@ export class InMemoryCategoriesRepository implements CategoriesRepository {
 
     return found || null;
   }
+
+  async delete(id: UniqueEntityID): Promise<void> {
+    const index = this.categories.findIndex((t) => t.id.equals(id));
+
+    if (index !== -1) {
+      this.categories.splice(index, 1);
+    }
+  }
+
+  async exists(id: UniqueEntityID): Promise<boolean> {
+    return this.categories.some((t) => t.id.equals(id));
+  }
 }

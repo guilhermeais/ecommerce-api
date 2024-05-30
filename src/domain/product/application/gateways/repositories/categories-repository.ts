@@ -16,4 +16,6 @@ export abstract class CategoriesRepository implements Repository<Category> {
       }>
     >,
   ): Promise<PaginatedResponse<Category>>;
+  abstract delete(id: UniqueEntityID): Promise<void>;
+  abstract exists(id: UniqueEntityID): Promise<boolean>;
 }
