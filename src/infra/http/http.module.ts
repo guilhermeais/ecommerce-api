@@ -9,6 +9,7 @@ import { CreateProductUseCase } from '@/domain/product/application/use-cases/cre
 import { GetProductByIdUseCase } from '@/domain/product/application/use-cases/get-product-by-id';
 import { ListCategoriesUseCase } from '@/domain/product/application/use-cases/list-categories';
 import { ListProductsUseCase } from '@/domain/product/application/use-cases/list-products';
+import { UpdateCategoryUseCase } from '@/domain/product/application/use-cases/update-category';
 import { UpdateProductUseCase } from '@/domain/product/application/use-cases/update-product';
 import { CryptographyModule } from '@/infra/cryptography/cryptography.module';
 import { DatabaseModule } from '@/infra/database/database.module';
@@ -27,6 +28,7 @@ import { CreateProductController } from './controllers/products/create-product.c
 import { GetProductByIdController } from './controllers/products/get-product-by-id.controller';
 import { ListCategoriesController } from './controllers/products/list-categories.controller';
 import { ListProductsController } from './controllers/products/list-products.controller';
+import { UpdateCategoryController } from './controllers/products/update-category.controller';
 import { UpdateProductController } from './controllers/products/update-product.controller';
 
 @Module({
@@ -46,6 +48,7 @@ import { UpdateProductController } from './controllers/products/update-product.c
     GetProductByIdController,
     CreateCategoryController,
     ListCategoriesController,
+    UpdateCategoryController,
   ],
   providers: [
     ClientSignUpUseCase,
@@ -61,6 +64,7 @@ import { UpdateProductController } from './controllers/products/update-product.c
     GetProductByIdUseCase,
     CreateCategoryUseCase,
     ListCategoriesUseCase,
+    UpdateCategoryUseCase,
   ],
 })
 export class HttpModule {}

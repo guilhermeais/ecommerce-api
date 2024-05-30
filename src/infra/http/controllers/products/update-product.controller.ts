@@ -68,7 +68,7 @@ export class UpdateProductController {
   @Roles(Role.MASTER, Role.ADMIN)
   @Patch('/:id')
   @UseInterceptors(FileInterceptor('image'))
-  @HttpCode(201)
+  @HttpCode(204)
   async handle(
     @CurrentUser() currentUser: User,
     @Body(new ZodValidationPipe(UpdateProductBodySchema))

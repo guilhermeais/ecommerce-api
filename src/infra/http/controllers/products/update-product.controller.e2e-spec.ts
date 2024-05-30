@@ -119,7 +119,7 @@ describe('UpdateProductController (E2E)', () => {
           .set('Authorization', `Bearer ${accessToken}`)
           .field(body);
 
-        expect(response.status).toBe(201);
+        expect(response.status).toBe(204);
 
         const product = await productsRepository.findById(existingProduct.id);
 
@@ -156,7 +156,7 @@ describe('UpdateProductController (E2E)', () => {
         .set('Authorization', `Bearer ${accessToken}`)
         .field(body);
 
-      expect(response.status).toBe(201);
+      expect(response.status).toBe(204);
 
       const product = await productsRepository.findById(existingProduct.id);
 
@@ -182,7 +182,7 @@ describe('UpdateProductController (E2E)', () => {
         .set('Authorization', `Bearer ${accessToken}`)
         .field(body);
 
-      expect(response.status).toBe(201);
+      expect(response.status).toBe(204);
 
       const product = await productsRepository.findById(existingProduct.id);
 
@@ -194,7 +194,7 @@ describe('UpdateProductController (E2E)', () => {
 
     it('should update the product image', async () => {
       const existingProduct = await productFactory.makeProduct({
-        image: null,
+        image: undefined,
       });
 
       const { accessToken, user } = await userFactory.makeUser({
@@ -211,7 +211,7 @@ describe('UpdateProductController (E2E)', () => {
         })
         .field(body);
 
-      expect(response.status).toBe(201);
+      expect(response.status).toBe(204);
 
       const product = await productsRepository.findById(existingProduct.id);
 
