@@ -32,7 +32,7 @@ export abstract class Entity<Props> {
     this._id = id ?? new UniqueEntityID();
 
     this._createdAt = createdAt;
-    this._updatedAt = updatedAt;
+    this._updatedAt = updatedAt ?? createdAt;
   }
 
   public equals(entity: Entity<unknown>) {
