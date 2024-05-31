@@ -3,8 +3,10 @@ import { StorageGateway } from '@/domain/product/application/gateways/storage/st
 import { AppModule } from '@/infra/app.module';
 import { FakeEmailSender } from '@/infra/notifications/fake-email-sender';
 import { FakeStorageGateway } from '@/infra/storage/fake-storage';
+import { GCP_STORAGE_PROVIDER } from '@/infra/storage/gcp-storage.factory';
 import { ModuleMetadata } from '@nestjs/common';
 import { Test, TestingModuleBuilder } from '@nestjs/testing';
+import { mock } from 'vitest-mock-extended';
 
 export function makeTestingApp(
   modifications?: Partial<ModuleMetadata>,
@@ -16,5 +18,7 @@ export function makeTestingApp(
     .overrideProvider(EmailSender)
     .useClass(FakeEmailSender)
     .overrideProvider(StorageGateway)
-    .useClass(FakeStorageGateway);
+    .useClass(FakeStorageGateway)
+    .overrideProvider(GCP_STORAGE_PROVIDER)
+    .useValue(mock());
 }

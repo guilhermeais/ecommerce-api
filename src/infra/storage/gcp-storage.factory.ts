@@ -1,12 +1,13 @@
 import { Logger } from '@/shared/logger';
 import { Storage } from '@google-cloud/storage';
-import { FactoryProvider } from '@nestjs/common';
+import { FactoryProvider, Scope } from '@nestjs/common';
 import { JWTInput } from 'google-auth-library';
 import { EnvService } from '../env/env.service';
 
 export const GCP_STORAGE_PROVIDER = Symbol('GCP_STORAGE_PROVIDER');
 
 export const GcpStorageFactory: FactoryProvider<Storage> = {
+  scope: Scope.TRANSIENT,
   inject: [EnvService, Logger],
   provide: GCP_STORAGE_PROVIDER,
   useFactory(envService: EnvService, logger: Logger): Storage {
