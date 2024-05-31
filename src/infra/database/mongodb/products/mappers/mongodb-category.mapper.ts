@@ -20,7 +20,7 @@ export class MongoDbCategoryMapper {
       {
         name: category.name,
         description: category.description,
-        rootCategory: category.rootCategory
+        rootCategory: category.rootCategory?.id
           ? MongoDbCategoryMapper.toDomain(category.rootCategory)
           : undefined,
       },
