@@ -62,6 +62,8 @@ jobs:
               GOOGLE_CLIENT_SECRET=GOOGLE_CLIENT_SECRET:latest
               GOOGLE_REFRESH_TOKEN=GOOGLE_REFRESH_TOKEN:latest
               MONGO_URI=MONGO_URI:latest    
+              GOOGLE_APPLICATION_CREDENTIALS=GOOGLE_APPLICATION_CREDENTIALS:latest
+              GOOGLE_STORAGE_BUCKET=GOOGLE_STORAGE_BUCKET:latest
           env_vars: |-
              APP_NAME=PiaLabs Ecommerce
              APP_EMAIL=guilhermeteixeiraais@gmail.com
