@@ -8,21 +8,41 @@ import { UserPresenter } from './presenters/user-presenter';
 import { LoginResponse } from './login.controller';
 
 const AddressSchema = z.object({
-  cep: z.string(),
-  address: z.string(),
-  number: z.string(),
-  state: z.string(),
-  city: z.string(),
+  cep: z.string({
+    message: 'CEP é obrigatório!',
+  }),
+  address: z.string({
+    message: 'Endereço é obrigatório!',
+  }),
+  number: z.string({
+    message: 'Número é obrigatório!',
+  }),
+  state: z.string({
+    message: 'Estado é obrigatório!',
+  }),
+  city: z.string({
+    message: 'Cidade é obrigatória!',
+  }),
 });
 
 const SignUpBodySchema = z.object({
   email: z.string({
     message: 'Email é obrigatório!',
   }),
-  password: z.string(),
-  name: z.string(),
-  cpf: z.string(),
-  phone: z.string().optional(),
+  password: z.string({
+    message: 'Senha é obrigatória!',
+  }),
+  name: z.string({
+    message: 'Nome é obrigatório!',
+  }),
+  cpf: z.string({
+    message: 'CPF é obrigatório!',
+  }),
+  phone: z
+    .string({
+      message: 'Telefone deve ser uma string!',
+    })
+    .optional(),
   address: z.optional(AddressSchema),
 });
 
