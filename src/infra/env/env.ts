@@ -31,6 +31,11 @@ export const envSchema = z.object({
     .string()
     .default('https://developers.google.com/oauthplayground'),
 
+  GOOGLE_STORAGE_BUCKET: z.string(),
+  GOOGLE_APPLICATION_CREDENTIALS: z.string().base64({
+    message:
+      'GOOGLE_APPLICATION_CREDENTIALS deve ser as credenciais em base64.',
+  }),
   MONGO_URI: z.string(),
   IS_TESTING: z
     .boolean({

@@ -117,7 +117,15 @@ export class UpdateProductUseCase
             UpdateProductUseCase.name,
             `Deleting old image of product ${request.id} - ${request.name} `,
           );
-          await this.storageGateway.delete(oldImageUrl);
+          await this.storageGateway
+            .delete(oldImageUrl)
+            .catch((err) =>
+              this.logger.error(
+                UpdateProductUseCase.name,
+                `Error deleting old image of product ${request.id} - ${request.name}: ${err.message}`,
+                err.stack,
+              ),
+            );
         }
 
         product.image = newImageUrl;

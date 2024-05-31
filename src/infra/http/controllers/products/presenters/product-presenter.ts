@@ -1,4 +1,5 @@
 import { Product } from '@/domain/product/enterprise/entities/product';
+import { CategoryHTTPResponse, CategoryPresenter } from './category-presenter';
 
 export type ProductHTTPResponse = {
   id: string;
@@ -6,14 +7,7 @@ export type ProductHTTPResponse = {
   description?: string;
   price: number;
   isShown: boolean;
-  category?: {
-    id: string;
-    name: string;
-    rootCategory?: {
-      id: string;
-      name: string;
-    };
-  };
+  category?: CategoryHTTPResponse;
   image?: string;
   createdBy?: {
     id: string;
@@ -34,14 +28,9 @@ export class ProductPresenter {
       isShown: product.isShown,
       name: product.name,
       price: product.price,
-      category: product.subCategory && {
-        id: product.subCategory.id.toString(),
-        name: product.subCategory.name,
-        rootCategory: product.subCategory.rootCategory && {
-          id: product.subCategory.rootCategory.id.toString(),
-          name: product.subCategory.rootCategory.name,
-        },
-      },
+      category: product.subCategory
+        ? CategoryPresenter.toHTTP(product.subCategory)
+        : undefined,
       createdBy: {
         id: product.createdBy.id.toString(),
         name: product.createdBy.name,
