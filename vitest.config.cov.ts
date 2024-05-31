@@ -23,7 +23,7 @@ export default mergeConfig(
         reporter: ['text', 'json-summary', 'json'],
         reportOnFailure: true,
       },
-      include: ['**/*.spec.ts'],
+      include: ['**/*spec.ts'],
       setupFiles: ['./test/setup-e2e.ts'],
       globalSetup: ['./test/global-setup.e2e.ts'],
       maxConcurrency: 1,
