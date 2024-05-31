@@ -28,7 +28,7 @@ export class ProductPresenter {
       isShown: product.isShown,
       name: product.name,
       price: product.price,
-      category: product.subCategory
+      category: product.subCategory?.id
         ? CategoryPresenter.toHTTP(product.subCategory)
         : undefined,
       createdBy: {

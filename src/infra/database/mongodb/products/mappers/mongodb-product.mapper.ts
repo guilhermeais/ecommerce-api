@@ -30,11 +30,11 @@ export class MongoDbProductMapper {
         description: product.description,
         image: product.image,
         isShown: product.isShown,
-        subCategory: product.subCategory
+        subCategory: product.subCategory?.id
           ? MongoDbCategoryMapper.toDomain(product.subCategory)
           : null,
         createdBy: MongoDbAdministratorMapper.toDomain(product!.createdBy!),
-        updatedBy: product.updatedBy
+        updatedBy: product.updatedBy?.id
           ? MongoDbAdministratorMapper.toDomain(product.updatedBy)
           : null,
       },

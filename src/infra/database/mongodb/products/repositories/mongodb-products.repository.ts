@@ -265,6 +265,7 @@ export class MongoDbProductsRepository implements ProductsRepository {
 
       const total = metadata?.total ?? 0;
       const pages = Math.ceil(total / limit);
+      console.log(result.items);
 
       this.logger.log(
         MongoDbProductsRepository.name,
