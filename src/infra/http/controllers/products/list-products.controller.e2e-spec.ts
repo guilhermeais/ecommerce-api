@@ -11,6 +11,7 @@ import { CategoryFactory } from 'test/products/enterprise/entities/make-category
 import { ProductFactory } from 'test/products/enterprise/entities/make-product';
 import { DefaultExceptionFilter } from '../../filters/default-exception-filter.filter';
 import { ListProductsParams } from './list-products.controller';
+import { ProductHTTPResponse } from './presenters/product-presenter';
 
 export function makeListProductsParams(
   modifications?: Partial<ListProductsParams>,
@@ -155,7 +156,16 @@ describe('ListSignUpInvitesController (E2E)', () => {
 
       expect(response.status).toBe(200);
       expect(response.body.items).toHaveLength(1);
-      expect(response.body.items[0].id).toBe(productToFound.id.toString());
+      const product = response.body.items[0] as ProductHTTPResponse;
+      expect(product.id).toBe(productToFound.id.toString());
+      expect(product.category?.id).toBe(subCategory.id.toString());
+      expect(product.category?.name).toBe(subCategory.name);
+      expect(product.category?.description).toBe(subCategory.description);
+      expect(product.category?.rootCategory!.id).toBe(category.id.toString());
+      expect(product.category?.rootCategory!.name).toBe(category.name);
+      expect(product.category?.rootCategory!.description).toBe(
+        category.description,
+      );
     });
 
     it('should filter by subCategoryId', async () => {

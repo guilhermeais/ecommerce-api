@@ -154,5 +154,34 @@ describe('MongoDbProductsRepository', () => {
 
       expect(secondResponse.items).toHaveLength(0);
     });
+
+    it('should list the product with the category and subCategory', async () => {
+      const { user } = await userFactory.makeUser();
+      const { category } = await categoryFactory.makeCategory();
+      const { category: subCategory } = await categoryFactory.makeCategory({
+        rootCategory: category,
+      });
+
+      const product = await productFactory.makeProduct({
+        subCategory: subCategory,
+        createdBy: Administrator.restore(
+          {
+            email: user.email.value,
+            name: user.name,
+          },
+          user.id,
+        ),
+      });
+
+      const response = await sut.list({ page: 1, limit: 10 });
+
+      expect(response.items).toHaveLength(1);
+      expect(response.total).toBe(1);
+      expect(response.currentPage).toBe(1);
+      expect(response.pages).toBe(1);
+      expect(response.items[0]).toEqual(product);
+      expect(response.items[0].subCategory).toEqual(subCategory);
+      expect(response.items[0].subCategory!.rootCategory).toEqual(category);
+    });
   });
 });
