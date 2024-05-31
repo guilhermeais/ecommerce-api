@@ -2,7 +2,7 @@ import { User } from '@/domain/auth/enterprise/entities/user';
 import { CurrentUser } from '@/infra/auth/current-user.decorator';
 import { Logger } from '@/shared/logger';
 import { Controller, Get } from '@nestjs/common';
-import { UserHTTPResponse, UserPresenter } from '../presenters/user-presenter';
+import { UserHTTPResponse, UserPresenter } from './presenters/user-presenter';
 
 export type GetLoggedUserResponse = UserHTTPResponse;
 

@@ -1,12 +1,12 @@
+import { ToolsModule } from '@/shared/tools/tools.module';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { EventEmitterModule } from '@nestjs/event-emitter';
+import { AuthModule } from './auth/auth.module';
 import { envSchema } from './env/env';
 import { EnvModule } from './env/env.module';
-import { EventEmitterModule } from '@nestjs/event-emitter';
 import { EventsModule } from './events/events.module';
 import { HttpModule } from './http/http.module';
-import { AuthModule } from './auth/auth.module';
-import { ToolsModule } from '@/shared/tools/tools.module';
 
 @Module({
   imports: [

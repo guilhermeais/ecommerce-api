@@ -10,7 +10,7 @@ import { UserFactory } from 'test/auth/enterprise/entities/make-user';
 import { makeTestingApp } from 'test/make-testing-app';
 import { DefaultExceptionFilter } from '../../filters/default-exception-filter.filter';
 import { ListSignUpInvitesQuery } from './list-sign-up-invites.controller';
-import { SignUpInvitePresenter } from '../presenters/sign-up-invite-presenter';
+import { SignUpInvitePresenter } from './presenters/sign-up-invite-presenter';
 
 export function makeListSignUpInvitesQuery(
   modifications?: Partial<ListSignUpInvitesQuery>,

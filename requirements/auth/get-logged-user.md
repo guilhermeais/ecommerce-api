@@ -1,4 +1,4 @@
-## Finalizar convite de cadastro
+## Buscar Usuário Logado
 
 ## Dados
 

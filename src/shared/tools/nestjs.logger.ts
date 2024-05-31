@@ -9,7 +9,7 @@ export class NestJsLogger implements Logger {
   }
 
   error(context: string, message: string, trace: string): void {
-    this.#logger.error(message, trace, context);
+    this.#logger.error(`${message}\n${trace}`, trace, context);
   }
 
   warn(context: string, message: string): void {

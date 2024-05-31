@@ -4,7 +4,7 @@ import { Logger } from '@/shared/logger';
 import { Body, Controller, Post } from '@nestjs/common';
 import { z } from 'zod';
 import { ZodValidationPipe } from '../../pipes/zod-validation.pipe';
-import { UserHTTPResponse, UserPresenter } from '../presenters/user-presenter';
+import { UserHTTPResponse, UserPresenter } from './presenters/user-presenter';
 
 const LoginBodySchema = z.object({
   email: z.string({

@@ -21,3 +21,19 @@ Este módulo lida com a autenticação do usuário administrador e do cliente no
 - ❎ [Conclusão do convite para cadastro de administrador](./requirements/auth/finish-signup-invite.md)
 - ❎ [Lista de convites para cadastro de administradores](./requirements/auth/list-signup-invites.md)
 - ❎ [Obter usuário logado](./requirements/auth/get-logged-user.md)
+
+### Administração de Produtos 📦🏷️
+
+![Progresso](https://img.shields.io/badge/Progresso-100%25-green)
+
+Este módulo lida com a administração dos produtos realizadas por um administrador.
+
+- ❎ [Criar Categoria de Produto](./requirements/product-administration/create-category.md)
+- ❎ [Buscar Categoria de Produto](./requirements/product-administration/search-category.md)
+- ❎ [Atualiza Categoria de Produto](./requirements/product-administration/update-category.md)
+- ❎ [Apagar Categoria de Produto](./requirements/product-administration/delete-category.md)
+
+- ❎ [Cadastro de Produtos](./requirements/product-administration/create-product.md)
+- ❎ [Busca de Produtos](./requirements/product-administration/search-products.md)
+- ❎ [Busca de Produto](./requirements/product-administration/search-product.md)
+- ❎ [Atualização de Produtos](./requirements/product-administration/update-product.md)
