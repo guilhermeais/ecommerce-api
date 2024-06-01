@@ -55,7 +55,10 @@ export class ListCategoriesController {
         `User ${currentUser.id.toString()} - ${currentUser.name} listing categories with: ${JSON.stringify(query)}`,
       );
 
-      const result = await this.listCategoriesUseCase.execute(query);
+      const result = await this.listCategoriesUseCase.execute({
+        ...query,
+        rootCategoryId: null,
+      });
 
       this.logger.log(
         ListCategoriesController.name,
