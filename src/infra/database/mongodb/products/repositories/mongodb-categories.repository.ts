@@ -100,14 +100,14 @@ export class MongoDbCategoriesRepository implements CategoriesRepository {
       );
 
       const { page, limit, name, rootCategoryId } = request;
-      const skip = (page - 1) * limit;
+      const skip = limit !== -1 ? (page - 1) * limit : 0;
 
       const [result] = (await this.categoryModel.aggregate([
         {
           $match: {
             ...(name && { name: { $regex: name, $options: 'i' } }),
-            ...(rootCategoryId && {
-              rootCategoryId: rootCategoryId.toString(),
+            ...(rootCategoryId !== undefined && {
+              rootCategoryId: rootCategoryId?.toString(),
             }),
           },
         },
@@ -128,7 +128,10 @@ export class MongoDbCategoriesRepository implements CategoriesRepository {
         { $sort: { createdAt: 1 } },
         {
           $facet: {
-            items: [{ $skip: skip }, { $limit: limit }],
+            items: [
+              { $skip: skip },
+              ...(limit !== -1 ? [{ $limit: limit }] : []),
+            ],
             metadata: [{ $count: 'total' }],
           },
         },
@@ -140,7 +143,7 @@ export class MongoDbCategoriesRepository implements CategoriesRepository {
       const [metadata] = result?.metadata;
 
       const total = metadata?.total ?? 0;
-      const pages = Math.ceil(total / limit);
+      const pages = Math.ceil(total / Math.abs(limit));
 
       this.logger.log(
         MongoDbCategoriesRepository.name,

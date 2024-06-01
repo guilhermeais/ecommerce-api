@@ -15,6 +15,8 @@ import { InvalidEmailFormatError } from '../../enterprise/entities/value-objects
 import { InvalidPasswordError } from '../../enterprise/entities/value-objects/errors/invalid-password-error';
 import { ClientSignUpRequest, ClientSignUpUseCase } from './client-sign-up';
 import { EmailAlreadyInUseError } from './errors/email-already-in-use-error';
+import { MockProxy, mock } from 'vitest-mock-extended';
+import { EnvService } from '@/infra/env/env.service';
 
 describe('ClientSignUp usecase', () => {
   let userRepository: InMemoryUserRepository;
@@ -23,6 +25,7 @@ describe('ClientSignUp usecase', () => {
   let eventManager: FakeEventManager;
   let logger: Logger;
   let sut: ClientSignUpUseCase;
+  let envService: MockProxy<EnvService>;
 
   beforeEach(() => {
     userRepository = new InMemoryUserRepository();
@@ -30,6 +33,7 @@ describe('ClientSignUp usecase', () => {
     encrypter = new FakeEncrypter();
     eventManager = new FakeEventManager();
     logger = makeFakeLogger();
+    envService = mock();
 
     sut = new ClientSignUpUseCase(
       userRepository,
@@ -37,6 +41,7 @@ describe('ClientSignUp usecase', () => {
       encrypter,
       eventManager,
       logger,
+      envService,
     );
   });
 

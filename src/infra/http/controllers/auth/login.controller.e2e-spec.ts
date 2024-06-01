@@ -7,6 +7,7 @@ import { InvalidLoginRequestError } from '@/domain/auth/application/use-cases/er
 import { UserPayload } from '@/infra/auth/jwt.strategy';
 import { CryptographyModule } from '@/infra/cryptography/cryptography.module';
 import { DatabaseModule } from '@/infra/database/database.module';
+import { EnvService } from '@/infra/env/env.service';
 import { faker } from '@faker-js/faker';
 import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
@@ -20,8 +21,11 @@ describe('ClientSignUp (E2E)', () => {
   let eventManager: EventManager;
   let encrypter: Encrypter;
   let userFactory: UserFactory;
+  let envService: EnvService;
 
   beforeAll(async () => {
+    vi.useFakeTimers();
+
     const moduleRef = await makeTestingApp({
       imports: [DatabaseModule, CryptographyModule],
       providers: [UserFactory],
@@ -35,6 +39,7 @@ describe('ClientSignUp (E2E)', () => {
     eventManager = moduleRef.get(EventManager);
     encrypter = moduleRef.get(Encrypter);
     userFactory = moduleRef.get(UserFactory);
+    envService = moduleRef.get(EnvService);
 
     await app.init();
   });
@@ -42,6 +47,11 @@ describe('ClientSignUp (E2E)', () => {
   beforeEach(async () => {
     eventManager.clearSubscriptions();
     await userRepository.clear();
+  });
+
+  afterAll(async () => {
+    vi.useRealTimers();
+    await app.close();
   });
 
   function makeLoginRequest(
@@ -82,11 +92,19 @@ describe('ClientSignUp (E2E)', () => {
           cpf: user.cpf.value,
         },
       });
+      const now = new Date().getTime();
+      const iatInSeconds = parseInt(
+        (Date.now() / 1000).toString().split('.')[0],
+      );
+
+      const exp = now + envService.get('JWT_EXPIRES_IN');
+      const expInSeconds = parseInt((exp / 1000).toString().split('.')[0]);
 
       const authToken = response.body.authToken;
       expect(await encrypter.decode(authToken)).toEqual<UserPayload>({
         sub: user.id.toString(),
-        iat: expect.any(Number),
+        iat: iatInSeconds,
+        exp: expInSeconds,
       });
     });
 

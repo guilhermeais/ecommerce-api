@@ -15,6 +15,7 @@ const tokenPayloadSchema = z.object({
 
 export type UserPayload = z.infer<typeof tokenPayloadSchema> & {
   iat?: number;
+  exp?: number;
 };
 
 @Injectable()
