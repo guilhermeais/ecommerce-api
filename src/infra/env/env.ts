@@ -1,20 +1,16 @@
 import { z } from 'zod';
 import 'dotenv/config';
+const ONE_DAY = 1000 * 60 * 60 * 24;
 
 export const envSchema = z.object({
   PORT: z.coerce.number().optional().default(3000),
   JWT_PRIVATE_KEY: z.string(),
   JWT_PUBLIC_KEY: z.string(),
+  JWT_EXPIRES_IN: z.coerce.number().optional().default(ONE_DAY),
 
-  CONFIRMATION_TOKEN_EXPIRES_IN: z.coerce
-    .number()
-    .optional()
-    .default(1000 * 60 * 60 * 24),
+  CONFIRMATION_TOKEN_EXPIRES_IN: z.coerce.number().optional().default(ONE_DAY),
 
-  SIGNUP_INVITE_EXPIRES_IN: z.coerce
-    .number()
-    .optional()
-    .default(1000 * 60 * 60 * 24),
+  SIGNUP_INVITE_EXPIRES_IN: z.coerce.number().optional().default(ONE_DAY),
 
   APP_NAME: z.string().optional().default('PiaLabs Ecommerce'),
 

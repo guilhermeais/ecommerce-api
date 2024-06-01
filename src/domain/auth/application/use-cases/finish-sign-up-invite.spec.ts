@@ -25,6 +25,8 @@ import { UserPayload } from '@/infra/auth/jwt.strategy';
 import { Role } from '../../enterprise/entities/enums/role';
 import { SignUpInviteExpiredError } from './errors/signup-invite-expired-error';
 import { CPF } from '../../enterprise/entities/value-objects/cpf';
+import { EnvService } from '@/infra/env/env.service';
+import { MockProxy, mock } from 'vitest-mock-extended';
 
 describe('FinishSignUpInvite use case', () => {
   let sut: FinishSignUpInviteUseCase;
@@ -34,6 +36,7 @@ describe('FinishSignUpInvite use case', () => {
   let encrypter: Encrypter;
   let eventManager: EventManager;
   let logger: Logger;
+  let envService: MockProxy<EnvService>;
 
   beforeEach(() => {
     signUpInvitesRepository = new InMemorySignUpInvitesRepository();
@@ -42,6 +45,7 @@ describe('FinishSignUpInvite use case', () => {
     encrypter = new FakeEncrypter();
     eventManager = new FakeEventManager();
     logger = makeFakeLogger();
+    envService = mock();
 
     sut = new FinishSignUpInviteUseCase(
       signUpInvitesRepository,
@@ -50,6 +54,7 @@ describe('FinishSignUpInvite use case', () => {
       encrypter,
       eventManager,
       logger,
+      envService,
     );
   });
 
