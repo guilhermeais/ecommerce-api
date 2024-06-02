@@ -8,8 +8,6 @@ export type ShowCaseProductProps = {
   price: number;
   image?: string;
   category?: ShowcaseCategory;
-  createdAt: Date;
-  updatedAt?: Date;
 };
 
 export class ShowcaseProduct extends Entity<ShowCaseProductProps> {
@@ -31,14 +29,6 @@ export class ShowcaseProduct extends Entity<ShowCaseProductProps> {
 
   get category(): ShowcaseCategory | undefined {
     return this.props.category;
-  }
-
-  get createdAt(): Date {
-    return this.props.createdAt;
-  }
-
-  get updatedAt(): Date | undefined {
-    return this.props.updatedAt;
   }
 
   static create(
