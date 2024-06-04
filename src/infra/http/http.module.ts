@@ -12,6 +12,7 @@ import { ListCategoriesUseCase } from '@/domain/product/application/use-cases/li
 import { ListProductsUseCase } from '@/domain/product/application/use-cases/list-products';
 import { UpdateCategoryUseCase } from '@/domain/product/application/use-cases/update-category';
 import { UpdateProductUseCase } from '@/domain/product/application/use-cases/update-product';
+import { GetShowcaseProductUseCase } from '@/domain/showcase/application/use-cases/get-showcase-product';
 import { GetShowcaseProductsUseCase } from '@/domain/showcase/application/use-cases/get-showcase-products';
 import { CryptographyModule } from '@/infra/cryptography/cryptography.module';
 import { DatabaseModule } from '@/infra/database/database.module';
@@ -33,7 +34,7 @@ import { ListCategoriesController } from './controllers/products/list-categories
 import { ListProductsController } from './controllers/products/list-products.controller';
 import { UpdateCategoryController } from './controllers/products/update-category.controller';
 import { UpdateProductController } from './controllers/products/update-product.controller';
-import { GetShowcaseProductsController } from './controllers/showcase/get-showcase-products.controller';
+import { ShowcaseProductsController } from './controllers/showcase/showcase-products.controller';
 
 @Module({
   imports: [EventsModule, DatabaseModule, CryptographyModule, StorageModule],
@@ -55,7 +56,7 @@ import { GetShowcaseProductsController } from './controllers/showcase/get-showca
     UpdateCategoryController,
     DeleteCategoryController,
 
-    GetShowcaseProductsController,
+    ShowcaseProductsController,
   ],
   providers: [
     ClientSignUpUseCase,
@@ -75,6 +76,7 @@ import { GetShowcaseProductsController } from './controllers/showcase/get-showca
     DeleteCategoryUseCase,
 
     GetShowcaseProductsUseCase,
+    GetShowcaseProductUseCase,
   ],
 })
 export class HttpModule {}

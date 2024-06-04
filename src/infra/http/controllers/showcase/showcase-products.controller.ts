@@ -1,8 +1,9 @@
 import { PaginatedResponse } from '@/core/types/pagination';
+import { GetShowcaseProductUseCase } from '@/domain/showcase/application/use-cases/get-showcase-product';
 import { GetShowcaseProductsUseCase } from '@/domain/showcase/application/use-cases/get-showcase-products';
 import { Public } from '@/infra/auth/public.decorator';
 import { Logger } from '@/shared/logger';
-import { Controller, Get, Query } from '@nestjs/common';
+import { Controller, Get, Param, Query } from '@nestjs/common';
 import { z } from 'zod';
 import { ZodValidationPipe } from '../../pipes/zod-validation.pipe';
 import {
@@ -45,29 +46,32 @@ export type GetShowcaseProductsParams = z.infer<
 export type GetShowcaseProductsResponse =
   PaginatedResponse<ShowcaseProductHTTPResponse>;
 
+export type GetShowcaseProductResponse = ShowcaseProductHTTPResponse;
+
 @Controller('/showcase/products')
-export class GetShowcaseProductsController {
+export class ShowcaseProductsController {
   constructor(
     private readonly getShowcaseProducts: GetShowcaseProductsUseCase,
+    private readonly getShowcaseProduct: GetShowcaseProductUseCase,
     private readonly logger: Logger,
   ) {}
 
   @Public()
   @Get()
-  async handle(
+  async list(
     @Query(new ZodValidationPipe(GetShowcaseProductsParamsSchema))
     query: GetShowcaseProductsParams,
   ): Promise<GetShowcaseProductsResponse> {
     try {
       this.logger.log(
-        GetShowcaseProductsController.name,
+        ShowcaseProductsController.name,
         `listing products with: ${JSON.stringify(query)}`,
       );
 
       const result = await this.getShowcaseProducts.execute(query);
 
       this.logger.log(
-        GetShowcaseProductsController.name,
+        ShowcaseProductsController.name,
         `found ${result.total} products with ${JSON.stringify(query, null, 2)}.`,
       );
 
@@ -77,8 +81,43 @@ export class GetShowcaseProductsController {
       };
     } catch (error: any) {
       this.logger.error(
-        GetShowcaseProductsController.name,
+        ShowcaseProductsController.name,
         `Error on listing products with ${JSON.stringify(query)}: ${error.message}`,
+        error.stack,
+      );
+
+      throw error;
+    }
+  }
+
+  @Public()
+  @Get('/:id')
+  async getById(
+    @Param(
+      'id',
+      new ZodValidationPipe(
+        z.string().uuid({
+          message: 'ID do produto deve ser um UUID válido!',
+        }),
+      ),
+    )
+    id: string,
+  ): Promise<GetShowcaseProductResponse> {
+    try {
+      this.logger.log(ShowcaseProductsController.name, `getting product ${id}`);
+
+      const result = await this.getShowcaseProduct.execute({ id });
+
+      this.logger.log(
+        ShowcaseProductsController.name,
+        `found product ${result.name} with id ${id}.`,
+      );
+
+      return ShowcaseProductPresenter.toHTTP(result);
+    } catch (error: any) {
+      this.logger.error(
+        ShowcaseProductsController.name,
+        `Error on getting product with id ${id}: ${error.message}`,
         error.stack,
       );
 

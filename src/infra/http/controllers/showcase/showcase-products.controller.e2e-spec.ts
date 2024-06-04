@@ -9,11 +9,13 @@ import { CategoryFactory } from 'test/products/enterprise/entities/make-category
 import { ProductFactory } from 'test/products/enterprise/entities/make-product';
 import { mapProductToShowcaseProduct } from 'test/showcase/enterprise/entities/make-showcase-product';
 import { DefaultExceptionFilter } from '../../filters/default-exception-filter.filter';
-import { GetShowcaseProductsParams } from './get-showcase-products.controller';
 import {
   ShowcaseProductHTTPResponse,
   ShowcaseProductPresenter,
 } from './presenters/showcase-product-presenter';
+import { GetShowcaseProductsParams } from './showcase-products.controller';
+import { faker } from '@faker-js/faker/locale/af_ZA';
+import { EntityNotFoundError } from '@/core/errors/commom/entity-not-found-error';
 
 export function makeGetShowcaseProductsParams(
   modifications?: Partial<GetShowcaseProductsParams>,
@@ -254,5 +256,78 @@ describe('GetShowcaseProductsController (E2E)', () => {
         expect(response.body.items).toEqual(expected);
       },
     );
+  });
+
+  describe('[GET] /showcase/products/:id', () => {
+    it('should return EntitiNotFoundError if the product does not exists', async () => {
+      const id = faker.string.uuid();
+
+      const response = await request(app.getHttpServer()).get(
+        `/showcase/products/${id}`,
+      );
+
+      expect(response.status).toBe(404);
+      const expectedError = new EntityNotFoundError('Produto', id);
+      expect(response.body).toEqual({
+        error: expectedError.name,
+        message: [expectedError.message],
+        details: expectedError.details,
+        statusCode: expectedError.code,
+      });
+    });
+
+    it('should return EntitiNotFoundError if the product is not shown', async () => {
+      const product = await productFactory.makeProduct({
+        isShown: false,
+      });
+
+      const response = await request(app.getHttpServer()).get(
+        `/showcase/products/${product.id.toString()}`,
+      );
+
+      expect(response.status).toBe(404);
+      const expectedError = new EntityNotFoundError(
+        'Produto',
+        product.id.toString(),
+      );
+      expect(response.body).toEqual({
+        error: expectedError.name,
+        message: [expectedError.message],
+        details: expectedError.details,
+        statusCode: expectedError.code,
+      });
+    });
+
+    it('should return 400 if an invalid product uuid is provided', async () => {
+      const id = '123654';
+
+      const response = await request(app.getHttpServer()).get(
+        `/showcase/products/${id}`,
+      );
+
+      expect(response.status).toBe(400);
+      expect(response.body).toEqual({
+        error: 'BadRequestException',
+        message: ['ID do produto deve ser um UUID válido!'],
+        statusCode: 400,
+      });
+    });
+
+    it('should return a valid showcase product if it exists', async () => {
+      const productToFound = mapProductToShowcaseProduct(
+        await productFactory.makeProduct({
+          isShown: true,
+        }),
+      );
+
+      const response = await request(app.getHttpServer()).get(
+        `/showcase/products/${productToFound.id}`,
+      );
+
+      expect(response.status).toBe(200);
+      expect(response.body).toEqual(
+        ShowcaseProductPresenter.toHTTP(productToFound),
+      );
+    });
   });
 });
