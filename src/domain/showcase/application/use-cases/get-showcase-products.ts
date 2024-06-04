@@ -1,10 +1,11 @@
+import { UniqueEntityID } from '@/core/entities/unique-entity-id';
 import { Partial } from '@/core/types/deep-partial';
 import { PaginatedRequest, PaginatedResponse } from '@/core/types/pagination';
 import { UseCase } from '@/core/types/use-case';
 import { Logger } from '@/shared/logger';
-import { ShowcaseProduct } from '../../enterprise/entities/showcase-product';
-import { ShowcaseProductRepository } from '../gateways/repositories/showcase-products-repository';
 import { Injectable } from '@nestjs/common';
+import { ShowcaseProduct } from '../../enterprise/entities/showcase-product';
+import { ShowcaseProductsRepository } from '../gateways/repositories/showcase-products-repository';
 
 export type GetShowcaseProductsRequest = PaginatedRequest<
   Partial<{
@@ -21,7 +22,7 @@ export class GetShowcaseProductsUseCase
   implements UseCase<GetShowcaseProductsRequest, GetShowcaseProductsResponse>
 {
   constructor(
-    private readonly showcaseProductRepository: ShowcaseProductRepository,
+    private readonly showcaseProductRepository: ShowcaseProductsRepository,
     private readonly logger: Logger,
   ) {}
 
@@ -34,7 +35,16 @@ export class GetShowcaseProductsUseCase
         `Getting showcase products with request: ${JSON.stringify(request)}`,
       );
 
-      const result = await this.showcaseProductRepository.list(request);
+      const result = await this.showcaseProductRepository.list({
+        ...request,
+        name: request.name || '',
+        categoryId: request.categoryId
+          ? new UniqueEntityID(request.categoryId)
+          : null,
+        subCategoryId: request.subCategoryId
+          ? new UniqueEntityID(request.subCategoryId)
+          : null,
+      });
 
       this.logger.log(
         GetShowcaseProductsUseCase.name,

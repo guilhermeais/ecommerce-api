@@ -3,7 +3,7 @@ import { SignUpInvitesRepository } from '@/domain/auth/application/gateways/repo
 import { UsersRepository } from '@/domain/auth/application/gateways/repositories/user-repository';
 import { CategoriesRepository } from '@/domain/product/application/gateways/repositories/categories-repository';
 import { ProductsRepository } from '@/domain/product/application/gateways/repositories/products-repository';
-import { ShowcaseProductRepository } from '@/domain/showcase/application/gateways/repositories/showcase-products-repository';
+import { ShowcaseProductsRepository } from '@/domain/showcase/application/gateways/repositories/showcase-products-repository';
 import { Module } from '@nestjs/common';
 import { MongoDbConfirmationTokensRepository } from './mongodb/auth/repositories/mongodb-confirmation-tokens.repository';
 import { MongoDbSignUpInvitesRepository } from './mongodb/auth/repositories/mongodb-signup-invites.repository';
@@ -44,7 +44,7 @@ import { MongoDbShowcaseProductsRepository } from './mongodb/showcase/repositori
       useClass: MongoDbProductsRepository,
     },
     {
-      provide: ShowcaseProductRepository,
+      provide: ShowcaseProductsRepository,
       useClass: MongoDbShowcaseProductsRepository,
     },
     MongooseConnectionFactory,
@@ -63,7 +63,7 @@ import { MongoDbShowcaseProductsRepository } from './mongodb/showcase/repositori
     ProductsRepository,
     CategoriesRepository,
 
-    ShowcaseProductRepository,
+    ShowcaseProductsRepository,
   ],
 })
 export class DatabaseModule {}

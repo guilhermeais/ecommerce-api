@@ -5,7 +5,7 @@ import { UserFactory } from 'test/auth/enterprise/entities/make-user';
 import { makeTestingApp } from 'test/make-testing-app';
 
 import { UniqueEntityID } from '@/core/entities/unique-entity-id';
-import { ShowcaseProductRepository } from '@/domain/showcase/application/gateways/repositories/showcase-products-repository';
+import { ShowcaseProductsRepository } from '@/domain/showcase/application/gateways/repositories/showcase-products-repository';
 import { CategoryFactory } from 'test/products/enterprise/entities/make-category';
 import { ProductFactory } from 'test/products/enterprise/entities/make-product';
 import { MongoDbShowcaseProductsRepository } from './mongodb-showcase-products.repository';
@@ -28,7 +28,7 @@ describe('MongoDbShowcaseProductsRepository', () => {
     }).compile();
 
     app = moduleRef.createNestApplication();
-    sut = moduleRef.get(ShowcaseProductRepository);
+    sut = moduleRef.get(ShowcaseProductsRepository);
     productFactory = moduleRef.get(ProductFactory);
     categoryFactory = moduleRef.get(CategoryFactory);
 

@@ -1,10 +1,10 @@
 import { UniqueEntityID } from '@/core/entities/unique-entity-id';
 import { PaginatedRequest, PaginatedResponse } from '@/core/types/pagination';
-import { ShowcaseProductRepository } from '@/domain/showcase/application/gateways/repositories/showcase-products-repository';
+import { ShowcaseProductsRepository } from '@/domain/showcase/application/gateways/repositories/showcase-products-repository';
 import { ShowcaseProduct } from '@/domain/showcase/enterprise/entities/showcase-product';
 
 export class InMemoryShowcaseProductRepository
-  implements ShowcaseProductRepository
+  implements ShowcaseProductsRepository
 {
   async list(
     request: PaginatedRequest<{
@@ -21,9 +21,7 @@ export class InMemoryShowcaseProductRepository
     const products = this.products.filter((product) => {
       if (
         subCategoryId &&
-        !product.category?.childrenCategories?.some((c) =>
-          c.id.equals(subCategoryId),
-        )
+        !product.category?.rootCategory?.id.equals(subCategoryId)
       ) {
         return false;
       }

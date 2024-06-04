@@ -1,6 +1,6 @@
 import { UseCase } from '@/core/types/use-case';
 import { ShowcaseProduct } from '../../enterprise/entities/showcase-product';
-import { ShowcaseProductRepository } from '../gateways/repositories/showcase-products-repository';
+import { ShowcaseProductsRepository } from '../gateways/repositories/showcase-products-repository';
 import { Logger } from '@/shared/logger';
 import { UniqueEntityID } from '@/core/entities/unique-entity-id';
 import { EntityNotFoundError } from '@/core/errors/commom/entity-not-found-error';
@@ -17,7 +17,7 @@ export class GetShowcaseProductUseCase
   implements UseCase<GetShowcaseProductRequest, GetShowcaseProductResponse>
 {
   constructor(
-    private readonly showcaseProductRepository: ShowcaseProductRepository,
+    private readonly showcaseProductRepository: ShowcaseProductsRepository,
     private readonly logger: Logger,
   ) {}
 

@@ -1,7 +1,7 @@
 import { UniqueEntityID } from '@/core/entities/unique-entity-id';
 
 import { PaginatedRequest, PaginatedResponse } from '@/core/types/pagination';
-import { ShowcaseProductRepository } from '@/domain/showcase/application/gateways/repositories/showcase-products-repository';
+import { ShowcaseProductsRepository } from '@/domain/showcase/application/gateways/repositories/showcase-products-repository';
 import { ShowcaseProduct } from '@/domain/showcase/enterprise/entities/showcase-product';
 import { ShowcaseProductModel } from '@/infra/storage/schemas/showcase-product.model';
 import { Logger } from '@/shared/logger';
@@ -12,7 +12,7 @@ import { MongoDbShowcaseProductsMapper } from '../mappers/mongodb-showcase-produ
 
 @Injectable()
 export class MongoDbShowcaseProductsRepository
-  implements ShowcaseProductRepository
+  implements ShowcaseProductsRepository
 {
   constructor(
     @Inject(ShowcaseProductModel.COLLECTION_NAME)

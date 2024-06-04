@@ -2,19 +2,17 @@ import { UniqueEntityID } from '@/core/entities/unique-entity-id';
 import { Partial } from '@/core/types/deep-partial';
 import { PaginatedRequest, PaginatedResponse } from '@/core/types/pagination';
 import { Repository } from '@/core/types/repository';
-import { ShowcaseProduct } from '@/domain/showcase/enterprise/entities/showcase-product';
+import { ShowcaseCategory } from '@/domain/showcase/enterprise/entities/showcase-category';
 
-export abstract class ShowcaseProductsRepository
-  implements Repository<ShowcaseProduct>
+export abstract class ShowcaseCategoriesRepository
+  implements Repository<ShowcaseCategory>
 {
-  abstract findById(id: UniqueEntityID): Promise<ShowcaseProduct | null>;
   abstract list(
     request: PaginatedRequest<
       Partial<{
         name: string;
         categoryId: UniqueEntityID;
-        subCategoryId: UniqueEntityID;
       }>
     >,
-  ): Promise<PaginatedResponse<ShowcaseProduct>>;
+  ): Promise<PaginatedResponse<ShowcaseCategory>>;
 }
