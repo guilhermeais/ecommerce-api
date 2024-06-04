@@ -31,4 +31,4 @@
 
 ## Requisitos
 
-- 🟩 Qualquer usuário deve conseguir visualiar um produto específico do mostruário.
+- ❎ Qualquer usuário deve conseguir visualiar um produto específico do mostruário.
