@@ -12,6 +12,7 @@ import { ListCategoriesUseCase } from '@/domain/product/application/use-cases/li
 import { ListProductsUseCase } from '@/domain/product/application/use-cases/list-products';
 import { UpdateCategoryUseCase } from '@/domain/product/application/use-cases/update-category';
 import { UpdateProductUseCase } from '@/domain/product/application/use-cases/update-product';
+import { GetShowcaseProductsUseCase } from '@/domain/showcase/application/use-cases/get-showcase-products';
 import { CryptographyModule } from '@/infra/cryptography/cryptography.module';
 import { DatabaseModule } from '@/infra/database/database.module';
 import { EventsModule } from '@/infra/events/events.module';
@@ -32,6 +33,7 @@ import { ListCategoriesController } from './controllers/products/list-categories
 import { ListProductsController } from './controllers/products/list-products.controller';
 import { UpdateCategoryController } from './controllers/products/update-category.controller';
 import { UpdateProductController } from './controllers/products/update-product.controller';
+import { GetShowcaseProductsController } from './controllers/showcase/get-showcase-products.controller';
 
 @Module({
   imports: [EventsModule, DatabaseModule, CryptographyModule, StorageModule],
@@ -52,6 +54,8 @@ import { UpdateProductController } from './controllers/products/update-product.c
     ListCategoriesController,
     UpdateCategoryController,
     DeleteCategoryController,
+
+    GetShowcaseProductsController,
   ],
   providers: [
     ClientSignUpUseCase,
@@ -69,6 +73,8 @@ import { UpdateProductController } from './controllers/products/update-product.c
     ListCategoriesUseCase,
     UpdateCategoryUseCase,
     DeleteCategoryUseCase,
+
+    GetShowcaseProductsUseCase,
   ],
 })
 export class HttpModule {}

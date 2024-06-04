@@ -6,41 +6,10 @@ import { makeTestingApp } from 'test/make-testing-app';
 
 import { UniqueEntityID } from '@/core/entities/unique-entity-id';
 import { ShowcaseProductRepository } from '@/domain/showcase/application/gateways/repositories/showcase-products-repository';
-import { ShowcaseProduct } from '@/domain/showcase/enterprise/entities/showcase-product';
 import { CategoryFactory } from 'test/products/enterprise/entities/make-category';
 import { ProductFactory } from 'test/products/enterprise/entities/make-product';
 import { MongoDbShowcaseProductsRepository } from './mongodb-showcase-products.repository';
-import { Product } from '@/domain/product/enterprise/entities/product';
-
-function mapProductToShowcaseProduct(product: Product): ShowcaseProduct {
-  return ShowcaseProduct.restore(
-    {
-      name: product.name,
-      price: product.price,
-      category: product?.subCategory
-        ? {
-            id: product.subCategory.id,
-            name: product.subCategory.name,
-            description: product.subCategory.description,
-            rootCategory: product.subCategory.rootCategory && {
-              id: product.subCategory.rootCategory.id,
-              name: product.subCategory.rootCategory.name,
-              description: product.subCategory.rootCategory.description,
-              createdAt: product.subCategory.rootCategory.createdAt,
-              updatedAt: product.subCategory.rootCategory.updatedAt,
-            },
-            createdAt: product.subCategory.createdAt,
-            updatedAt: product.subCategory.updatedAt,
-          }
-        : undefined,
-      description: product.description,
-      image: product.image,
-    },
-    product.id,
-    product.createdAt,
-    product.updatedAt,
-  );
-}
+import { mapProductToShowcaseProduct } from 'test/showcase/enterprise/entities/make-showcase-product';
 
 describe('MongoDbShowcaseProductsRepository', () => {
   let app: INestApplication;
