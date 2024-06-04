@@ -1,13 +1,26 @@
 import { Entity } from '@/core/entities/entity';
 import { UniqueEntityID } from '@/core/entities/unique-entity-id';
-import { ShowcaseCategory } from './showcase-category';
+
+export type ShowcaseProductCategory = {
+  id: UniqueEntityID;
+  name: string;
+  description?: string;
+  rootCategory?: ShowcaseProductSubCategory;
+  createdAt: Date;
+  updatedAt?: Date;
+};
+
+export type ShowcaseProductSubCategory = Omit<
+  ShowcaseProductCategory,
+  'rootCategory'
+>;
 
 export type ShowCaseProductProps = {
   name: string;
   description?: string;
   price: number;
   image?: string;
-  category?: ShowcaseCategory;
+  category?: ShowcaseProductCategory;
 };
 
 export class ShowcaseProduct extends Entity<ShowCaseProductProps> {
@@ -27,7 +40,7 @@ export class ShowcaseProduct extends Entity<ShowCaseProductProps> {
     return this.props.image;
   }
 
-  get category(): ShowcaseCategory | undefined {
+  get category() {
     return this.props.category;
   }
 

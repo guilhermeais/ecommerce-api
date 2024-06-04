@@ -3,6 +3,7 @@ import { SignUpInvitesRepository } from '@/domain/auth/application/gateways/repo
 import { UsersRepository } from '@/domain/auth/application/gateways/repositories/user-repository';
 import { CategoriesRepository } from '@/domain/product/application/gateways/repositories/categories-repository';
 import { ProductsRepository } from '@/domain/product/application/gateways/repositories/products-repository';
+import { ShowcaseProductRepository } from '@/domain/showcase/application/gateways/repositories/showcase-products-repository';
 import { Module } from '@nestjs/common';
 import { MongoDbConfirmationTokensRepository } from './mongodb/auth/repositories/mongodb-confirmation-tokens.repository';
 import { MongoDbSignUpInvitesRepository } from './mongodb/auth/repositories/mongodb-signup-invites.repository';
@@ -18,6 +19,7 @@ import { MongoDbCategoriesRepository } from './mongodb/products/repositories/mon
 import { MongoDbProductsRepository } from './mongodb/products/repositories/mongodb-products.repository';
 import { MongoCategoryModelProvider } from './mongodb/products/schemas/category.model';
 import { MongoProductModelProvider } from './mongodb/products/schemas/product.model';
+import { MongoDbShowcaseProductsRepository } from './mongodb/showcase/repositories/mongodb-showcase-products.repository';
 
 @Module({
   providers: [
@@ -41,6 +43,10 @@ import { MongoProductModelProvider } from './mongodb/products/schemas/product.mo
       provide: ProductsRepository,
       useClass: MongoDbProductsRepository,
     },
+    {
+      provide: ShowcaseProductRepository,
+      useClass: MongoDbShowcaseProductsRepository,
+    },
     MongooseConnectionFactory,
     MongoUserModelProvider,
     MongoConfirmationTokenModelProvider,
@@ -56,6 +62,8 @@ import { MongoProductModelProvider } from './mongodb/products/schemas/product.mo
 
     ProductsRepository,
     CategoriesRepository,
+
+    ShowcaseProductRepository,
   ],
 })
 export class DatabaseModule {}

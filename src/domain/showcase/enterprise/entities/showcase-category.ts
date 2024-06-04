@@ -4,8 +4,6 @@ import { UniqueEntityID } from '@/core/entities/unique-entity-id';
 export type ShowcaseCategoryProps = {
   name: string;
   description?: string;
-  createdAt: Date;
-  updatedAt?: Date;
   rootCategory?: ShowcaseCategory;
   childrenCategories?: ShowcaseCategory[];
 };
@@ -25,14 +23,6 @@ export class ShowcaseCategory extends Entity<ShowcaseCategoryProps> {
 
   get childrenCategories() {
     return this.props.childrenCategories;
-  }
-
-  get createdAt(): Date {
-    return this.props.createdAt;
-  }
-
-  get updatedAt(): Date | undefined {
-    return this.props.updatedAt;
   }
 
   static create(
