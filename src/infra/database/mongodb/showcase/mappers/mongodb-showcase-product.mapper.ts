@@ -6,7 +6,7 @@ import {
 import {
   ShowcaseProductCategoryModel,
   ShowcaseProductModel,
-} from '@/infra/storage/schemas/showcase-product.model';
+} from '@/infra/database/mongodb/showcase/schemas/showcase-product.model';
 
 export class MongoDbShowcaseProductsMapper {
   static toDomain(model: ShowcaseProductModel): ShowcaseProduct {

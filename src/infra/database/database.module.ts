@@ -3,6 +3,7 @@ import { SignUpInvitesRepository } from '@/domain/auth/application/gateways/repo
 import { UsersRepository } from '@/domain/auth/application/gateways/repositories/user-repository';
 import { CategoriesRepository } from '@/domain/product/application/gateways/repositories/categories-repository';
 import { ProductsRepository } from '@/domain/product/application/gateways/repositories/products-repository';
+import { ShowcaseCategoriesRepository } from '@/domain/showcase/application/gateways/repositories/showcase-categoires.repository';
 import { ShowcaseProductsRepository } from '@/domain/showcase/application/gateways/repositories/showcase-products-repository';
 import { Module } from '@nestjs/common';
 import { MongoDbConfirmationTokensRepository } from './mongodb/auth/repositories/mongodb-confirmation-tokens.repository';
@@ -19,6 +20,7 @@ import { MongoDbCategoriesRepository } from './mongodb/products/repositories/mon
 import { MongoDbProductsRepository } from './mongodb/products/repositories/mongodb-products.repository';
 import { MongoCategoryModelProvider } from './mongodb/products/schemas/category.model';
 import { MongoProductModelProvider } from './mongodb/products/schemas/product.model';
+import { MongoDbShowcaseCategoriesRepository } from './mongodb/showcase/repositories/mongodb-showcase-categories.repository';
 import { MongoDbShowcaseProductsRepository } from './mongodb/showcase/repositories/mongodb-showcase-products.repository';
 
 @Module({
@@ -47,6 +49,10 @@ import { MongoDbShowcaseProductsRepository } from './mongodb/showcase/repositori
       provide: ShowcaseProductsRepository,
       useClass: MongoDbShowcaseProductsRepository,
     },
+    {
+      provide: ShowcaseCategoriesRepository,
+      useClass: MongoDbShowcaseCategoriesRepository,
+    },
     MongooseConnectionFactory,
     MongoUserModelProvider,
     MongoConfirmationTokenModelProvider,
@@ -64,6 +70,7 @@ import { MongoDbShowcaseProductsRepository } from './mongodb/showcase/repositori
     CategoriesRepository,
 
     ShowcaseProductsRepository,
+    ShowcaseCategoriesRepository,
   ],
 })
 export class DatabaseModule {}
