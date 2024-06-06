@@ -50,7 +50,7 @@ export class MongoDbShowcaseCategoriesRepository
         { $sort: { createdAt: 1 } },
         {
           $facet: {
-            items: [{ $skip: skip }, { $limit: limit }],
+            items: [{ $skip: skip }, ...(limit > 0 ? [{ $limit: limit }] : [])],
             metadata: [{ $count: 'total' }],
           },
         },
@@ -65,7 +65,7 @@ export class MongoDbShowcaseCategoriesRepository
       );
 
       const total = metadata?.total ?? 0;
-      const pages = Math.ceil(total / limit);
+      const pages = limit < 0 ? 1 : Math.ceil(total / limit);
 
       this.logger.log(
         MongoDbShowcaseCategoriesRepository.name,

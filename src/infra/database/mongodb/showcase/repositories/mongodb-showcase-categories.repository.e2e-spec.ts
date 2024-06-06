@@ -94,5 +94,28 @@ describe('MongoDbShowcaseCategoriesRepository', () => {
         showcaseSubCategory.id,
       );
     });
+
+    it.only('should return all categories when provide limit as -1', async () => {
+      const categories = await Promise.all(
+        Array.from({ length: 10 }).map(async (_, i) => {
+          return mapCategoryToShowcaseCategory(
+            (
+              await categoryFactory.makeCategory(
+                undefined,
+                new Date(2021, 1, i + 1),
+              )
+            ).category,
+          );
+        }),
+      );
+
+      const response = await sut.list({ page: 1, limit: -1 });
+
+      expect(response.items).toHaveLength(10);
+      expect(response.items).toEqual(categories);
+      expect(response.total).toBe(10);
+      expect(response.currentPage).toBe(1);
+      expect(response.pages).toBe(1);
+    });
   });
 });

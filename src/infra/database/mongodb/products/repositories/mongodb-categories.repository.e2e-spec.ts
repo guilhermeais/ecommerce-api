@@ -1,3 +1,4 @@
+import { UniqueEntityID } from '@/core/entities/unique-entity-id';
 import { CategoriesRepository } from '@/domain/product/application/gateways/repositories/categories-repository';
 import { CryptographyModule } from '@/infra/cryptography/cryptography.module';
 import { DatabaseModule } from '@/infra/database/database.module';
@@ -11,7 +12,6 @@ import {
 } from 'test/products/enterprise/entities/make-category';
 import { MongoCategoryModel } from '../schemas/category.model';
 import { MongoDbCategoriesRepository } from './mongodb-categories.repository';
-import { UniqueEntityID } from '@/core/entities/unique-entity-id';
 
 describe('MongoDbCategoriesRepository', () => {
   let app: INestApplication;

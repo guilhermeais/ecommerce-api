@@ -35,6 +35,8 @@ import { ListProductsController } from './controllers/products/list-products.con
 import { UpdateCategoryController } from './controllers/products/update-category.controller';
 import { UpdateProductController } from './controllers/products/update-product.controller';
 import { ShowcaseProductsController } from './controllers/showcase/showcase-products.controller';
+import { ShowcaseCategoriesController } from './controllers/showcase/showcase-categories.controller';
+import { GetShowcaseCategoriesUseCase } from '@/domain/showcase/application/use-cases/get-showcase-categories';
 
 @Module({
   imports: [EventsModule, DatabaseModule, CryptographyModule, StorageModule],
@@ -57,6 +59,7 @@ import { ShowcaseProductsController } from './controllers/showcase/showcase-prod
     DeleteCategoryController,
 
     ShowcaseProductsController,
+    ShowcaseCategoriesController,
   ],
   providers: [
     ClientSignUpUseCase,
@@ -77,6 +80,7 @@ import { ShowcaseProductsController } from './controllers/showcase/showcase-prod
 
     GetShowcaseProductsUseCase,
     GetShowcaseProductUseCase,
+    GetShowcaseCategoriesUseCase,
   ],
 })
 export class HttpModule {}
