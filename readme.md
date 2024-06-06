@@ -39,13 +39,13 @@ Este módulo lida com a administração dos produtos realizadas por um administr
 - ❎ [Atualização de Produtos](./requirements/product-administration/update-product.md)
 
 ### Vitrine de Produtos 🏪🛍️
-![Progresso](https://img.shields.io/badge/Progresso-40%25-green)
+![Progresso](https://img.shields.io/badge/Progresso-60%25-green)
 Este módulo lida com a vitrine de produtos que o usuário irá visualizar no marketplace.
 
 - ❎ [Buscar mostruário de produtos](./requirements/showcase/get-showcase-products.md)
 - ❎ [Buscar produto do mostruário](./requirements/showcase/get-showcase-product-by-id.md)
 
-- 🟩 [Buscar categorias do mostruário](./requirements/showcase/get-showcase-categories.md)
+- ❎ [Buscar categorias do mostruário](./requirements/showcase/get-showcase-categories.md)
 
 - 🟩 [Realizar checkout](./requirements/showcase/checkout.md)
 

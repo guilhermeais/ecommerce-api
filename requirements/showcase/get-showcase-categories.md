@@ -32,4 +32,4 @@
 
 ## Requisitos
 
-- 🟩 Qualquer pessoa deve conseguir visualizar as categorias do mostruário.
+- ❎ Qualquer pessoa deve conseguir visualizar as categorias do mostruário.
