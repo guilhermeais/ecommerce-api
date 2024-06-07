@@ -2,12 +2,13 @@ import { Entity } from '@/core/entities/entity';
 import { UniqueEntityID } from '@/core/entities/unique-entity-id';
 import { Address } from '@/shared/value-objects/address';
 import { ItemAlreadyPlacedError } from '../../application/use-cases/errors/item-already-placed-error';
+import { Customer } from './customer';
 import { ShowcaseProduct } from './showcase-product';
 import { OrderItem } from './value-objects/order-item';
 import { PaymentMethod } from './value-objects/payment-method';
 
 export type OrderProps = {
-  customerId: UniqueEntityID;
+  customer: Customer;
   paymentMethod: PaymentMethod;
   deliveryAddress: Address;
 };
@@ -67,8 +68,8 @@ export class Order extends Entity<OrderProps> {
     return structuredClone(this._items);
   }
 
-  get userId() {
-    return this.props.customerId;
+  get customer() {
+    return this.props.customer;
   }
 
   get paymentMethod() {
