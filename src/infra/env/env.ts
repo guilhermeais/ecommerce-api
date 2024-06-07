@@ -1,20 +1,16 @@
 import { z } from 'zod';
 import 'dotenv/config';
+const ONE_DAY = 1000 * 60 * 60 * 24;
 
 export const envSchema = z.object({
   PORT: z.coerce.number().optional().default(3000),
   JWT_PRIVATE_KEY: z.string(),
   JWT_PUBLIC_KEY: z.string(),
+  JWT_EXPIRES_IN: z.coerce.number().optional().default(ONE_DAY),
 
-  CONFIRMATION_TOKEN_EXPIRES_IN: z.coerce
-    .number()
-    .optional()
-    .default(1000 * 60 * 60 * 24),
+  CONFIRMATION_TOKEN_EXPIRES_IN: z.coerce.number().optional().default(ONE_DAY),
 
-  SIGNUP_INVITE_EXPIRES_IN: z.coerce
-    .number()
-    .optional()
-    .default(1000 * 60 * 60 * 24),
+  SIGNUP_INVITE_EXPIRES_IN: z.coerce.number().optional().default(ONE_DAY),
 
   APP_NAME: z.string().optional().default('PiaLabs Ecommerce'),
 
@@ -24,18 +20,14 @@ export const envSchema = z.object({
 
   FINISH_SIGNUP_INVITE_URL: z.string().url(),
 
-  GOOGLE_CLIENT_ID: z.string(),
-  GOOGLE_CLIENT_SECRET: z.string(),
-  GOOGLE_REFRESH_TOKEN: z.string(),
-  GOOGLE_REDIRECT_URI: z
-    .string()
-    .default('https://developers.google.com/oauthplayground'),
-
   GOOGLE_STORAGE_BUCKET: z.string(),
   GOOGLE_APPLICATION_CREDENTIALS: z.string().base64({
     message:
       'GOOGLE_APPLICATION_CREDENTIALS deve ser as credenciais em base64.',
   }),
+
+  GOOGLE_GMAIL_USER: z.string().email(),
+  GOOGLE_GMAIL_PASSWORD: z.string(),
   MONGO_URI: z.string(),
   IS_TESTING: z
     .boolean({

@@ -10,6 +10,8 @@ import { Hasher } from '../gateways/cryptography/hasher';
 import { UsersRepository } from '../gateways/repositories/user-repository';
 import { InvalidLoginRequestError } from './errors/invalid-login-request-error';
 import { LoginRequest, LoginUseCase } from './login';
+import { MockProxy, mock } from 'vitest-mock-extended';
+import { EnvService } from '@/infra/env/env.service';
 
 describe('Login use case', () => {
   let sut: LoginUseCase;
@@ -17,14 +19,22 @@ describe('Login use case', () => {
   let hasher: Hasher;
   let encrypter: Encrypter;
   let logger: Logger;
+  let envService: MockProxy<EnvService>;
 
   beforeEach(() => {
     userRepository = new InMemoryUserRepository();
     hasher = new FakeHasher();
     encrypter = new FakeEncrypter();
     logger = makeFakeLogger();
+    envService = mock();
 
-    sut = new LoginUseCase(userRepository, hasher, encrypter, logger);
+    sut = new LoginUseCase(
+      userRepository,
+      hasher,
+      encrypter,
+      logger,
+      envService,
+    );
   });
 
   function makeLoginUseCaseRequest(

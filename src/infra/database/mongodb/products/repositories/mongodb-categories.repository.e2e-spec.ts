@@ -212,6 +212,69 @@ describe('MongoDbCategoriesRepository', () => {
       expect(response.currentPage).toBe(1);
       expect(response.pages).toBe(1);
     });
+
+    it('should list filtering by root category id as null', async () => {
+      const { category: rootCategory } = await categoryFactory.makeCategory(
+        {
+          name: 'Root category',
+        },
+        new Date(2021, 0, 1),
+      );
+
+      const { category: categoryToFind } = await categoryFactory.makeCategory(
+        undefined,
+        new Date(2021, 0, 2),
+      );
+
+      await Promise.all(
+        Array.from({ length: 10 }).map(async (_, i) => {
+          return (
+            await categoryFactory.makeCategory(
+              {
+                rootCategory,
+              },
+              new Date(2021, 1, i + 1),
+            )
+          ).category;
+        }),
+      );
+
+      const response = await sut.list({
+        page: 1,
+        limit: 10,
+        rootCategoryId: null,
+      });
+
+      expect(response.items).toHaveLength(2);
+      expect(response.items[0]).toEqual(rootCategory);
+      expect(response.items[1]).toEqual(categoryToFind);
+      expect(response.total).toBe(2);
+      expect(response.currentPage).toBe(1);
+      expect(response.pages).toBe(1);
+    });
+
+    it('should list all categories without pagination if limit is -1', async () => {
+      const categories = await Promise.all(
+        Array.from({ length: 10 }).map(async (_, i) => {
+          return (
+            await categoryFactory.makeCategory(
+              undefined,
+              new Date(2021, 1, i + 1),
+            )
+          ).category;
+        }),
+      );
+
+      const response = await sut.list({ page: 1, limit: -1 });
+
+      expect(response.items).toHaveLength(10);
+
+      expect(response.items).toEqual(categories);
+
+      expect(response.total).toBe(categories.length);
+      expect(response.currentPage).toBe(1);
+      expect(response.pages).toBe(categories.length);
+    });
   });
 
   describe('delete()', () => {

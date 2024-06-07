@@ -8,6 +8,7 @@ import { Hasher } from '../gateways/cryptography/hasher';
 import { UsersRepository } from '../gateways/repositories/user-repository';
 import { InvalidLoginRequestError } from './errors/invalid-login-request-error';
 import { Injectable } from '@nestjs/common';
+import { EnvService } from '@/infra/env/env.service';
 
 export type LoginRequest = {
   email: string;
@@ -26,6 +27,7 @@ export class LoginUseCase implements UseCase<LoginRequest, LoginResponse> {
     private readonly hasher: Hasher,
     private readonly encrypter: Encrypter,
     private readonly logger: Logger,
+    private readonly envService: EnvService,
   ) {}
 
   async execute(request: LoginRequest): Promise<LoginResponse> {
@@ -57,9 +59,14 @@ export class LoginUseCase implements UseCase<LoginRequest, LoginResponse> {
       throw new InvalidLoginRequestError();
     }
 
-    const authToken = await this.encrypter.encrypt<UserPayload>({
-      sub: user.id.toString(),
-    });
+    const authToken = await this.encrypter.encrypt<UserPayload>(
+      {
+        sub: user.id.toString(),
+      },
+      {
+        expiresIn: this.envService.get('JWT_EXPIRES_IN'),
+      },
+    );
 
     return {
       authToken,

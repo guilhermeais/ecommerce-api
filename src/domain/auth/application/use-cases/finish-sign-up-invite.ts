@@ -3,6 +3,7 @@ import { EntityNotFoundError } from '@/core/errors/commom/entity-not-found-error
 import { EventManager, Events } from '@/core/types/events';
 import { UseCase } from '@/core/types/use-case';
 import { UserPayload } from '@/infra/auth/jwt.strategy';
+import { EnvService } from '@/infra/env/env.service';
 import { Logger } from '@/shared/logger';
 import { Address } from '@/shared/value-objects/address';
 import { Injectable } from '@nestjs/common';
@@ -44,6 +45,7 @@ export class FinishSignUpInviteUseCase
     private readonly encrypter: Encrypter,
     private readonly eventManager: EventManager,
     private readonly logger: Logger,
+    private readonly envService: EnvService,
   ) {}
 
   async execute(request: FinishSigUpInviteRequest): Promise<LoginResponse> {
@@ -92,9 +94,14 @@ export class FinishSignUpInviteUseCase
 
       await this.eventManager.publish(Events.USER_CREATED, user);
 
-      const authToken = await this.encrypter.encrypt<UserPayload>({
-        sub: user.id.toString(),
-      });
+      const authToken = await this.encrypter.encrypt<UserPayload>(
+        {
+          sub: user.id.toString(),
+        },
+        {
+          expiresIn: this.envService.get('JWT_EXPIRES_IN'),
+        },
+      );
 
       return {
         user,
