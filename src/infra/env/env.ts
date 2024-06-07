@@ -20,18 +20,14 @@ export const envSchema = z.object({
 
   FINISH_SIGNUP_INVITE_URL: z.string().url(),
 
-  GOOGLE_CLIENT_ID: z.string(),
-  GOOGLE_CLIENT_SECRET: z.string(),
-  GOOGLE_REFRESH_TOKEN: z.string(),
-  GOOGLE_REDIRECT_URI: z
-    .string()
-    .default('https://developers.google.com/oauthplayground'),
-
   GOOGLE_STORAGE_BUCKET: z.string(),
   GOOGLE_APPLICATION_CREDENTIALS: z.string().base64({
     message:
       'GOOGLE_APPLICATION_CREDENTIALS deve ser as credenciais em base64.',
   }),
+
+  GOOGLE_GMAIL_USER: z.string().email(),
+  GOOGLE_GMAIL_PASSWORD: z.string(),
   MONGO_URI: z.string(),
   IS_TESTING: z
     .boolean({
