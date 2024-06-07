@@ -7,13 +7,8 @@ export type CustomerProps = {
 };
 
 export class Customer extends Entity<CustomerProps> {
-  static restore(
-    props: CustomerProps,
-    id: UniqueEntityID,
-    createdAt: Date,
-    updatedAt: Date,
-  ) {
-    return new Customer(props, id, createdAt, updatedAt);
+  static restore(props: CustomerProps, id: UniqueEntityID) {
+    return new Customer(props, id);
   }
 
   get name() {

@@ -50,7 +50,7 @@ export class Order extends Entity<OrderProps> {
       item.equals(newItem),
     );
 
-    if (duplicatedItemIndex) {
+    if (duplicatedItemIndex !== -1) {
       throw new ItemAlreadyPlacedError(product.name, duplicatedItemIndex);
     }
 
@@ -65,7 +65,7 @@ export class Order extends Entity<OrderProps> {
   }
 
   get items() {
-    return structuredClone(this._items);
+    return this._items;
   }
 
   get customer() {
