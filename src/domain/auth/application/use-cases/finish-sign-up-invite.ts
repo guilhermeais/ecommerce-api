@@ -4,7 +4,8 @@ import { EventManager, Events } from '@/core/types/events';
 import { UseCase } from '@/core/types/use-case';
 import { UserPayload } from '@/infra/auth/jwt.strategy';
 import { Logger } from '@/shared/logger';
-import { Address } from '../../enterprise/entities/value-objects/address';
+import { Address } from '@/shared/value-objects/address';
+import { Injectable } from '@nestjs/common';
 import { CPF } from '../../enterprise/entities/value-objects/cpf';
 import { Password } from '../../enterprise/entities/value-objects/password';
 import { Encrypter } from '../gateways/cryptography/encrypter';
@@ -12,7 +13,6 @@ import { Hasher } from '../gateways/cryptography/hasher';
 import { SignUpInvitesRepository } from '../gateways/repositories/sign-up-invites.repository';
 import { UsersRepository } from '../gateways/repositories/user-repository';
 import { LoginResponse } from './login';
-import { Injectable } from '@nestjs/common';
 
 export type FinishSigUpInviteRequest = {
   inviteId: string;

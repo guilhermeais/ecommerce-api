@@ -1,10 +1,11 @@
 import { EventManager, Events } from '@/core/types/events';
+import { UserPayload } from '@/infra/auth/jwt.strategy';
 import { Logger } from '@/shared/logger';
+import { Address } from '@/shared/value-objects/address';
 import { Injectable } from '@nestjs/common';
 import { UseCase } from 'src/core/types/use-case';
 import { Role } from '../../enterprise/entities/enums/role';
 import { User } from '../../enterprise/entities/user';
-import { Address } from '../../enterprise/entities/value-objects/address';
 import { CPF } from '../../enterprise/entities/value-objects/cpf';
 import { Email } from '../../enterprise/entities/value-objects/email';
 import { Password } from '../../enterprise/entities/value-objects/password';
@@ -13,7 +14,6 @@ import { Hasher } from '../gateways/cryptography/hasher';
 import { UsersRepository } from '../gateways/repositories/user-repository';
 import { EmailAlreadyInUseError } from './errors/email-already-in-use-error';
 import { LoginResponse } from './login';
-import { UserPayload } from '@/infra/auth/jwt.strategy';
 
 export type ClientSignUpRequest = {
   email: string;
