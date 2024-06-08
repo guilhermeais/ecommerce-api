@@ -58,12 +58,11 @@ jobs:
           secrets: |-
               JWT_PUBLIC_KEY=JWT_PUBLIC_KEY:latest
               JWT_PRIVATE_KEY=JWT_PRIVATE_KEY:latest
-              GOOGLE_CLIENT_ID=GOOGLE_CLIENT_ID:latest
-              GOOGLE_CLIENT_SECRET=GOOGLE_CLIENT_SECRET:latest
-              GOOGLE_REFRESH_TOKEN=GOOGLE_REFRESH_TOKEN:latest
               MONGO_URI=MONGO_URI:latest    
               GOOGLE_APPLICATION_CREDENTIALS=GOOGLE_APPLICATION_CREDENTIALS:latest
               GOOGLE_STORAGE_BUCKET=GOOGLE_STORAGE_BUCKET:latest
+              GOOGLE_GMAIL_USER=GOOGLE_GMAIL_USER:latest
+              GOOGLE_GMAIL_PASSWORD=GOOGLE_GMAIL_PASSWORD:latest
           env_vars: |-
              APP_NAME=PiaLabs Ecommerce
              APP_EMAIL=guilhermeteixeiraais@gmail.com
