@@ -34,6 +34,8 @@ export class ShowcaseProductPresenter {
           name: product.category.rootCategory.name,
         },
       },
+      image: product.image,
+      description: product.description,
     };
   }
 }
