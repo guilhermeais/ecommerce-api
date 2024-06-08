@@ -7,10 +7,7 @@ import { UserFactory } from 'test/auth/enterprise/entities/make-user';
 import { makeTestingApp } from 'test/make-testing-app';
 
 import { Administrator } from '@/domain/product/enterprise/entities/administrator';
-import {
-  CategoryFactory,
-  makeCategory,
-} from 'test/products/enterprise/entities/make-category';
+import { CategoryFactory } from 'test/products/enterprise/entities/make-category';
 import {
   ProductFactory,
   makeProduct,
@@ -53,7 +50,7 @@ describe('MongoDbProductsRepository', () => {
 
   describe('findById()', () => {
     it('should return null if the product does not exists', async () => {
-      const product = await sut.findById(makeCategory().id);
+      const product = await sut.findById(makeProduct().id);
 
       expect(product).toBeNull();
     });

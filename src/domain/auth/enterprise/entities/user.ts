@@ -1,10 +1,10 @@
 import { Entity } from '@/core/entities/entity';
 import { UniqueEntityID } from '@/core/entities/unique-entity-id';
+import { Address } from '@/shared/value-objects/address';
+import { ConfirmationToken } from './confirmation-token';
 import { Role } from './enums/role';
-import { Address } from './value-objects/address';
 import { CPF } from './value-objects/cpf';
 import { Email } from './value-objects/email';
-import { ConfirmationToken } from './confirmation-token';
 
 export type UserProps = {
   id?: UniqueEntityID;

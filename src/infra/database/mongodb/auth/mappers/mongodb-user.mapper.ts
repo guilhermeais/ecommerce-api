@@ -1,9 +1,9 @@
+import { UniqueEntityID } from '@/core/entities/unique-entity-id';
 import { User } from '@/domain/auth/enterprise/entities/user';
-import { MongoUserModel } from '../schemas/user.model';
 import { CPF } from '@/domain/auth/enterprise/entities/value-objects/cpf';
 import { Email } from '@/domain/auth/enterprise/entities/value-objects/email';
-import { UniqueEntityID } from '@/core/entities/unique-entity-id';
-import { Address } from '@/domain/auth/enterprise/entities/value-objects/address';
+import { Address } from '@/shared/value-objects/address';
+import { MongoUserModel } from '../schemas/user.model';
 
 export class MongoDbUserMapper {
   static toPersistence(user: User): MongoUserModel {

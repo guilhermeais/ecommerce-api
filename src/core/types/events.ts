@@ -2,6 +2,7 @@ import { ConfirmationToken } from '@/domain/auth/enterprise/entities/confirmatio
 import { SignUpInvite } from '@/domain/auth/enterprise/entities/signup-invite';
 import { User } from '@/domain/auth/enterprise/entities/user';
 import { Product } from '@/domain/product/enterprise/entities/product';
+import { Order } from '@/domain/showcase/enterprise/entities/order';
 
 export enum Events {
   USER_CREATED = 'user.created',
@@ -9,6 +10,8 @@ export enum Events {
   SIGN_UP_INVITE_CREATED = 'signUpInvite.created',
   PRODUCT_CREATED = 'product.created',
   PRODUCT_UPDATED = 'product.updated',
+
+  ORDER_CREATED = 'order.created',
 }
 
 export type EventsMap = {
@@ -20,6 +23,8 @@ export type EventsMap = {
 
   [Events.PRODUCT_CREATED]: Product;
   [Events.PRODUCT_UPDATED]: Product;
+
+  [Events.ORDER_CREATED]: Order;
 };
 
 export abstract class EventManager {

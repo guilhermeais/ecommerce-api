@@ -1,5 +1,5 @@
 import { ValueObject } from '@/core/entities/value-object';
-import { InvalidAddressError } from './errors/invalid-address-error';
+import { InvalidAddressError } from '../../domain/auth/enterprise/entities/value-objects/errors/invalid-address-error';
 
 export type AddressProps = {
   cep: string;
@@ -25,6 +25,10 @@ export class Address extends ValueObject<AddressProps> {
     }
 
     return new Address(addressProps);
+  }
+
+  public static restore(address: AddressProps): Address {
+    return new Address(address);
   }
 
   private static isValid(address: AddressProps): {

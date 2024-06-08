@@ -1,5 +1,5 @@
 import { Address, AddressProps } from './address';
-import { InvalidAddressError } from './errors/invalid-address-error';
+import { InvalidAddressError } from '../../domain/auth/enterprise/entities/value-objects/errors/invalid-address-error';
 
 describe('Address', () => {
   it.each([
