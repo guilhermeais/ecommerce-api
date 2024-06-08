@@ -13,6 +13,7 @@ import { ListProductsUseCase } from '@/domain/product/application/use-cases/list
 import { UpdateCategoryUseCase } from '@/domain/product/application/use-cases/update-category';
 import { UpdateProductUseCase } from '@/domain/product/application/use-cases/update-product';
 import { CheckoutUseCase } from '@/domain/showcase/application/use-cases/checkout';
+import { GetCustomerOrders } from '@/domain/showcase/application/use-cases/get-customer-orders';
 import { GetShowcaseCategoriesUseCase } from '@/domain/showcase/application/use-cases/get-showcase-categories';
 import { GetShowcaseProductUseCase } from '@/domain/showcase/application/use-cases/get-showcase-product';
 import { GetShowcaseProductsUseCase } from '@/domain/showcase/application/use-cases/get-showcase-products';
@@ -37,6 +38,7 @@ import { ListProductsController } from './controllers/products/list-products.con
 import { UpdateCategoryController } from './controllers/products/update-category.controller';
 import { UpdateProductController } from './controllers/products/update-product.controller';
 import { CheckoutController } from './controllers/showcase/checkout.controller';
+import { GetCustomerOrdersController } from './controllers/showcase/get-customer-orders.controller';
 import { ShowcaseCategoriesController } from './controllers/showcase/showcase-categories.controller';
 import { ShowcaseProductsController } from './controllers/showcase/showcase-products.controller';
 
@@ -63,6 +65,7 @@ import { ShowcaseProductsController } from './controllers/showcase/showcase-prod
     ShowcaseProductsController,
     ShowcaseCategoriesController,
     CheckoutController,
+    GetCustomerOrdersController,
   ],
   providers: [
     ClientSignUpUseCase,
@@ -85,6 +88,7 @@ import { ShowcaseProductsController } from './controllers/showcase/showcase-prod
     GetShowcaseProductUseCase,
     GetShowcaseCategoriesUseCase,
     CheckoutUseCase,
+    GetCustomerOrders,
   ],
 })
 export class HttpModule {}

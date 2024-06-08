@@ -40,4 +40,4 @@
 
 ## Requisitos
 
-- 🟩 Um usuário deve conseguir buscar os seus pedidos
+- ❎ Um usuário deve conseguir buscar os seus pedidos
