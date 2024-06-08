@@ -2,6 +2,7 @@ import { UniqueEntityID } from '@/core/entities/unique-entity-id';
 import { PaginatedRequest, PaginatedResponse } from '@/core/types/pagination';
 import { UseCase } from '@/core/types/use-case';
 import { Logger } from '@/shared/logger';
+import { Injectable } from '@nestjs/common';
 import { Order } from '../../enterprise/entities/order';
 import { OrdersRepository } from '../gateways/repositories/orders-repository';
 
@@ -11,6 +12,7 @@ export type GetCustomerOrdersRequest = PaginatedRequest<{
 
 export type GetCustomerOrdersResponse = PaginatedResponse<Order>;
 
+@Injectable()
 export class GetCustomerOrders
   implements UseCase<GetCustomerOrdersRequest, GetCustomerOrdersResponse>
 {
