@@ -47,7 +47,7 @@ export class Order extends Entity<OrderProps> {
     });
 
     const duplicatedItemIndex = this._items.findIndex((item) =>
-      item.equals(newItem),
+      item.productId.equals(newItem.productId),
     );
 
     if (duplicatedItemIndex !== -1) {

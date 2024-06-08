@@ -10,6 +10,8 @@ import { makeShowcaseProduct } from 'test/showcase/enterprise/entities/make-show
 import { PaymentType } from '../../enterprise/entities/enums/payment-type';
 import { PixPaymentDetails } from '../../enterprise/entities/value-objects/payment-method';
 import { CheckoutRequest, CheckoutUseCase } from './checkout';
+import { ItemAlreadyPlacedError } from './errors/item-already-placed-error';
+import { InvalidOrderItemError } from './errors/invalid-order-item-error';
 
 describe('Checkout UseCase', () => {
   let sut: CheckoutUseCase;
@@ -90,5 +92,46 @@ describe('Checkout UseCase', () => {
 
     expect(ordersRepository.orders.length).toBe(1);
     expect(ordersRepository.orders[0]).toEqual(order);
+  });
+
+  it('should not place an order with duplicated items', async () => {
+    const product = makeShowcaseProduct();
+    productRepository.products.push(product);
+
+    const request = makeCheckoutRequest({
+      items: [
+        {
+          productId: product.id.toString(),
+          quantity: 1,
+        },
+        {
+          productId: product.id.toString(),
+          quantity: 2,
+        },
+      ],
+    });
+
+    await expect(sut.execute(request)).rejects.toThrowError(
+      new ItemAlreadyPlacedError(product.name, 0),
+    );
+  });
+
+  it('should not place an order with unexisting product', async () => {
+    const productId = faker.string.uuid();
+    const request = makeCheckoutRequest({
+      items: [
+        {
+          productId,
+          quantity: 1,
+        },
+      ],
+    });
+
+    await expect(sut.execute(request)).rejects.toThrowError(
+      new InvalidOrderItemError(
+        0,
+        `Produto com id ${productId} não encontrado.`,
+      ),
+    );
   });
 });
