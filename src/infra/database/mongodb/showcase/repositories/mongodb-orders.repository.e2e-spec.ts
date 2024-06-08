@@ -8,9 +8,9 @@ import { makeTestingApp } from 'test/make-testing-app';
 import { OrdersRepository } from '@/domain/showcase/application/gateways/repositories/orders-repository';
 import { CategoryFactory } from 'test/products/enterprise/entities/make-category';
 import { ProductFactory } from 'test/products/enterprise/entities/make-product';
+import { makeOrder } from 'test/showcase/enterprise/entities/make-order';
 import { MongoOrderModel } from '../schemas/order.model';
 import { MongoDbOrdersRepository } from './mongodb-orders.repository';
-import { makeOrder } from 'test/showcase/enterprise/entities/make-order';
 
 describe('MongoDbOrdersRepository', () => {
   let app: INestApplication;
@@ -25,7 +25,7 @@ describe('MongoDbOrdersRepository', () => {
 
     const moduleRef = await makeTestingApp({
       imports: [DatabaseModule, CryptographyModule],
-      providers: [UserFactory, CategoryFactory, ProductFactory, UserFactory],
+      providers: [UserFactory, CategoryFactory, ProductFactory],
     }).compile();
 
     app = moduleRef.createNestApplication();
@@ -54,7 +54,7 @@ describe('MongoDbOrdersRepository', () => {
 
       expect(storedOrder).toBeDefined();
       expect(storedOrder?.id).toBe(order.id.toString());
-      expect(storedOrder?.costumerId).toBe(order.customer.id.toString());
+      expect(storedOrder?.customerId).toBe(order.customer.id.toString());
       expect(storedOrder?.deliveryAddress.address).toEqual(
         order.deliveryAddress.address,
       );

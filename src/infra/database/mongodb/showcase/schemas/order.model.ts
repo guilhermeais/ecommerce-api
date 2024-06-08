@@ -3,7 +3,7 @@ import { Provider } from '@nestjs/common';
 import { Mongoose, Schema } from 'mongoose';
 import { MongoAddressModel } from '../../auth/schemas/confirmation-token.model';
 import { MONGOOSE_CONNECTION_PROVIDER } from '../../mongoose-connection.provider';
-import { MongoDbCostumerModel } from './costumer.model';
+import { MongoDbCostumerModel } from './customer.model';
 
 export class MongoOrderItemModel {
   productId!: string;
@@ -16,8 +16,8 @@ export class MongoOrderModel {
 
   _id!: string;
   id!: string;
-  costumerId!: string;
-  costumer?: MongoDbCostumerModel;
+  customerId!: string;
+  customer?: MongoDbCostumerModel;
   paymentMethod!: PaymentMethodProps;
   deliveryAddress!: MongoAddressModel;
   items!: MongoOrderItemModel[];
@@ -33,14 +33,14 @@ export const MongoOrderSchema = new Schema<MongoOrderModel>(
       required: true,
       unique: true,
     },
-    costumerId: { type: String, required: true },
-    costumer: {
+    customerId: { type: String, required: true },
+    customer: {
       ref: MongoDbCostumerModel.COLLECTION_NAME,
       type: {
         name: { type: String },
         email: { type: String },
       },
-      refPath: 'costumerId',
+      refPath: 'customerId',
     },
     paymentMethod: {
       type: {

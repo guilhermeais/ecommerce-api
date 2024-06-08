@@ -18,18 +18,18 @@ export type BoletoPaymentDetails = {
   expirationDate?: Date;
 };
 
-type PaymentDetailsMap = {
+export type AllPaymentMethods =
+  | PaymentType.PIX
+  | PaymentType.CARD
+  | PaymentType.BOLETO;
+
+export type PaymentDetailsMap = {
   [PaymentType.PIX]: PixPaymentDetails;
   [PaymentType.CARD]: CardPaymentDetails;
   [PaymentType.BOLETO]: BoletoPaymentDetails;
 };
 
-export type PaymentMethodProps<
-  T extends PaymentType =
-    | PaymentType.PIX
-    | PaymentType.CARD
-    | PaymentType.BOLETO,
-> = {
+export type PaymentMethodProps<T extends PaymentType = AllPaymentMethods> = {
   method: T;
   details: PaymentDetailsMap[T];
 };
@@ -37,8 +37,13 @@ export type PaymentMethodProps<
 export class PaymentMethod<T extends PaymentType = any> extends ValueObject<
   PaymentMethodProps<T>
 > {
-  constructor(props: PaymentMethodProps<T>) {
-    super(props);
+  static restore(props: PaymentMethodProps<PaymentType>) {
+    return PaymentMethod.create(props);
+  }
+  static create<T extends PaymentType = any>(
+    props: PaymentMethodProps<T>,
+  ): PaymentMethod<T> {
+    const instance = new PaymentMethod<T>(props);
     if (!props) {
       throw new BadRequestError(
         `Pagamento inválido`,
@@ -46,31 +51,37 @@ export class PaymentMethod<T extends PaymentType = any> extends ValueObject<
       );
     }
 
-    if (PaymentMethod.isPix(this) && !this.details.customerKey) {
+    if (PaymentMethod.isPix(instance) && !instance.details.customerKey) {
       throw new InvalidPaymentMethodError(
-        this.method,
+        instance.method,
         'Chave inválida (customerKey é obrigatório).',
       );
     }
 
     if (
-      PaymentMethod.isCard(this) &&
-      !this.details.cardNumber &&
-      !this.details.expiryDate &&
-      !this.details.cvv
+      PaymentMethod.isCard(instance) &&
+      !instance.details.cardNumber &&
+      !instance.details.expiryDate &&
+      !instance.details.cvv
     ) {
       throw new InvalidPaymentMethodError(
-        this.method,
+        instance.method,
         'Número do cartão inválido (cardNumber, expirityDate e cvv são obrigatórios).',
       );
     }
 
-    if (PaymentMethod.isBoleto(this) && !this.details.boletoNumber) {
+    if (PaymentMethod.isBoleto(instance) && !instance.details.boletoNumber) {
       throw new InvalidPaymentMethodError(
-        this.method,
+        instance.method,
         'Código de barras inválido (boletoNumber é obrigatório).',
       );
     }
+
+    return instance;
+  }
+
+  private constructor(props: PaymentMethodProps<T>) {
+    super(props);
   }
 
   static isPix(

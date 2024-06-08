@@ -27,7 +27,7 @@ export function makeOrder(
         city: faker.location.city(),
         state: faker.location.state(),
       }),
-      paymentMethod: new PaymentMethod<PaymentType.PIX>({
+      paymentMethod: PaymentMethod.create<PaymentType.PIX>({
         method: PaymentType.PIX,
         details: {
           customerKey: cpf.generate(),

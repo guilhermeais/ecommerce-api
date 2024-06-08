@@ -13,6 +13,10 @@ export class OrderItem extends ValueObject<OrderItemProps> {
     return new OrderItem(props);
   }
 
+  static restore(props: OrderItemProps): OrderItem {
+    return new OrderItem(props);
+  }
+
   get orderId() {
     return this.props.orderId;
   }

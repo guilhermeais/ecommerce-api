@@ -16,6 +16,7 @@ import {
 import { OrdersRepository } from '../gateways/repositories/orders-repository';
 import { ShowcaseProductsRepository } from '../gateways/repositories/showcase-products-repository';
 import { InvalidOrderItemError } from './errors/invalid-order-item-error';
+import { Injectable } from '@nestjs/common';
 
 export type CheckoutRequest<
   PaymentDetails =
@@ -45,6 +46,7 @@ export type CheckoutRequest<
 
 export type CheckoutResponse = Order;
 
+@Injectable()
 export class CheckoutUseCase
   implements UseCase<CheckoutRequest, CheckoutResponse>
 {
@@ -71,7 +73,7 @@ export class CheckoutUseCase
       );
       const { items } = request;
 
-      const paymentMethod = new PaymentMethod({
+      const paymentMethod = PaymentMethod.create({
         details: request.paymentDetails,
         method: request.paymentMethod,
       });

@@ -11,6 +11,7 @@ export type OrderProps = {
   customer: Customer;
   paymentMethod: PaymentMethod;
   deliveryAddress: Address;
+  items?: OrderItem[];
 };
 
 export class Order extends Entity<OrderProps> {
@@ -24,7 +25,7 @@ export class Order extends Entity<OrderProps> {
     props: OrderProps,
     id: UniqueEntityID,
     createdAt: Date,
-    updatedAt: Date,
+    updatedAt?: Date,
   ) {
     return new Order(props, id, createdAt, updatedAt);
   }
@@ -36,6 +37,7 @@ export class Order extends Entity<OrderProps> {
     updatedAt?: Date,
   ) {
     super(props, id, createdAt, updatedAt);
+    this._items = props.items || [];
   }
 
   addItem(product: ShowcaseProduct, quantity: number) {

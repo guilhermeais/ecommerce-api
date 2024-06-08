@@ -27,6 +27,10 @@ export class Address extends ValueObject<AddressProps> {
     return new Address(addressProps);
   }
 
+  public static restore(address: AddressProps): Address {
+    return new Address(address);
+  }
+
   private static isValid(address: AddressProps): {
     missingProperties: string[];
   } {
