@@ -25,4 +25,4 @@
 ```
 
 ## Requisitos
-- 🟩 Um usuário deve conseguir realizar checkout dos produtos no seu carrinho
+- ❎ Um usuário deve conseguir realizar checkout dos produtos no seu carrinho

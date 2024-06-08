@@ -47,6 +47,6 @@ Este módulo lida com a vitrine de produtos que o usuário irá visualizar no ma
 
 - ❎ [Buscar categorias do mostruário](./requirements/showcase/get-showcase-categories.md)
 
-- 🟩 [Realizar checkout](./requirements/showcase/checkout.md)
+- ❎ [Realizar checkout](./requirements/showcase/checkout.md)
 
 - 🟩 [Buscar pedidos](./requirements/showcase/orders.md)
