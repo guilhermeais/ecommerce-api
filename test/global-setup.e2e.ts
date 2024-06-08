@@ -55,7 +55,7 @@ export async function setup() {
       Buffer.from('fake-credentials').toString('base64'),
     GOOGLE_STORAGE_BUCKET: 'fake-bucket',
     GOOGLE_GMAIL_PASSWORD: 'fake-password',
-    GOOGLE_GMAIL_USER: 'fake-user',
+    GOOGLE_GMAIL_USER: 'fake-user@mail.com',
     JWT_EXPIRES_IN: 1000 * 60 * 60 * 24,
   };
 

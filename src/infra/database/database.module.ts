@@ -22,6 +22,9 @@ import { MongoCategoryModelProvider } from './mongodb/products/schemas/category.
 import { MongoProductModelProvider } from './mongodb/products/schemas/product.model';
 import { MongoDbShowcaseCategoriesRepository } from './mongodb/showcase/repositories/mongodb-showcase-categories.repository';
 import { MongoDbShowcaseProductsRepository } from './mongodb/showcase/repositories/mongodb-showcase-products.repository';
+import { OrdersRepository } from '@/domain/showcase/application/gateways/repositories/orders-repository';
+import { MongoDbOrdersRepository } from './mongodb/showcase/repositories/mongodb-orders.repository';
+import { MongoOrderModelProvider } from './mongodb/showcase/schemas/order.model';
 
 @Module({
   providers: [
@@ -53,12 +56,17 @@ import { MongoDbShowcaseProductsRepository } from './mongodb/showcase/repositori
       provide: ShowcaseCategoriesRepository,
       useClass: MongoDbShowcaseCategoriesRepository,
     },
+    {
+      provide: OrdersRepository,
+      useClass: MongoDbOrdersRepository,
+    },
     MongooseConnectionFactory,
     MongoUserModelProvider,
     MongoConfirmationTokenModelProvider,
     MongoSignUpModelProvider,
     MongoCategoryModelProvider,
     MongoProductModelProvider,
+    MongoOrderModelProvider,
   ],
   exports: [
     MONGOOSE_CONNECTION_PROVIDER,
@@ -71,6 +79,8 @@ import { MongoDbShowcaseProductsRepository } from './mongodb/showcase/repositori
 
     ShowcaseProductsRepository,
     ShowcaseCategoriesRepository,
+
+    OrdersRepository,
   ],
 })
 export class DatabaseModule {}

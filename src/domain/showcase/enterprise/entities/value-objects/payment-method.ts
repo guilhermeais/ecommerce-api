@@ -24,7 +24,12 @@ type PaymentDetailsMap = {
   [PaymentType.BOLETO]: BoletoPaymentDetails;
 };
 
-type PaymentMethodProps<T extends PaymentType> = {
+export type PaymentMethodProps<
+  T extends PaymentType =
+    | PaymentType.PIX
+    | PaymentType.CARD
+    | PaymentType.BOLETO,
+> = {
   method: T;
   details: PaymentDetailsMap[T];
 };

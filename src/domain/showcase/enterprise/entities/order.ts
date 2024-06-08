@@ -16,8 +16,8 @@ export type OrderProps = {
 export class Order extends Entity<OrderProps> {
   private _items: OrderItem[] = [];
 
-  static create(props: OrderProps, createdAt?: Date) {
-    return new Order(props, undefined, createdAt);
+  static create(props: OrderProps, createdAt?: Date, updatedAt?: Date) {
+    return new Order(props, undefined, createdAt, updatedAt);
   }
 
   static restore(
