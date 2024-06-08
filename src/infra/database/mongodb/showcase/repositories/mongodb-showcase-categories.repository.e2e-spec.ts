@@ -95,7 +95,7 @@ describe('MongoDbShowcaseCategoriesRepository', () => {
       );
     });
 
-    it.only('should return all categories when provide limit as -1', async () => {
+    it('should return all categories when provide limit as -1', async () => {
       const categories = await Promise.all(
         Array.from({ length: 10 }).map(async (_, i) => {
           return mapCategoryToShowcaseCategory(
