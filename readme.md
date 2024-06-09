@@ -22,9 +22,9 @@ Este módulo lida com a autenticação do usuário administrador e do cliente no
 - ❎ [Lista de convites para cadastro de administradores](./requirements/auth/list-signup-invites.md)
 - ❎ [Obter usuário logado](./requirements/auth/get-logged-user.md)
 
-### Administração de Produtos 📦🏷️
+### Administração do Ecommerce 📦🏷️
 
-![Progresso](https://img.shields.io/badge/Progresso-100%25-green)
+![Progresso](https://img.shields.io/badge/Progresso-88%25-green)
 
 Este módulo lida com a administração dos produtos realizadas por um administrador.
 
@@ -38,8 +38,10 @@ Este módulo lida com a administração dos produtos realizadas por um administr
 - ❎ [Busca de Produto](./requirements/product-administration/search-product.md)
 - ❎ [Atualização de Produtos](./requirements/product-administration/update-product.md)
 
+- 🟩 [Buscar Vendas](./requirements/product-administration/get-sales.md)
+
 ### Vitrine de Produtos 🏪🛍️
-![Progresso](https://img.shields.io/badge/Progresso-100%25-green)
+![Progresso](https://img.shields.io/badge/Progresso-88%25-green)
 Este módulo lida com a vitrine de produtos que o usuário irá visualizar no marketplace.
 
 - ❎ [Buscar mostruário de produtos](./requirements/showcase/get-showcase-products.md)
@@ -48,5 +50,6 @@ Este módulo lida com a vitrine de produtos que o usuário irá visualizar no ma
 - ❎ [Buscar categorias do mostruário](./requirements/showcase/get-showcase-categories.md)
 
 - ❎ [Realizar checkout](./requirements/showcase/checkout.md)
-
 - ❎ [Buscar pedidos](./requirements/showcase/orders.md)
+
+- 🟩 [Busca de produtos similiares](./requirements/showcase/get-similar-products.md)

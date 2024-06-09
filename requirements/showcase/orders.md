@@ -14,6 +14,7 @@
         {
           "productId": "string",
           "productName": "string",
+          "productImage": "string",
           "quantity": 0,
           "unitPrice": 0,
           "totalAmount": 0
@@ -31,7 +32,6 @@
         "city": "string"
       },
       "totalAmount": 0,
-      "status": "completed",
       "date": "2024-06-04T22:39:09.769Z"
     }
   ]
