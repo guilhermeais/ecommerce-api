@@ -5,6 +5,7 @@ import { UniqueEntityID } from '@/core/entities/unique-entity-id';
 import { Address } from '@/shared/value-objects/address';
 import { PaymentMethod } from '@/domain/showcase/enterprise/entities/value-objects/payment-method';
 import { OrderItem } from '@/domain/showcase/enterprise/entities/value-objects/order-item';
+import { MongoDbShowcaseProductsMapper } from './mongodb-showcase-product.mapper';
 
 export class MongoDBOrderMapper {
   static toPersistence(order: Order): MongoOrderModel {
@@ -15,7 +16,7 @@ export class MongoDBOrderMapper {
       deliveryAddress: order.deliveryAddress.toObject(),
       paymentMethod: order.paymentMethod.toObject(),
       items: order.items.map((item) => ({
-        productId: item.productId.toString(),
+        productId: item.product.id.toString(),
         quantity: item.quantity,
         price: item.price,
       })),
@@ -49,7 +50,7 @@ export class MongoDBOrderMapper {
           OrderItem.restore({
             orderId: new UniqueEntityID(model.id),
             price: item.price,
-            productId: new UniqueEntityID(item.productId),
+            product: MongoDbShowcaseProductsMapper.toDomain(item.product!),
             quantity: item.quantity,
           }),
         ),

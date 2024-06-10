@@ -4,9 +4,11 @@ import { Mongoose, Schema } from 'mongoose';
 import { MongoAddressModel } from '../../auth/schemas/confirmation-token.model';
 import { MONGOOSE_CONNECTION_PROVIDER } from '../../mongoose-connection.provider';
 import { MongoDbCostumerModel } from './customer.model';
+import { ShowcaseProductModel } from './showcase-product.model';
 
 export class MongoOrderItemModel {
   productId!: string;
+  product?: ShowcaseProductModel;
   quantity!: number;
   price!: number;
 }

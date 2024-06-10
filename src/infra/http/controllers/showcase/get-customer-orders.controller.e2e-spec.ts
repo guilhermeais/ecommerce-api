@@ -2,7 +2,7 @@ import { DefaultExceptionFilter } from '@/infra/http/filters/default-exception-f
 
 import { EventManager } from '@/core/types/events';
 import { Role } from '@/domain/auth/enterprise/entities/enums/role';
-import { OrdersRepository } from '@/domain/showcase/application/gateways/repositories/orders-repository';
+import { Customer } from '@/domain/showcase/enterprise/entities/customer';
 import { CryptographyModule } from '@/infra/cryptography/cryptography.module';
 import { DatabaseModule } from '@/infra/database/database.module';
 import { INestApplication } from '@nestjs/common';
@@ -13,15 +13,12 @@ import { CategoryFactory } from 'test/products/enterprise/entities/make-category
 import { ProductFactory } from 'test/products/enterprise/entities/make-product';
 import { OrderFactory } from 'test/showcase/enterprise/entities/make-order';
 import { GetCustomerOrdersParams } from './get-customer-orders.controller';
-import { Customer } from '@/domain/showcase/enterprise/entities/customer';
 import { OrderPresenter } from './presenters/order-presenter';
 
 describe('GetCustomerOrders (E2E)', () => {
   let app: INestApplication;
   let eventManager: EventManager;
   let userFactory: UserFactory;
-  let productFactory: ProductFactory;
-  let ordersRepository: OrdersRepository;
   let orderFactory: OrderFactory;
 
   beforeAll(async () => {
@@ -36,8 +33,6 @@ describe('GetCustomerOrders (E2E)', () => {
 
     eventManager = moduleRef.get(EventManager);
     userFactory = moduleRef.get(UserFactory);
-    productFactory = moduleRef.get(ProductFactory);
-    ordersRepository = moduleRef.get(OrdersRepository);
     orderFactory = moduleRef.get(OrderFactory);
 
     await app.init();

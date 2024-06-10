@@ -13,8 +13,11 @@ export type OrderHTTPResponse = {
   paymentDetails: PixPaymentDetails | CardPaymentDetails | BoletoPaymentDetails;
   items: {
     productId: string;
-    quantity: number;
+    productName: string;
+    productImage?: string;
     price: number;
+    quantity: number;
+    total: number;
   }[];
   deliveryAddress: {
     cep: string;
@@ -36,7 +39,10 @@ export class OrderPresenter {
       orderId: order.id.toString(),
       items: order.items.map((item) => ({
         price: item.price,
-        productId: item.productId.toString(),
+        productId: item.product.id.toString(),
+        productImage: item.product.image,
+        productName: item.product.name,
+        total: item.total,
         quantity: item.quantity,
       })),
       paymentMethod: order.paymentMethod.method,

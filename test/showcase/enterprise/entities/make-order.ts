@@ -10,6 +10,7 @@ import { Injectable } from '@nestjs/common';
 import { cpf } from 'cpf-cnpj-validator';
 import { UserFactory } from 'test/auth/enterprise/entities/make-user';
 import { ProductFactory } from 'test/products/enterprise/entities/make-product';
+import { mapProductToShowcaseProduct } from './make-showcase-product';
 
 export function makeOrder(
   modifications?: Partial<OrderProps>,
@@ -78,7 +79,11 @@ export class OrderFactory {
     );
 
     if (!order.items.length) {
-      const product = await this.productFactory.makeProduct();
+      const product = mapProductToShowcaseProduct(
+        await this.productFactory.makeProduct({
+          isShown: true,
+        }),
+      );
       order.addItem(product, 1);
     }
 

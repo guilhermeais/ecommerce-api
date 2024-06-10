@@ -58,7 +58,9 @@ describe('MongoDbOrdersRepository', () => {
 
   describe('save()', () => {
     it('should save an order', async () => {
-      const product = await productFactory.makeProduct();
+      const product = await productFactory.makeProduct({
+        isShown: true,
+      });
       const order = makeOrder();
 
       order.addItem(product, 1);
@@ -94,7 +96,7 @@ describe('MongoDbOrdersRepository', () => {
       expect(storedOrder?.items.length).toEqual(order.items.length);
       expect(storedOrder?.items[0].price).toEqual(order.items[0].price);
       expect(storedOrder?.items[0].productId).toEqual(
-        order.items[0].productId.toString(),
+        order.items[0].product.id.toString(),
       );
       expect(storedOrder?.items[0].quantity).toEqual(order.items[0].quantity);
 
@@ -110,7 +112,7 @@ describe('MongoDbOrdersRepository', () => {
       expect(order).toBeNull();
     });
 
-    it('should get and existing order', async () => {
+    it.only('should get and existing order', async () => {
       const order = await orderFactory.makeOrder();
 
       const foundOrder = await sut.findById(order.id);

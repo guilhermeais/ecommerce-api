@@ -5,14 +5,18 @@ import { Order } from '@/domain/showcase/enterprise/entities/order';
 import { Logger } from '@/shared/logger';
 import { Inject } from '@nestjs/common';
 import { Model } from 'mongoose';
+import { MongoCategoryModel } from '../../products/schemas/category.model';
 import { MongoDBOrderMapper } from '../mappers/mongodb-order.mapper';
 import { MongoDbCostumerModel } from '../schemas/customer.model';
 import { MongoOrderModel } from '../schemas/order.model';
+import { ShowcaseProductModel } from '../schemas/showcase-product.model';
 
 export class MongoDbOrdersRepository implements OrdersRepository {
   constructor(
     @Inject(MongoOrderModel.COLLECTION_NAME)
     private readonly orderModel: Model<MongoOrderModel>,
+    @Inject(ShowcaseProductModel.COLLECTION_NAME)
+    private readonly productModel: Model<ShowcaseProductModel>,
     private readonly logger: Logger,
   ) {}
 
@@ -66,8 +70,13 @@ export class MongoDbOrdersRepository implements OrdersRepository {
         MongoDbOrdersRepository.name,
         `Found ${total} orders with ${JSON.stringify(request)}`,
       );
+
+      const enrichedOrders = await Promise.all(
+        result.items.map((order) => this.enrichOrder(order)),
+      );
+
       return {
-        items: result.items.map(MongoDBOrderMapper.toDomain),
+        items: enrichedOrders.map(MongoDBOrderMapper.toDomain),
         total,
         pages,
         limit,
@@ -82,6 +91,7 @@ export class MongoDbOrdersRepository implements OrdersRepository {
       throw error;
     }
   }
+
   async findById(id: UniqueEntityID): Promise<Order | null> {
     try {
       this.logger.log(
@@ -115,7 +125,9 @@ export class MongoDbOrdersRepository implements OrdersRepository {
         `Order ${id.toString()} found`,
       );
 
-      return MongoDBOrderMapper.toDomain(order);
+      const enrichedOrder = await this.enrichOrder(order);
+
+      return MongoDBOrderMapper.toDomain(enrichedOrder);
     } catch (error: any) {
       this.logger.error(
         MongoDbOrdersRepository.name,
@@ -124,6 +136,73 @@ export class MongoDbOrdersRepository implements OrdersRepository {
       );
       throw error;
     }
+  }
+
+  private async enrichOrder(order: MongoOrderModel): Promise<MongoOrderModel> {
+    const { items } = order;
+
+    const productsHashMap = new Map<string, ShowcaseProductModel | undefined>();
+
+    const newItems = await Promise.all(
+      items.map(async (item) => {
+        let product = productsHashMap.get(item.productId);
+
+        if (!product) {
+          const [productOnDb] = (await this.productModel.aggregate([
+            {
+              $match: {
+                id: item.productId,
+              },
+            },
+            {
+              $lookup: {
+                from: MongoCategoryModel.COLLECTION_NAME,
+                localField: 'subCategoryId',
+                foreignField: 'id',
+                as: 'category',
+              },
+            },
+            {
+              $unwind: {
+                path: '$category',
+                preserveNullAndEmptyArrays: true,
+              },
+            },
+            {
+              $lookup: {
+                from: MongoCategoryModel.COLLECTION_NAME,
+                localField: 'category.rootCategoryId',
+                foreignField: 'id',
+                as: 'rootCategory',
+              },
+            },
+            {
+              $unwind: {
+                path: '$rootCategory',
+                preserveNullAndEmptyArrays: true,
+              },
+            },
+            {
+              $addFields: {
+                'category.rootCategory': '$rootCategory',
+              },
+            },
+          ])) as ShowcaseProductModel[];
+          product = productOnDb;
+          productsHashMap.set(item.productId, product);
+        }
+
+        return {
+          ...item,
+          product,
+        };
+      }),
+    );
+
+    return {
+      ...order,
+      items: newItems,
+    };
   }
 
   async save(order: Order): Promise<void> {
