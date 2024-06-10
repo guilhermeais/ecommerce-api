@@ -44,12 +44,12 @@ export class Order extends Entity<OrderProps> {
     const newItem = OrderItem.create({
       orderId: this.id,
       price: product.price,
-      productId: product.id,
+      product: product,
       quantity,
     });
 
     const duplicatedItemIndex = this._items.findIndex((item) =>
-      item.productId.equals(newItem.productId),
+      item.product.equals(newItem.product),
     );
 
     if (duplicatedItemIndex !== -1) {
@@ -60,10 +60,7 @@ export class Order extends Entity<OrderProps> {
   }
 
   get total() {
-    return this._items.reduce(
-      (total, item) => total + item.price * item.quantity,
-      0,
-    );
+    return this._items.reduce((total, item) => total + item.total, 0);
   }
 
   get items() {

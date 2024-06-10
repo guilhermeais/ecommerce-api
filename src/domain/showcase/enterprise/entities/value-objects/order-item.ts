@@ -1,15 +1,21 @@
 import { UniqueEntityID } from '@/core/entities/unique-entity-id';
 import { ValueObject } from '@/core/entities/value-object';
+import { ShowcaseProduct } from '../showcase-product';
+import { InvalidOrderItemError } from '@/domain/showcase/application/use-cases/errors/invalid-order-item-error';
 
 export type OrderItemProps = {
   orderId: UniqueEntityID;
-  productId: UniqueEntityID;
+  product: ShowcaseProduct;
   quantity: number;
   price: number;
 };
 
 export class OrderItem extends ValueObject<OrderItemProps> {
   static create(props: OrderItemProps): OrderItem {
+    if (props.quantity <= 0) {
+      throw new InvalidOrderItemError(0, `Quantidade deve ser maior que 0`);
+    }
+
     return new OrderItem(props);
   }
 
@@ -21,8 +27,8 @@ export class OrderItem extends ValueObject<OrderItemProps> {
     return this.props.orderId;
   }
 
-  get productId() {
-    return this.props.productId;
+  get product() {
+    return this.props.product;
   }
 
   get quantity() {
@@ -31,5 +37,9 @@ export class OrderItem extends ValueObject<OrderItemProps> {
 
   get price() {
     return this.props.price;
+  }
+
+  get total() {
+    return this.price * this.quantity;
   }
 }
