@@ -87,7 +87,7 @@ describe('Checkout UseCase', () => {
 
     const item = order.items[0];
 
-    expect(item.productId.toString()).toBe(request.items[0].productId);
+    expect(item.product.id.toString()).toBe(request.items[0].productId);
     expect(item.quantity).toBe(request.items[0].quantity);
 
     expect(ordersRepository.orders.length).toBe(1);

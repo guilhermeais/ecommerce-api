@@ -89,19 +89,21 @@ export class CheckoutUseCase
         throw new BadRequestError(`Deve haver ao menos 1 item no pedido.`);
       }
 
-      for (const [index, item] of Object.entries(items)) {
-        const productId = new UniqueEntityID(item.productId);
-        const product = await this.productRepository.findById(productId);
+      await Promise.all(
+        Object.entries(items).map(async ([index, item]) => {
+          const productId = new UniqueEntityID(item.productId);
+          const product = await this.productRepository.findById(productId);
 
-        if (!product) {
-          throw new InvalidOrderItemError(
-            index,
-            `Produto com id ${item.productId} não encontrado.`,
-          );
-        }
+          if (!product) {
+            throw new InvalidOrderItemError(
+              index,
+              `Produto com id ${item.productId} não encontrado.`,
+            );
+          }
 
-        order.addItem(product, item.quantity);
-      }
+          order.addItem(product, item.quantity);
+        }),
+      );
 
       await this.ordersRepository.save(order);
 
