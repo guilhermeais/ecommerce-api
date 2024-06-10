@@ -26,3 +26,4 @@
 
 ## Requisitos
 - ❎ Um usuário deve conseguir realizar checkout dos produtos no seu carrinho
+- 🟩 Deve emitir um evento no Google Pub/Sub contendo todas informações do pedido.
