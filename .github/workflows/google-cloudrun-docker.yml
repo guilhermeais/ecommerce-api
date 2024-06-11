@@ -63,6 +63,7 @@ jobs:
               GOOGLE_STORAGE_BUCKET=GOOGLE_STORAGE_BUCKET:latest
               GOOGLE_GMAIL_USER=GOOGLE_GMAIL_USER:latest
               GOOGLE_GMAIL_PASSWORD=GOOGLE_GMAIL_PASSWORD:latest
+              GOOGLE_PUB_SUB_CHECKOUT_TOPIC=GOOGLE_PUB_SUB_CHECKOUT_TOPIC:latest
           env_vars: |-
              APP_NAME=PiaLabs Ecommerce
              APP_EMAIL=guilhermeteixeiraais@gmail.com
