@@ -1,4 +1,5 @@
 import { UniqueEntityID } from './unique-entity-id';
+import { ValueObject } from './value-object';
 
 export abstract class Entity<Props> {
   private _id: UniqueEntityID;
@@ -52,5 +53,36 @@ export abstract class Entity<Props> {
       ...this.props,
       id: this.id.toString(),
     });
+  }
+
+  public toObject() {
+    const obj = structuredClone({
+      ...this,
+      id: this.id.toString(),
+    });
+
+    for (const prop in obj) {
+      const _nonSerializable = prop.startsWith('_');
+
+      if (_nonSerializable) {
+        continue;
+      }
+
+      if (
+        obj[prop] instanceof Entity ||
+        obj[prop] instanceof ValueObject ||
+        (obj[prop] && typeof obj[prop].toObject === 'function')
+      ) {
+        obj[prop] = obj[prop].toObject();
+        continue;
+      }
+
+      if (obj[prop] && typeof obj[prop].toValue === 'function') {
+        obj[prop] = obj[prop].toValue();
+        continue;
+      }
+    }
+
+    return obj;
   }
 }

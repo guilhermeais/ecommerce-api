@@ -28,6 +28,9 @@ export const envSchema = z.object({
 
   GOOGLE_GMAIL_USER: z.string().email(),
   GOOGLE_GMAIL_PASSWORD: z.string(),
+
+  GOOGLE_PUB_SUB_CHECKOUT_TOPIC: z.string(),
+
   MONGO_URI: z.string(),
   IS_TESTING: z
     .boolean({
