@@ -30,6 +30,10 @@ RUN deluser --remove-home node
 RUN addgroup --system --gid 1001 node
 RUN adduser --system --uid 1001 node
 
+RUN apk add --update --no-cache python3 py3-pip
+RUN pip3 install --upgrade pip
+RUN pip3 install joblib scikit-learn pandas numpy matplotlib seaborn plotly scipy
+
 COPY --chown=node:node --from=dev /app/node_modules ./node_modules
 COPY --chown=node:node . .
 
