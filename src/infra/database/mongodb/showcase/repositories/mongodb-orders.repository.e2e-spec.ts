@@ -112,7 +112,7 @@ describe('MongoDbOrdersRepository', () => {
       expect(order).toBeNull();
     });
 
-    it.only('should get and existing order', async () => {
+    it('should get and existing order', async () => {
       const order = await orderFactory.makeOrder();
 
       const foundOrder = await sut.findById(order.id);
