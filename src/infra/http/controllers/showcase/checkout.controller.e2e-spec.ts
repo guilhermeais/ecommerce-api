@@ -103,6 +103,9 @@ describe('CheckoutController (E2E)', () => {
             productId: item.productId,
             quantity: item.quantity,
             price: expect.any(Number),
+            productImage: expect.any(String),
+            productName: expect.any(String),
+            total: expect.any(Number),
           })),
         ),
       );
