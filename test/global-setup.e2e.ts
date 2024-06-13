@@ -57,6 +57,8 @@ export async function setup() {
     GOOGLE_GMAIL_PASSWORD: 'fake-password',
     GOOGLE_GMAIL_USER: 'fake-user@mail.com',
     JWT_EXPIRES_IN: 1000 * 60 * 60 * 24,
+
+    GOOGLE_PUB_SUB_CHECKOUT_TOPIC: 'fake-topic',
   };
 
   Object.entries(mockedEnvs).forEach(([key, value]) => {
