@@ -9,9 +9,7 @@ import { EnvService } from '@/infra/env/env.service';
 import { Logger } from '@/shared/logger';
 import { Inject, Injectable } from '@nestjs/common';
 import { randomUUID } from 'crypto';
-import { readFileSync } from 'fs';
 import { Transporter } from 'nodemailer';
-import path from 'path';
 import { InvalidEmailTemplateError } from './errors/invalid-email-template-error';
 import { NODE_MAILER_TRANSPORT } from './transporter-factory';
 @Injectable()
