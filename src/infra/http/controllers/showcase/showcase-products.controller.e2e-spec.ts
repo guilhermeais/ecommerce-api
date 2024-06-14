@@ -1,12 +1,16 @@
+import { EntityNotFoundError } from '@/core/errors/commom/entity-not-found-error';
 import { EventManager } from '@/core/types/events';
+import { ProductSimilarityModelGateway } from '@/domain/showcase/application/gateways/gateways/product-similarity-model-gateway';
 import { CryptographyModule } from '@/infra/cryptography/cryptography.module';
 import { DatabaseModule } from '@/infra/database/database.module';
+import { faker } from '@faker-js/faker/locale/af_ZA';
 import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
 import { UserFactory } from 'test/auth/enterprise/entities/make-user';
 import { makeTestingApp } from 'test/make-testing-app';
 import { CategoryFactory } from 'test/products/enterprise/entities/make-category';
 import { ProductFactory } from 'test/products/enterprise/entities/make-product';
+import { FakeProductSimilarityModel } from 'test/showcase/application/gateways/gateways/fake-product-similarity-model';
 import { mapProductToShowcaseProduct } from 'test/showcase/enterprise/entities/make-showcase-product';
 import { DefaultExceptionFilter } from '../../filters/default-exception-filter.filter';
 import {
@@ -14,8 +18,6 @@ import {
   ShowcaseProductPresenter,
 } from './presenters/showcase-product-presenter';
 import { GetShowcaseProductsParams } from './showcase-products.controller';
-import { faker } from '@faker-js/faker/locale/af_ZA';
-import { EntityNotFoundError } from '@/core/errors/commom/entity-not-found-error';
 
 export function makeGetShowcaseProductsParams(
   modifications?: Partial<GetShowcaseProductsParams>,
@@ -32,6 +34,7 @@ describe('GetShowcaseProductsController (E2E)', () => {
   let eventManager: EventManager;
   let productFactory: ProductFactory;
   let categoryFactory: CategoryFactory;
+  let productSimilarityModelGateway: FakeProductSimilarityModel;
 
   beforeAll(async () => {
     const moduleRef = await makeTestingApp({
@@ -46,11 +49,16 @@ describe('GetShowcaseProductsController (E2E)', () => {
     productFactory = moduleRef.get(ProductFactory);
     categoryFactory = moduleRef.get(CategoryFactory);
 
+    productSimilarityModelGateway = moduleRef.get(
+      ProductSimilarityModelGateway,
+    );
+
     await app.init();
   });
 
   beforeEach(async () => {
     eventManager.clearSubscriptions();
+    productSimilarityModelGateway.clear();
   });
 
   describe('[GET] /showcase/products', () => {
@@ -328,6 +336,109 @@ describe('GetShowcaseProductsController (E2E)', () => {
       expect(response.body).toEqual(
         ShowcaseProductPresenter.toHTTP(productToFound),
       );
+    });
+  });
+
+  describe('[GET] /showcase/products/:id/similar', () => {
+    it('should get similar producst', async () => {
+      const product = await productFactory.makeProduct({
+        isShown: true,
+      });
+
+      const similarProducts = await Promise.all(
+        Array.from({ length: 5 }).map(async (_, i) =>
+          mapProductToShowcaseProduct(
+            await productFactory.makeProduct(
+              {
+                isShown: true,
+              },
+              new Date(2022, 0, i + 1),
+            ),
+          ),
+        ),
+      );
+
+      productSimilarityModelGateway.fakeProductIds.set(
+        product.id.toString(),
+        similarProducts.map((product) => product.id),
+      );
+
+      const response = await request(app.getHttpServer()).get(
+        `/showcase/products/${product.id.toString()}/similar`,
+      );
+
+      expect(response.status).toBe(200);
+      expect(response.body.items).toEqual(
+        similarProducts.map(ShowcaseProductPresenter.toHTTP),
+      );
+    });
+    describe('Exceptions', () => {
+      it('should return EntitiNotFoundError if the product does not exists', async () => {
+        const id = faker.string.uuid();
+
+        const response = await request(app.getHttpServer()).get(
+          `/showcase/products/${id}/similar`,
+        );
+
+        expect(response.status).toBe(404);
+        const expectedError = new EntityNotFoundError('Produto', id);
+        expect(response.body).toEqual({
+          error: expectedError.name,
+          message: [expectedError.message],
+          details: expectedError.details,
+          statusCode: expectedError.code,
+        });
+      });
+
+      it('should return EntitiNotFoundError if the product is not shown', async () => {
+        const product = await productFactory.makeProduct({
+          isShown: false,
+        });
+
+        const response = await request(app.getHttpServer()).get(
+          `/showcase/products/${product.id.toString()}/similar`,
+        );
+
+        expect(response.status).toBe(404);
+        const expectedError = new EntityNotFoundError(
+          'Produto',
+          product.id.toString(),
+        );
+        expect(response.body).toEqual({
+          error: expectedError.name,
+          message: [expectedError.message],
+          details: expectedError.details,
+          statusCode: expectedError.code,
+        });
+      });
+
+      it('should return 400 if an invalid product uuid is provided', async () => {
+        const id = '123654';
+
+        const response = await request(app.getHttpServer()).get(
+          `/showcase/products/${id}/similar`,
+        );
+
+        expect(response.status).toBe(400);
+        expect(response.body).toEqual({
+          error: 'BadRequestException',
+          message: ['ID do produto deve ser um UUID válido!'],
+          statusCode: 400,
+        });
+      });
+
+      it('should return empty array if there are no similar products', async () => {
+        const product = await productFactory.makeProduct({
+          isShown: true,
+        });
+
+        const response = await request(app.getHttpServer()).get(
+          `/showcase/products/${product.id.toString()}/similar`,
+        );
+
+        expect(response.status).toBe(200);
+        expect(response.body.items).toEqual([]);
+      });
     });
   });
 });
