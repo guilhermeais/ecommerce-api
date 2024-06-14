@@ -46,6 +46,12 @@ RUN deluser --remove-home node && \
     adduser --system --uid 1001 node && \
     apk add --no-cache libc6-compat
 
+    
+RUN apk add --no-cache libc6-compat python3 py3-pip build-base pkgconfig python3-dev gcc musl-dev linux-headers && \
+pip3 install --no-cache-dir --break-system-packages joblib scikit-learn pandas numpy matplotlib seaborn plotly scipy psutil
+
+ENV JOBLIB_START_METHOD=forkserver
+
 COPY --chown=node:node --from=build /app/dist dist
 COPY --chown=node:node --from=build /app/node_modules node_modules
 
