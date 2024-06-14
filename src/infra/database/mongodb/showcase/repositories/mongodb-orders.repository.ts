@@ -237,4 +237,23 @@ export class MongoDbOrdersRepository implements OrdersRepository {
       throw error;
     }
   }
+
+  async *findAllOnDemand(): AsyncGenerator<Order, any, unknown> {
+    this.logger.log(
+      MongoDbOrdersRepository.name,
+      `Finding all orders on demand`,
+    );
+    const cursor = this.orderModel
+      .find({ onDemand: true })
+      .batchSize(30)
+      .cursor();
+
+    for await (const doc of cursor) {
+      this.logger.log(
+        MongoDbOrdersRepository.name,
+        `Found order ${doc.id} on demand`,
+      );
+      yield MongoDBOrderMapper.toDomain(doc);
+    }
+  }
 }

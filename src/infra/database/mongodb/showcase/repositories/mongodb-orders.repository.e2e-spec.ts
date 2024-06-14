@@ -185,4 +185,37 @@ describe('MongoDbOrdersRepository', () => {
       expect(secondResponse.pages).toEqual(2);
     });
   });
+
+  describe('findAllOnDemand()', () => {
+    it('should return all orders', async () => {
+      const { user } = await userFactory.makeUser();
+      const customer = Customer.restore(
+        {
+          email: user.email.value,
+          name: user.name,
+        },
+        user.id,
+      );
+
+      const orders = await Promise.all(
+        Array.from({ length: 15 }).map((_, i) =>
+          orderFactory.makeOrder(
+            {
+              customer,
+            },
+            new Date(2021, 1, i + 1),
+          ),
+        ),
+      );
+
+      const onDemandOrders = sut.findAllOnDemand();
+
+      for await (const order of onDemandOrders) {
+        const expectedOrder = orders.find((o) => o.id.equals(order.id));
+
+        expect(expectedOrder).toBeDefined();
+        expect(order).toEqual(expectedOrder);
+      }
+    });
+  });
 });
