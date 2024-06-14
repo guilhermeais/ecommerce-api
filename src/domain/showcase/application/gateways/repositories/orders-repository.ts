@@ -14,4 +14,6 @@ export abstract class OrdersRepository implements Repository<Order> {
       }>
     >,
   ): Promise<PaginatedResponse<Order>>;
+
+  abstract findAllOnDemand(): AsyncGenerator<Order>;
 }
