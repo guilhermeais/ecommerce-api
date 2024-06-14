@@ -87,7 +87,7 @@ export class PyProductSimilarityModel implements ProductSimilarityModelGateway {
   private async hasPythonInstalled(): Promise<boolean> {
     this.logger.log(PyProductSimilarityModel.name, 'Checking python version');
     return new Promise((resolve) => {
-      exec('python --version', (error, stdout, stderr) => {
+      exec('python3 --version', (error, stdout, stderr) => {
         if (error) {
           this.logger.error(
             PyProductSimilarityModel.name,
@@ -202,7 +202,7 @@ export class PyProductSimilarityModel implements ProductSimilarityModelGateway {
       `Running python script ${scriptPath} with args: ${args}`,
     );
     return new Promise((resolve, reject) => {
-      const python = spawn('python', [scriptPath, ...args]);
+      const python = spawn('python3', [scriptPath, ...args]);
 
       let result = '';
       let error = '';

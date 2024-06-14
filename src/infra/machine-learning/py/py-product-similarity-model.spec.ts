@@ -222,7 +222,7 @@ describe('PyProductSimilarityModel', () => {
 
       expect(createdCsv).toEqual(expectedCsv);
 
-      expect(childProcess.spawn).toHaveBeenCalledWith('python', [
+      expect(childProcess.spawn).toHaveBeenCalledWith('python3', [
         PyProductSimilarityModel.TRAIN_PYTHON_SCRIPT,
         expectedCsvPath,
         expectedModelPath,
