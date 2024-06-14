@@ -53,3 +53,4 @@ Este módulo lida com a vitrine de produtos que o usuário irá visualizar no ma
 - ❎ [Buscar pedidos](./requirements/showcase/orders.md)
 
 - 🟩 [Busca de produtos similiares](./requirements/showcase/get-similar-products.md)
+- 🟩 [Treinamento de algoritmo de busca de produtos similares](./requirements/showcase/train-similar-products-model.md)

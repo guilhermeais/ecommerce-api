@@ -40,6 +40,70 @@ describe('MongoDbShowcaseProductsRepository', () => {
     await app.close();
   });
 
+  describe('findByIds()', () => {
+    it('should return empty array when no products are found', async () => {
+      const products = await sut.findByIds([new UniqueEntityID()]);
+      expect(products).toHaveLength(0);
+    });
+
+    it('should return empty array when no products are shown', async () => {
+      const { id } = await productFactory.makeProduct({
+        isShown: false,
+      });
+
+      const products = await sut.findByIds([id]);
+      expect(products).toHaveLength(0);
+    });
+
+    it('should find multiple showcase products by ids', async () => {
+      const showcaseProducts = await Promise.all(
+        Array.from({ length: 10 }).map(async (_, i) => {
+          const product = await productFactory.makeProduct(
+            {
+              isShown: true,
+            },
+            new Date(2021, 1, i + 1),
+          );
+
+          return mapProductToShowcaseProduct(product);
+        }),
+      );
+
+      const response = await sut.findByIds(showcaseProducts.map((p) => p.id));
+
+      expect(response).toHaveLength(10);
+      expect(response).toEqual(showcaseProducts);
+    });
+  });
+
+  describe('exists()', () => {
+    it('should return false if the showcase product does not exists', async () => {
+      const exists = await sut.exists(new UniqueEntityID());
+
+      expect(exists).toBe(false);
+    });
+
+    it('should return false when searching for a product that is not displayed', async () => {
+      const { id } = await productFactory.makeProduct({
+        isShown: false,
+      });
+
+      const exists = await sut.exists(id);
+
+      expect(exists).toBe(false);
+    });
+
+    it('should return true if the showcase product exists', async () => {
+      const product = await productFactory.makeProduct({
+        isShown: true,
+      });
+
+      const exists = await sut.exists(product.id);
+
+      expect(exists).toBe(true);
+    });
+  });
+
   describe('findById()', () => {
     it('should return null if the showcase product does not exists', async () => {
       const product = await sut.findById(new UniqueEntityID());

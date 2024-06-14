@@ -45,4 +45,10 @@ export class InMemoryOrdersRepository implements OrdersRepository {
       currentPage: request.page,
     };
   }
+
+  async *findAllOnDemand(): AsyncGenerator<Order, any, unknown> {
+    for (const order of this.orders) {
+      yield order;
+    }
+  }
 }

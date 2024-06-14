@@ -2,42 +2,35 @@
 # 🧑‍💻 Development
 #
 FROM node:20-alpine as dev
-RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
 ENV NODE_ENV development
 
-RUN deluser --remove-home node
-RUN addgroup --system --gid 1001 node
-RUN adduser --system --uid 1001 node
+RUN deluser --remove-home node && \
+    addgroup --system --gid 1001 node && \
+    adduser --system --uid 1001 node
 
-COPY --chown=node:node . .
+RUN apk add --no-cache libc6-compat python3 py3-pip build-base pkgconfig python3-dev gcc musl-dev linux-headers && \
+    pip3 install --no-cache-dir --break-system-packages joblib scikit-learn pandas numpy matplotlib seaborn plotly scipy psutil
 
+# Set JOBLIB_START_METHOD environment variable
+ENV JOBLIB_START_METHOD=forkserver
+
+COPY --chown=node:node package*.json ./
 RUN npm ci
+COPY --chown=node:node . .
 
 USER node
 
 #
 # 🏡 Production Build
 #
-FROM node:20-alpine as build
-
-WORKDIR /app
-RUN apk add --no-cache libc6-compat
+FROM dev as build
+ENV JOBLIB_START_METHOD=forkserver
 ENV NODE_ENV production
 
-RUN deluser --remove-home node
-RUN addgroup --system --gid 1001 node
-RUN adduser --system --uid 1001 node
-
-COPY --chown=node:node --from=dev /app/node_modules ./node_modules
 COPY --chown=node:node . .
-
-RUN npm run build
-
-RUN npm ci --omit=dev && npm cache clean --force
-
-USER node
+RUN npm run build && npm ci --omit=dev && npm cache clean --force
 
 #
 # 🚀 Production Server
@@ -45,13 +38,19 @@ USER node
 FROM node:20-alpine as prod
 
 WORKDIR /app
-RUN apk add --no-cache libc6-compat
 
 ENV NODE_ENV production
 
-RUN deluser --remove-home node
-RUN addgroup --system --gid 1001 node
-RUN adduser --system --uid 1001 node
+RUN deluser --remove-home node && \
+    addgroup --system --gid 1001 node && \
+    adduser --system --uid 1001 node && \
+    apk add --no-cache libc6-compat
+
+    
+RUN apk add --no-cache libc6-compat python3 py3-pip build-base pkgconfig python3-dev gcc musl-dev linux-headers && \
+pip3 install --no-cache-dir --break-system-packages joblib scikit-learn pandas numpy matplotlib seaborn plotly scipy psutil
+
+ENV JOBLIB_START_METHOD=forkserver
 
 COPY --chown=node:node --from=build /app/dist dist
 COPY --chown=node:node --from=build /app/node_modules node_modules

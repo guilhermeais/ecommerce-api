@@ -237,4 +237,34 @@ export class MongoDbOrdersRepository implements OrdersRepository {
       throw error;
     }
   }
+
+  async *findAllOnDemand(): AsyncGenerator<Order, any, unknown> {
+    this.logger.log(
+      MongoDbOrdersRepository.name,
+      `Finding all orders on demand`,
+    );
+    const cursor = this.orderModel
+      .aggregate<MongoOrderModel>([
+        {
+          $lookup: {
+            from: MongoDbCostumerModel.COLLECTION_NAME,
+            localField: 'customerId',
+            foreignField: 'id',
+            as: 'customer',
+          },
+        },
+        {
+          $unwind: '$customer',
+        },
+        { $sort: { createdAt: 1 } },
+      ])
+      .cursor({
+        batchSize: 1000,
+      });
+
+    for await (const doc of cursor) {
+      const enrichedOrder = await this.enrichOrder(doc);
+      yield MongoDBOrderMapper.toDomain(enrichedOrder);
+    }
+  }
 }

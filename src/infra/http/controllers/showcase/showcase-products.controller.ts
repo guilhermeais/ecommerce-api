@@ -1,6 +1,7 @@
 import { PaginatedResponse } from '@/core/types/pagination';
 import { GetShowcaseProductUseCase } from '@/domain/showcase/application/use-cases/get-showcase-product';
 import { GetShowcaseProductsUseCase } from '@/domain/showcase/application/use-cases/get-showcase-products';
+import { GetSimilarProductsUseCase } from '@/domain/showcase/application/use-cases/get-similar-products';
 import { Public } from '@/infra/auth/public.decorator';
 import { Logger } from '@/shared/logger';
 import { Controller, Get, Param, Query } from '@nestjs/common';
@@ -48,11 +49,16 @@ export type GetShowcaseProductsResponse =
 
 export type GetShowcaseProductResponse = ShowcaseProductHTTPResponse;
 
+export type GetSimilarProductsResponse = {
+  items: ShowcaseProductHTTPResponse[];
+};
+
 @Controller('/showcase/products')
 export class ShowcaseProductsController {
   constructor(
-    private readonly getShowcaseProducts: GetShowcaseProductsUseCase,
-    private readonly getShowcaseProduct: GetShowcaseProductUseCase,
+    private readonly getShowcaseProductsUseCase: GetShowcaseProductsUseCase,
+    private readonly getShowcaseProductUseCase: GetShowcaseProductUseCase,
+    private readonly getSimilarProductsUseCase: GetSimilarProductsUseCase,
     private readonly logger: Logger,
   ) {}
 
@@ -68,7 +74,7 @@ export class ShowcaseProductsController {
         `listing products with: ${JSON.stringify(query)}`,
       );
 
-      const result = await this.getShowcaseProducts.execute(query);
+      const result = await this.getShowcaseProductsUseCase.execute(query);
 
       this.logger.log(
         ShowcaseProductsController.name,
@@ -106,7 +112,7 @@ export class ShowcaseProductsController {
     try {
       this.logger.log(ShowcaseProductsController.name, `getting product ${id}`);
 
-      const result = await this.getShowcaseProduct.execute({ id });
+      const result = await this.getShowcaseProductUseCase.execute({ id });
 
       this.logger.log(
         ShowcaseProductsController.name,
@@ -118,6 +124,48 @@ export class ShowcaseProductsController {
       this.logger.error(
         ShowcaseProductsController.name,
         `Error on getting product with id ${id}: ${error.message}`,
+        error.stack,
+      );
+
+      throw error;
+    }
+  }
+
+  @Public()
+  @Get('/:id/similar')
+  async getSimilarProducts(
+    @Param(
+      'id',
+      new ZodValidationPipe(
+        z.string().uuid({
+          message: 'ID do produto deve ser um UUID válido!',
+        }),
+      ),
+    )
+    id: string,
+  ): Promise<GetSimilarProductsResponse> {
+    try {
+      this.logger.log(
+        ShowcaseProductsController.name,
+        `getting similar products for product ${id}`,
+      );
+
+      const result = await this.getSimilarProductsUseCase.execute({
+        productId: id,
+      });
+
+      this.logger.log(
+        ShowcaseProductsController.name,
+        `found ${result.products.length} similar products for product ${id}.`,
+      );
+
+      return {
+        items: result.products.map(ShowcaseProductPresenter.toHTTP),
+      };
+    } catch (error: any) {
+      this.logger.error(
+        ShowcaseProductsController.name,
+        `Error on getting similar products for product ${id}: ${error.message}`,
         error.stack,
       );
 

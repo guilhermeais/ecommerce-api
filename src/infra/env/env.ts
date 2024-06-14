@@ -1,5 +1,5 @@
-import { z } from 'zod';
 import 'dotenv/config';
+import { z } from 'zod';
 const ONE_DAY = 1000 * 60 * 60 * 24;
 
 export const envSchema = z.object({
@@ -21,9 +21,9 @@ export const envSchema = z.object({
   FINISH_SIGNUP_INVITE_URL: z.string().url(),
 
   GOOGLE_STORAGE_BUCKET: z.string(),
-  GOOGLE_APPLICATION_CREDENTIALS: z.string().base64({
+  GOOGLE_APPLICATION_CREDENTIALS_BASE_64: z.string().base64({
     message:
-      'GOOGLE_APPLICATION_CREDENTIALS deve ser as credenciais em base64.',
+      'GOOGLE_APPLICATION_CREDENTIALS_BASE_64 deve ser as credenciais em base64.',
   }),
 
   GOOGLE_GMAIL_USER: z.string().email(),
@@ -38,6 +38,13 @@ export const envSchema = z.object({
     })
     .optional()
     .default(false),
+
+  TRAIN_MODEL_CRON: z
+    .string({
+      message: 'TRAIN_MODEL_CRON deve ser uma string válida do cron.',
+    })
+    .optional()
+    .default('*/10 * * * *'),
 });
 
 export type Env = z.infer<typeof envSchema>;

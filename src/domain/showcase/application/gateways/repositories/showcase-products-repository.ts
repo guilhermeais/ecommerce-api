@@ -17,4 +17,6 @@ export abstract class ShowcaseProductsRepository
       }>
     >,
   ): Promise<PaginatedResponse<ShowcaseProduct>>;
+  abstract findByIds(ids: UniqueEntityID[]): Promise<ShowcaseProduct[]>;
+  abstract exists(id: UniqueEntityID): Promise<boolean>;
 }

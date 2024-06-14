@@ -20,6 +20,110 @@ export class MongoDbShowcaseProductsRepository
     private readonly logger: Logger,
   ) {}
 
+  async findByIds(ids: UniqueEntityID[]): Promise<ShowcaseProduct[]> {
+    try {
+      this.logger.log(
+        MongoDbShowcaseProductsRepository.name,
+        `Finding product by ids ${ids.map((id) => id.toString()).join(', ')}`,
+      );
+
+      const products = (await this.productModel.aggregate([
+        {
+          $match: {
+            id: { $in: ids.map((id) => id.toString()) },
+            isShown: true,
+          },
+        },
+        {
+          $lookup: {
+            from: MongoCategoryModel.COLLECTION_NAME,
+            localField: 'subCategoryId',
+            foreignField: 'id',
+            as: 'category',
+          },
+        },
+        {
+          $unwind: {
+            path: '$category',
+            preserveNullAndEmptyArrays: true,
+          },
+        },
+        {
+          $lookup: {
+            from: MongoCategoryModel.COLLECTION_NAME,
+            localField: 'category.rootCategoryId',
+            foreignField: 'id',
+            as: 'rootCategory',
+          },
+        },
+        {
+          $unwind: {
+            path: '$rootCategory',
+            preserveNullAndEmptyArrays: true,
+          },
+        },
+        {
+          $addFields: {
+            'category.rootCategory': '$rootCategory',
+          },
+        },
+        {
+          $sort: { createdAt: 1 },
+        },
+      ])) as ShowcaseProductModel[];
+
+      this.logger.log(
+        MongoDbShowcaseProductsRepository.name,
+        `Product found ${products.length} products`,
+      );
+
+      return products.map(MongoDbShowcaseProductsMapper.toDomain);
+    } catch (error: any) {
+      this.logger.error(
+        MongoDbShowcaseProductsRepository.name,
+        `Error finding products ${ids.map((id) => id.toString())}: ${error.message}`,
+        error.stack,
+      );
+      throw error;
+    }
+  }
+
+  async exists(id: UniqueEntityID): Promise<boolean> {
+    try {
+      this.logger.log(
+        MongoDbShowcaseProductsRepository.name,
+        `Checking if product ${id.toString()} exists`,
+      );
+
+      const product = await this.productModel.exists({
+        id: id.toString(),
+        isShown: true,
+      });
+
+      if (!product) {
+        this.logger.log(
+          MongoDbShowcaseProductsRepository.name,
+          `Product ${id.toString()} not found`,
+        );
+        return false;
+      }
+
+      this.logger.log(
+        MongoDbShowcaseProductsRepository.name,
+        `Product ${id.toString()} found`,
+      );
+
+      return true;
+    } catch (error: any) {
+      this.logger.error(
+        MongoDbShowcaseProductsRepository.name,
+        `Error checking if product ${id.toString()} exists: ${error.message}`,
+        error.stack,
+      );
+      throw error;
+    }
+  }
+
   async findById(id: UniqueEntityID): Promise<ShowcaseProduct | null> {
     try {
       this.logger.log(

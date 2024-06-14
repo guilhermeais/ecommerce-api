@@ -6,6 +6,18 @@ import { ShowcaseProduct } from '@/domain/showcase/enterprise/entities/showcase-
 export class InMemoryShowcaseProductRepository
   implements ShowcaseProductsRepository
 {
+  readonly products: ShowcaseProduct[] = [];
+
+  async findByIds(ids: UniqueEntityID[]): Promise<ShowcaseProduct[]> {
+    return this.products.filter((product) =>
+      ids.some((id) => product.id.equals(id)),
+    );
+  }
+
+  async exists(id: UniqueEntityID): Promise<boolean> {
+    return this.products.some((product) => product.id.equals(id));
+  }
+
   async list(
     request: PaginatedRequest<{
       name: string;
@@ -47,7 +59,6 @@ export class InMemoryShowcaseProductRepository
       currentPage: request.page,
     };
   }
-  readonly products: ShowcaseProduct[] = [];
 
   async clear(): Promise<void> {
     this.products.length = 0;

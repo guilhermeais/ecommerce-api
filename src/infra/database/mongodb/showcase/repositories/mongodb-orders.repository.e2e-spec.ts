@@ -112,7 +112,7 @@ describe('MongoDbOrdersRepository', () => {
       expect(order).toBeNull();
     });
 
-    it.only('should get and existing order', async () => {
+    it('should get and existing order', async () => {
       const order = await orderFactory.makeOrder();
 
       const foundOrder = await sut.findById(order.id);
@@ -183,6 +183,46 @@ describe('MongoDbOrdersRepository', () => {
       expect(secondResponse.items).toHaveLength(5);
       expect(secondResponse.total).toBe(15);
       expect(secondResponse.pages).toEqual(2);
+    });
+  });
+
+  describe('findAllOnDemand()', () => {
+    it('should return all orders', async () => {
+      const { user } = await userFactory.makeUser();
+      const customer = Customer.restore(
+        {
+          email: user.email.value,
+          name: user.name,
+        },
+        user.id,
+      );
+
+      const orders = await Promise.all(
+        Array.from({ length: 15 }).map((_, i) =>
+          orderFactory.makeOrder(
+            {
+              customer,
+            },
+            new Date(2021, 1, i + 1),
+          ),
+        ),
+      );
+
+      const onDemandOrders = sut.findAllOnDemand();
+
+      for await (const order of onDemandOrders) {
+        const expectedOrder = orders.find((o) => o.id.equals(order.id));
+
+        expect(expectedOrder).toBeDefined();
+        expect(order.id).toEqual(expectedOrder!.id);
+        expect(order.items).toEqual(expectedOrder!.items);
+        expect(order.deliveryAddress).toEqual(expectedOrder!.deliveryAddress);
+        expect(order.paymentMethod).toEqual(expectedOrder!.paymentMethod);
+        expect(order.customer).toEqual(expectedOrder!.customer);
+        expect(order.total).toEqual(expectedOrder!.total);
+        expect(order.createdAt).toEqual(expectedOrder!.createdAt);
+        expect(order.updatedAt).toEqual(expectedOrder!.updatedAt);
+      }
     });
   });
 });

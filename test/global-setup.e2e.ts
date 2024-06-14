@@ -51,12 +51,14 @@ export async function setup() {
     IS_TESTING: true,
     MONGO_URI: uri,
 
-    GOOGLE_APPLICATION_CREDENTIALS:
+    GOOGLE_APPLICATION_CREDENTIALS_BASE_64:
       Buffer.from('fake-credentials').toString('base64'),
     GOOGLE_STORAGE_BUCKET: 'fake-bucket',
     GOOGLE_GMAIL_PASSWORD: 'fake-password',
     GOOGLE_GMAIL_USER: 'fake-user@mail.com',
     JWT_EXPIRES_IN: 1000 * 60 * 60 * 24,
+
+    GOOGLE_PUB_SUB_CHECKOUT_TOPIC: 'fake-topic',
   };
 
   Object.entries(mockedEnvs).forEach(([key, value]) => {
