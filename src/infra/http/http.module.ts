@@ -17,10 +17,12 @@ import { GetCustomerOrders } from '@/domain/showcase/application/use-cases/get-c
 import { GetShowcaseCategoriesUseCase } from '@/domain/showcase/application/use-cases/get-showcase-categories';
 import { GetShowcaseProductUseCase } from '@/domain/showcase/application/use-cases/get-showcase-product';
 import { GetShowcaseProductsUseCase } from '@/domain/showcase/application/use-cases/get-showcase-products';
+import { GetSimilarProductsUseCase } from '@/domain/showcase/application/use-cases/get-similar-products';
 import { CryptographyModule } from '@/infra/cryptography/cryptography.module';
 import { DatabaseModule } from '@/infra/database/database.module';
 import { EventsModule } from '@/infra/events/events.module';
 import { Module } from '@nestjs/common';
+import { MachineLearningModule } from '../machine-learning/machine-learning.module';
 import { StorageModule } from '../storage/storage.module';
 import { ClientSignUpController } from './controllers/auth/client-sign-up.controller';
 import { ConfirmAccountController } from './controllers/auth/confirm-account.controller';
@@ -43,7 +45,13 @@ import { ShowcaseCategoriesController } from './controllers/showcase/showcase-ca
 import { ShowcaseProductsController } from './controllers/showcase/showcase-products.controller';
 
 @Module({
-  imports: [EventsModule, DatabaseModule, CryptographyModule, StorageModule],
+  imports: [
+    EventsModule,
+    DatabaseModule,
+    CryptographyModule,
+    StorageModule,
+    MachineLearningModule,
+  ],
   controllers: [
     ClientSignUpController,
     ConfirmAccountController,
@@ -87,6 +95,7 @@ import { ShowcaseProductsController } from './controllers/showcase/showcase-prod
     GetShowcaseProductsUseCase,
     GetShowcaseProductUseCase,
     GetShowcaseCategoriesUseCase,
+    GetSimilarProductsUseCase,
     CheckoutUseCase,
     GetCustomerOrders,
   ],
