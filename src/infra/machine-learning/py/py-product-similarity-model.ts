@@ -207,10 +207,18 @@ export class PyProductSimilarityModel implements ProductSimilarityModelGateway {
       let result = '';
       let error = '';
       python.stdout.on('data', (data) => {
+        this.logger.log(
+          PyProductSimilarityModel.name,
+          `Python script stdout: ${data.toString()}`,
+        );
         result += data.toString();
       });
 
       python.stderr.on('data', (data) => {
+        this.logger.error(
+          PyProductSimilarityModel.name,
+          `Python script stderr: ${data.toString()}`,
+        );
         error += data.toString();
       });
 
