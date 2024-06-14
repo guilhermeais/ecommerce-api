@@ -64,6 +64,7 @@ jobs:
               GOOGLE_GMAIL_USER=GOOGLE_GMAIL_USER:latest
               GOOGLE_GMAIL_PASSWORD=GOOGLE_GMAIL_PASSWORD:latest
               GOOGLE_PUB_SUB_CHECKOUT_TOPIC=GOOGLE_PUB_SUB_CHECKOUT_TOPIC:latest
+              TRAIN_MODEL_CRON=TRAIN_MODEL_CRON:latest
           env_vars: |-
              APP_NAME=PiaLabs Ecommerce
              APP_EMAIL=guilhermeteixeiraais@gmail.com
