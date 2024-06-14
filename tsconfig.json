@@ -21,5 +21,6 @@
       "@/*": ["src/*"]
     },
     "types": ["vitest/globals", "multer"]
-  }
+  },
+  "include": ["**/*.ts", "**/*.py"]
 }

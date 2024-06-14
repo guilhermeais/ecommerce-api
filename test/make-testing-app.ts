@@ -11,6 +11,7 @@ import { ModuleMetadata } from '@nestjs/common';
 import { Test, TestingModuleBuilder } from '@nestjs/testing';
 import { mock } from 'vitest-mock-extended';
 import { FakeProductSimilarityModel } from './showcase/application/gateways/gateways/fake-product-similarity-model';
+import { TrainProductsSimilarityModelCronName } from '@/infra/crons/cron.module';
 
 export function makeTestingApp(
   modifications?: Partial<ModuleMetadata>,
@@ -30,5 +31,7 @@ export function makeTestingApp(
     .overrideProvider(GOOGLE_PUB_SUB_FACTORY)
     .useValue(mock())
     .overrideProvider(ProductSimilarityModelGateway)
-    .useValue(new FakeProductSimilarityModel());
+    .useValue(new FakeProductSimilarityModel())
+    .overrideProvider(TrainProductsSimilarityModelCronName)
+    .useValue(mock());
 }

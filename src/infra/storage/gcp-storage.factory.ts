@@ -13,7 +13,7 @@ export const GcpStorageFactory: FactoryProvider<Storage> = {
   useFactory(envService: EnvService, logger: Logger): Storage {
     const credentials: JWTInput = JSON.parse(
       Buffer.from(
-        envService.get('GOOGLE_APPLICATION_CREDENTIALS'),
+        envService.get('GOOGLE_APPLICATION_CREDENTIALS_BASE_64'),
         'base64',
       ).toString(),
     );

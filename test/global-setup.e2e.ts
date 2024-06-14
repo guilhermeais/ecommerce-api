@@ -51,7 +51,7 @@ export async function setup() {
     IS_TESTING: true,
     MONGO_URI: uri,
 
-    GOOGLE_APPLICATION_CREDENTIALS:
+    GOOGLE_APPLICATION_CREDENTIALS_BASE_64:
       Buffer.from('fake-credentials').toString('base64'),
     GOOGLE_STORAGE_BUCKET: 'fake-bucket',
     GOOGLE_GMAIL_PASSWORD: 'fake-password',

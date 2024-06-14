@@ -12,7 +12,7 @@ export const GOOGLE_PUB_SUB_PROVIDER: Provider<PubSub> = {
   useFactory: (env: EnvService, logger: Logger) => {
     const credentials: JWTInput = JSON.parse(
       Buffer.from(
-        env.get('GOOGLE_APPLICATION_CREDENTIALS'),
+        env.get('GOOGLE_APPLICATION_CREDENTIALS_BASE_64'),
         'base64',
       ).toString(),
     );

@@ -20,7 +20,7 @@ services:
       - nest
     depends_on:
       - mongodb
-    command: npx nest start --watch
+    command: npm run start:dev
   mongodb:
     container_name: mongodb
     image: mongo

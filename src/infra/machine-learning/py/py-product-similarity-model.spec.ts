@@ -116,6 +116,14 @@ describe('PyProductSimilarityModel', () => {
       );
     });
 
+    it('should throw if there is no model file', async () => {
+      vol.reset();
+
+      await expect(sut.predict(new UniqueEntityID())).rejects.toThrowError(
+        new ModelNotTrainedError(),
+      );
+    });
+
     it('should throw error if the python script throws', async () => {
       const fakeChildProcess = new FakeChildProcess({
         stdout: new Readable({
@@ -216,8 +224,8 @@ describe('PyProductSimilarityModel', () => {
 
       expect(childProcess.spawn).toHaveBeenCalledWith('python', [
         PyProductSimilarityModel.TRAIN_PYTHON_SCRIPT,
-        expectedModelPath,
         expectedCsvPath,
+        expectedModelPath,
       ]);
     });
 

@@ -20,9 +20,9 @@ import { PythonScriptError } from './errors/python-script-error';
 export class PyProductSimilarityModel implements ProductSimilarityModelGateway {
   constructor(private readonly logger: Logger) {}
 
-  static readonly MODEL_DIR = path.resolve(__dirname, '../models');
+  static readonly MODEL_DIR = path.resolve(__dirname, './models');
   static readonly MODEL_FILE = 'model.pkl';
-  static readonly MATRIX_FILE = 'matriz.pkl';
+  static readonly MATRIX_FILE = 'matrix.pkl';
   static readonly TRAIN_DATA_FILE = 'train-data.csv';
   static readonly TRAIN_PYTHON_SCRIPT = path.resolve(
     __dirname,
@@ -120,7 +120,21 @@ export class PyProductSimilarityModel implements ProductSimilarityModelGateway {
     lastModelDir: string | null;
   }> {
     this.logger.log(PyProductSimilarityModel.name, 'Getting last model path');
-    const modelsDir = await readdir(PyProductSimilarityModel.MODEL_DIR);
+    const modelsDir = await readdir(PyProductSimilarityModel.MODEL_DIR).catch(
+      (err) => {
+        this.logger.error(
+          PyProductSimilarityModel.name,
+          `Error reading models directory: ${err.message}`,
+          err.stack,
+        );
+
+        if (err.code === 'ENOENT') {
+          return [];
+        }
+
+        throw err;
+      },
+    );
 
     this.logger.log(
       PyProductSimilarityModel.name,
@@ -191,18 +205,18 @@ export class PyProductSimilarityModel implements ProductSimilarityModelGateway {
       const python = spawn('python', [scriptPath, ...args]);
 
       let result = '';
-      let err = '';
+      let error = '';
       python.stdout.on('data', (data) => {
         result += data.toString();
       });
 
       python.stderr.on('data', (data) => {
-        err += data.toString();
+        error += data.toString();
       });
 
       python.on('close', (code) => {
-        if (code !== 0 || err) {
-          reject(new PythonScriptError(1, err));
+        if (code !== 0 || error) {
+          reject(new PythonScriptError(1, error));
         } else {
           this.logger.log(
             PyProductSimilarityModel.name,
@@ -282,7 +296,9 @@ export class PyProductSimilarityModel implements ProductSimilarityModelGateway {
       `New model directory: ${newModelPath}: `,
     );
 
-    await mkdir(newModelPath);
+    await mkdir(newModelPath, {
+      recursive: true,
+    });
 
     return newModelPath;
   }
@@ -300,7 +316,6 @@ export class PyProductSimilarityModel implements ProductSimilarityModelGateway {
     const csvStream = createWriteStream(csvPath);
 
     csvStream.write('quantidade_produto,preco_unitario,id_venda,id_produto\n');
-
     await pipeline(
       data,
       new Transform({
@@ -328,8 +343,8 @@ export class PyProductSimilarityModel implements ProductSimilarityModelGateway {
 
     await this.runPythonScript(
       PyProductSimilarityModel.TRAIN_PYTHON_SCRIPT,
-      modelDir,
       csvPath,
+      modelDir,
     );
   }
 

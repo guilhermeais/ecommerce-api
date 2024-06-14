@@ -1,7 +1,4 @@
 import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
-import seaborn as sns
 import warnings
 from scipy.sparse import csc_matrix
 from sklearn.neighbors import NearestNeighbors
@@ -10,13 +7,13 @@ import sys
 
 def configure_settings():
     warnings.filterwarnings('ignore')
-    pd.set_option('display.max_rows', 100)
-    pd.set_option('display.max_columns', 50)
-    plt.rcParams['figure.figsize'] = (15, 6)
-    plt.style.use('seaborn-darkgrid')
 
 def load_data(csv_path):
     df = pd.read_csv(csv_path)
+
+    if df.empty:
+        raise ValueError("The CSV file is empty. Please provide a CSV file with data.")
+
     return df
 
 def preprocess_data(df):
@@ -48,11 +45,11 @@ def train_model(sparse_matrix, n_neighbors=5, algorithm='brute', metric='minkows
     return model
 
 def save_model(model, base_path):
-    joblib_file = base_path + "modelo.pkl"
+    joblib_file = base_path + "/model.pkl"
     joblib.dump(model, joblib_file)
 
 def save_pivot_table(pivot_table, base_path):
-    pivot_table.to_pickle(base_path + "matriz.pkl")
+    pivot_table.to_pickle(base_path + "/matrix.pkl")
 
 def main():
     if len(sys.argv) != 3:

@@ -244,16 +244,27 @@ export class MongoDbOrdersRepository implements OrdersRepository {
       `Finding all orders on demand`,
     );
     const cursor = this.orderModel
-      .find({ onDemand: true })
-      .batchSize(30)
-      .cursor();
+      .aggregate<MongoOrderModel>([
+        {
+          $lookup: {
+            from: MongoDbCostumerModel.COLLECTION_NAME,
+            localField: 'customerId',
+            foreignField: 'id',
+            as: 'customer',
+          },
+        },
+        {
+          $unwind: '$customer',
+        },
+        { $sort: { createdAt: 1 } },
+      ])
+      .cursor({
+        batchSize: 1000,
+      });
 
     for await (const doc of cursor) {
-      this.logger.log(
-        MongoDbOrdersRepository.name,
-        `Found order ${doc.id} on demand`,
-      );
-      yield MongoDBOrderMapper.toDomain(doc);
+      const enrichedOrder = await this.enrichOrder(doc);
+      yield MongoDBOrderMapper.toDomain(enrichedOrder);
     }
   }
 }
