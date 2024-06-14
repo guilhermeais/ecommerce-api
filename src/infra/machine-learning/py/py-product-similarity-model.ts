@@ -321,7 +321,20 @@ export class PyProductSimilarityModel implements ProductSimilarityModelGateway {
       PyProductSimilarityModel.name,
       `Piping data to CSV file to ${csvPath}...`,
     );
-    const csvStream = createWriteStream(csvPath);
+    const csvStream = createWriteStream(csvPath)
+      .on('error', (error) => {
+        this.logger.error(
+          PyProductSimilarityModel.name,
+          `Error writing CSV file: ${error.message}`,
+          error.stack,
+        );
+      })
+      .on('finish', () => {
+        this.logger.log(
+          PyProductSimilarityModel.name,
+          `Data piped to CSV file ${csvPath}`,
+        );
+      });
 
     csvStream.write('quantidade_produto,preco_unitario,id_venda,id_produto\n');
     await pipeline(
