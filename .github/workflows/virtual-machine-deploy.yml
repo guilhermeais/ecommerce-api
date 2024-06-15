@@ -15,13 +15,9 @@ jobs:
 
       - name: SSH and Deploy
         run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} <<EOF
-            source ~/.profile
-            source ~/.bashrc
-            cd ~/ecommerce-api
-            git checkout master
-            git pull
-            npm install
-            npm run build
-            pm2 reload ecosystem.config.js
-          EOF
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} "bash -l -c 'cd ~/ecommerce-api && \
+          git checkout master && \
+          git pull && \
+          npm install && \
+          npm run build && \
+          pm2 reload ecosystem.config.js'"
