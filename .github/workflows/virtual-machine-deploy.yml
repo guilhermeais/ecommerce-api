@@ -1,0 +1,27 @@
+name: CI/CD Deploy On Virtal Machine Workflow
+
+on:
+  push:
+    branches: [master]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup SSH and known hosts
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+      - name: SSH and Deploy
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} <<EOF
+            cd ~/ecommerce-api
+            git checkout master
+            git pull
+            npm install
+            npm run build
+            pm2 start ecosystem.config.js
+          EOF
+
+      - name: Show Output
+        run: echo ${{ steps.deploy.outputs.url }}
