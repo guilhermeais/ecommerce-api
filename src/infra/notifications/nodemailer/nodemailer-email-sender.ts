@@ -34,7 +34,7 @@ export class NodeMailerEmailSender implements EmailSender {
     [K in keyof EmailTemplatesMap]: (data: EmailTemplatesMap[K]) => string;
   } = {
     'account-confirmation': (data) => {
-      const confirmationUrl = `${this.env.get('ACCOUNT_CONFIRMATION_URL')}?confirmationId=${data.confirmationId}`;
+      const confirmationUrl = `${this.env.get('ACCOUNT_CONFIRMATION_URL')}?token=${data.confirmationId}`;
       const variables = {
         name: data.name,
         confirmationUrl,
@@ -47,7 +47,7 @@ export class NodeMailerEmailSender implements EmailSender {
       return template;
     },
     'sign-up-invite': (data) => {
-      const finishSignUpUrl = `${this.env.get('FINISH_SIGNUP_INVITE_URL')}?inviteId=${data.inviteId}`;
+      const finishSignUpUrl = `${this.env.get('FINISH_SIGNUP_INVITE_URL')}?token=${data.inviteId}`;
       const variables = {
         sentByName: data.sentByName,
         guestName: data.guestName,
