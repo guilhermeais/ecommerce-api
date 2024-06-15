@@ -29,7 +29,7 @@ export class MongoDbProductsRepository implements ProductsRepository {
       );
 
       const exists = await this.productModel.exists({
-        _id: product.id.toString(),
+        id: product.id.toString(),
       });
 
       const productModel = MongoDbProductMapper.toPersistence(product);
