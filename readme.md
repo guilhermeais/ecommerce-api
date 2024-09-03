@@ -41,7 +41,7 @@ Este módulo lida com a administração dos produtos realizadas por um administr
 - 🟩 [Buscar Vendas](./requirements/product-administration/get-sales.md)
 
 ### Vitrine de Produtos 🏪🛍️
-![Progresso](https://img.shields.io/badge/Progresso-88%25-green)
+![Progresso](https://img.shields.io/badge/Progresso-100%25-green)
 Este módulo lida com a vitrine de produtos que o usuário irá visualizar no marketplace.
 
 - ❎ [Buscar mostruário de produtos](./requirements/showcase/get-showcase-products.md)
@@ -52,5 +52,5 @@ Este módulo lida com a vitrine de produtos que o usuário irá visualizar no ma
 - ❎ [Realizar checkout](./requirements/showcase/checkout.md)
 - ❎ [Buscar pedidos](./requirements/showcase/orders.md)
 
-- 🟩 [Busca de produtos similiares](./requirements/showcase/get-similar-products.md)
-- 🟩 [Treinamento de algoritmo de busca de produtos similares](./requirements/showcase/train-similar-products-model.md)
+- ❎ [Busca de produtos similiares](./requirements/showcase/get-similar-products.md)
+- ❎ [Treinamento de algoritmo de busca de produtos similares](./requirements/showcase/train-similar-products-model.md)
