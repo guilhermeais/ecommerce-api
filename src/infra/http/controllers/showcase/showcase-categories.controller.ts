@@ -1,13 +1,14 @@
 import { GetShowcaseCategoriesUseCase } from '@/domain/showcase/application/use-cases/get-showcase-categories';
 import { Public } from '@/infra/auth/public.decorator';
 import { Logger } from '@/shared/logger';
-import { Controller, Get, Query } from '@nestjs/common';
+import { Controller, Get, Query, UseInterceptors } from '@nestjs/common';
 import { z } from 'zod';
 import { ZodValidationPipe } from '../../pipes/zod-validation.pipe';
 import {
   ShowcaseCategoryHTTPResponse,
   ShowcaseCategoryPresenter,
 } from './presenters/showcase-category-presenter';
+import { TelemetryInterceptor } from '../../interceptors/telemetry.interceptor';
 
 const GetShowcaseCategoriesParamsSchema = z.object({
   limit: z
@@ -37,6 +38,7 @@ export type GetShowcaseCategoriesResponse = {
 
 export type GetShowcaseCategoryResponse = ShowcaseCategoryHTTPResponse;
 
+@UseInterceptors(TelemetryInterceptor)
 @Controller('/showcase/categories')
 export class ShowcaseCategoriesController {
   constructor(

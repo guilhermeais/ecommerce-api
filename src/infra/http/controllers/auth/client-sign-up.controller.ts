@@ -1,11 +1,12 @@
 import { ClientSignUpUseCase } from '@/domain/auth/application/use-cases/client-sign-up';
 import { Public } from '@/infra/auth/public.decorator';
 import { Logger } from '@/shared/logger';
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post, UseInterceptors } from '@nestjs/common';
 import { z } from 'zod';
 import { ZodValidationPipe } from '../../pipes/zod-validation.pipe';
 import { UserPresenter } from './presenters/user-presenter';
 import { LoginResponse } from './login.controller';
+import { TelemetryInterceptor } from '../../interceptors/telemetry.interceptor';
 
 const AddressSchema = z.object({
   cep: z.string({
@@ -50,6 +51,7 @@ export type SignUpBody = z.infer<typeof SignUpBodySchema>;
 
 export type SignUpResponse = LoginResponse;
 
+@UseInterceptors(TelemetryInterceptor)
 @Controller('sign-up')
 export class ClientSignUpController {
   constructor(

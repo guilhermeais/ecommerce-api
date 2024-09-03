@@ -4,13 +4,14 @@ import { GetShowcaseProductsUseCase } from '@/domain/showcase/application/use-ca
 import { GetSimilarProductsUseCase } from '@/domain/showcase/application/use-cases/get-similar-products';
 import { Public } from '@/infra/auth/public.decorator';
 import { Logger } from '@/shared/logger';
-import { Controller, Get, Param, Query } from '@nestjs/common';
+import { Controller, Get, Param, Query, UseInterceptors } from '@nestjs/common';
 import { z } from 'zod';
 import { ZodValidationPipe } from '../../pipes/zod-validation.pipe';
 import {
   ShowcaseProductHTTPResponse,
   ShowcaseProductPresenter,
 } from './presenters/showcase-product-presenter';
+import { TelemetryInterceptor } from '../../interceptors/telemetry.interceptor';
 
 const GetShowcaseProductsParamsSchema = z.object({
   limit: z
@@ -53,6 +54,7 @@ export type GetSimilarProductsResponse = {
   items: ShowcaseProductHTTPResponse[];
 };
 
+@UseInterceptors(TelemetryInterceptor)
 @Controller('/showcase/products')
 export class ShowcaseProductsController {
   constructor(

@@ -1,8 +1,9 @@
 import { User } from '@/domain/auth/enterprise/entities/user';
 import { CurrentUser } from '@/infra/auth/current-user.decorator';
 import { Logger } from '@/shared/logger';
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, UseInterceptors } from '@nestjs/common';
 import { UserHTTPResponse, UserPresenter } from './presenters/user-presenter';
+import { TelemetryInterceptor } from '../../interceptors/telemetry.interceptor';
 
 export type GetLoggedUserResponse = UserHTTPResponse;
 
@@ -10,6 +11,7 @@ export type GetLoggedUserResponse = UserHTTPResponse;
 export class GetLoggedUserController {
   constructor(private readonly logger: Logger) {}
 
+  @UseInterceptors(TelemetryInterceptor)
   @Get()
   async handle(@CurrentUser() user: User): Promise<GetLoggedUserResponse> {
     try {

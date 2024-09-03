@@ -5,9 +5,9 @@ import { PaymentType } from '@/domain/showcase/enterprise/entities/enums/payment
 import { CurrentUser } from '@/infra/auth/current-user.decorator';
 import { Roles } from '@/infra/auth/roles.decorator';
 import { Logger } from '@/shared/logger';
-import { Body, Controller, Post } from '@nestjs/common';
-import { context, trace } from '@opentelemetry/api';
+import { Body, Controller, Post, UseInterceptors } from '@nestjs/common';
 import { z } from 'zod';
+import { TelemetryInterceptor } from '../../interceptors/telemetry.interceptor';
 import { ZodValidationPipe } from '../../pipes/zod-validation.pipe';
 import {
   OrderHTTPResponse,
@@ -62,6 +62,7 @@ export type CheckoutBody = z.infer<typeof CheckoutBodySchema>;
 
 export type CheckoutResponse = OrderHTTPResponse;
 
+@UseInterceptors(TelemetryInterceptor)
 @Controller('/checkout')
 export class CheckoutController {
   constructor(
@@ -77,8 +78,6 @@ export class CheckoutController {
     body: CheckoutBody,
   ): Promise<CheckoutResponse> {
     try {
-      const span = trace.getSpan(context.active());
-      span?.setAttribute('http.request_body', JSON.stringify(body));
       this.logger.log(
         CheckoutController.name,
         `User ${currentUser.id.toString()} - ${currentUser.name} Checkout with: ${JSON.stringify(body)}.`,
@@ -102,7 +101,6 @@ export class CheckoutController {
       );
 
       const result = OrderPresenter.toHTTP(order);
-      span?.setAttribute('http.response_body', JSON.stringify(result));
 
       return result;
     } catch (error: any) {

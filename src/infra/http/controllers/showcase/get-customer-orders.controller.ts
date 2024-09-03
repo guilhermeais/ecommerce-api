@@ -5,13 +5,14 @@ import { GetCustomerOrders } from '@/domain/showcase/application/use-cases/get-c
 import { CurrentUser } from '@/infra/auth/current-user.decorator';
 import { Roles } from '@/infra/auth/roles.decorator';
 import { Logger } from '@/shared/logger';
-import { Controller, Get, Query } from '@nestjs/common';
+import { Controller, Get, Query, UseInterceptors } from '@nestjs/common';
 import { z } from 'zod';
 import { ZodValidationPipe } from '../../pipes/zod-validation.pipe';
 import {
   OrderHTTPResponse,
   OrderPresenter,
 } from './presenters/order-presenter';
+import { TelemetryInterceptor } from '../../interceptors/telemetry.interceptor';
 
 const GetCustomerOrdersParamsSchema = z.object({
   limit: z
@@ -32,6 +33,7 @@ export type GetCustomerOrdersParams = z.infer<
 
 export type GetCustomerOrdersResponse = PaginatedResponse<OrderHTTPResponse>;
 
+@UseInterceptors(TelemetryInterceptor)
 @Controller('/orders')
 export class GetCustomerOrdersController {
   constructor(
