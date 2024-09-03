@@ -6,6 +6,7 @@ import { CurrentUser } from '@/infra/auth/current-user.decorator';
 import { Roles } from '@/infra/auth/roles.decorator';
 import { Logger } from '@/shared/logger';
 import { Body, Controller, Post } from '@nestjs/common';
+import { context, trace } from '@opentelemetry/api';
 import { z } from 'zod';
 import { ZodValidationPipe } from '../../pipes/zod-validation.pipe';
 import {
@@ -59,7 +60,7 @@ const CheckoutBodySchema = z.object({
 
 export type CheckoutBody = z.infer<typeof CheckoutBodySchema>;
 
-export type CheckoutRespoinse = OrderHTTPResponse;
+export type CheckoutResponse = OrderHTTPResponse;
 
 @Controller('/checkout')
 export class CheckoutController {
@@ -74,8 +75,10 @@ export class CheckoutController {
     @CurrentUser() currentUser: User,
     @Body(new ZodValidationPipe(CheckoutBodySchema))
     body: CheckoutBody,
-  ): Promise<CheckoutRespoinse> {
+  ): Promise<CheckoutResponse> {
     try {
+      const span = trace.getSpan(context.active());
+      span?.setAttribute('http.request_body', JSON.stringify(body));
       this.logger.log(
         CheckoutController.name,
         `User ${currentUser.id.toString()} - ${currentUser.name} Checkout with: ${JSON.stringify(body)}.`,
@@ -98,7 +101,10 @@ export class CheckoutController {
         `Order created: ${order.id.toString()} for the user ${currentUser.id.toString()} - ${currentUser.name}.`,
       );
 
-      return OrderPresenter.toHTTP(order);
+      const result = OrderPresenter.toHTTP(order);
+      span?.setAttribute('http.response_body', JSON.stringify(result));
+
+      return result;
     } catch (error: any) {
       this.logger.error(
         CheckoutController.name,
