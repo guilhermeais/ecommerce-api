@@ -45,6 +45,8 @@ export const envSchema = z.object({
     })
     .optional()
     .default('*/10 * * * *'),
+
+  OTEL_TRACE_EXPORTER_URL: z.string().url().optional(),
 });
 
 export type Env = z.infer<typeof envSchema>;

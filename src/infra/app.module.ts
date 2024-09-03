@@ -20,7 +20,6 @@ import { HttpModule } from './http/http.module';
     ConfigModule.forRoot({
       isGlobal: true,
       validate: (env) => {
-        console.log('ENVS: ', env);
         return envSchema.parse(env);
       },
     }),
