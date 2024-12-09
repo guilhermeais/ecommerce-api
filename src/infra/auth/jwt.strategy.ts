@@ -35,7 +35,8 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   }
 
   async validate(payload: UserPayload) {
-    this.logger.log(JwtStrategy.name, `Validating user ${payload}`);
+    try {
+      this.logger.log(JwtStrategy.name, `Validating user ${JSON.stringify(payload, null, 2)}`);
     const { sub } = tokenPayloadSchema.parse(payload);
 
     this.logger.log(JwtStrategy.name, `Getting user ${sub}`);
@@ -48,6 +49,10 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     );
 
     return user;
+    } catch (error: any) {
+      this.logger.error(JwtStrategy.name, `Error validatin the user ${JSON.stringify(payload, null, 2)}: ${error.message}`, error.stack)
+      throw error
+    }
   }
 
   authenticate(
