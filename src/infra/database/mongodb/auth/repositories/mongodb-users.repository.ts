@@ -91,9 +91,11 @@ export class MongoDbUsersRepository implements UsersRepository {
         `Finding user by id ${id.toValue()}...`,
       );
 
-      const user = await this.userModel.findOne({
-        id: id.toValue()
-      }).exec();
+      const user = await this.userModel
+        .findOne({
+          id: id.toValue(),
+        })
+        .exec();
 
       if (!user) {
         this.logger.log(
