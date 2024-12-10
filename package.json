@@ -37,6 +37,7 @@
     "test:e2e:watch": "vitest --config ./vitest.config.e2e.ts"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.705.0",
     "@google-cloud/pubsub": "^4.4.1",
     "@google-cloud/storage": "^7.11.1",
     "@nestjs/common": "^10.0.0",

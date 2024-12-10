@@ -1,15 +1,15 @@
 import { StorageGateway } from '@/domain/product/application/gateways/storage/storage-gateway';
 import { Module } from '@nestjs/common';
-import { GcpStorageGateway } from './gcp-storage-gateway';
-import { GcpStorageFactory } from './gcp-storage.factory';
+import { S3ClientFactory } from './s3-client.factory';
+import { S3StorageGateway } from './s3-storage-gateway';
 
 @Module({
   providers: [
     {
       provide: StorageGateway,
-      useClass: GcpStorageGateway,
+      useClass: S3StorageGateway,
     },
-    GcpStorageFactory,
+    S3ClientFactory,
   ],
   exports: [StorageGateway],
 })

@@ -47,6 +47,11 @@ export const envSchema = z.object({
     .default('*/10 * * * *'),
 
   OTEL_TRACE_EXPORTER_URL: z.string().url().optional(),
+
+  S3_REGION: z.string().optional(),
+  S3_ACCESS_KEY_ID: z.string().optional(),
+  S3_SECRET_ACCESS_KEY: z.string().optional(),
+  STORAGE_BUCKET_NAME: z.string(),
 });
 
 export type Env = z.infer<typeof envSchema>;

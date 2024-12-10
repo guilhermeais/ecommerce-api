@@ -7,7 +7,7 @@ import { EnvService } from '../env/env.service';
 export const GCP_STORAGE_PROVIDER = Symbol('GCP_STORAGE_PROVIDER');
 
 export const GcpStorageFactory: FactoryProvider<Storage> = {
-  scope: Scope.TRANSIENT,
+  scope: Scope.DEFAULT,
   inject: [EnvService, Logger],
   provide: GCP_STORAGE_PROVIDER,
   useFactory(envService: EnvService, logger: Logger): Storage {
