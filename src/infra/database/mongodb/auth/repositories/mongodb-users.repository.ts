@@ -92,7 +92,7 @@ export class MongoDbUsersRepository implements UsersRepository {
       );
 
       const user = await this.userModel.findOne({
-        _id: id.toValue()
+        id: id.toValue()
       }).exec();
 
       if (!user) {
