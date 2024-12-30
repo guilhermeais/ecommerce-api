@@ -32,12 +32,14 @@ export class MongoDbProductsRepository implements ProductsRepository {
         id: product.id.toString(),
       });
 
-      const productModel = MongoDbProductMapper.toPersistence(product);
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { _id: _, ...productModel } =
+        MongoDbProductMapper.toPersistence(product);
 
       if (exists) {
         await this.productModel.updateOne(
           {
-            _id: product.id.toString(),
+            id: product.id.toString(),
           },
           productModel,
         );
@@ -47,7 +49,7 @@ export class MongoDbProductsRepository implements ProductsRepository {
 
       this.logger.log(
         MongoDbProductsRepository.name,
-        `Product ${product.name} saved`,
+        `Product ${product.id} ${product.name} saved: ${JSON.stringify(productModel, null, 2)}`,
       );
     } catch (error: any) {
       this.logger.error(

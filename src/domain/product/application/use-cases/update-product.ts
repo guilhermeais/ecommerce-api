@@ -75,6 +75,8 @@ export class UpdateProductUseCase
         throw new EntityNotFoundError('Produto', request.id);
       }
 
+      Object.assign(product, restOfRequest);
+
       if (newSubCategoryId !== undefined) {
         this.logger.log(
           UpdateProductUseCase.name,
@@ -111,6 +113,7 @@ export class UpdateProductUseCase
         );
         const { url: newImageUrl } = await this.storageGateway.upload(newImage);
         const oldImageUrl = product.image;
+        product.image = newImageUrl;
 
         if (oldImageUrl) {
           this.logger.log(
@@ -128,15 +131,11 @@ export class UpdateProductUseCase
             );
         }
 
-        product.image = newImageUrl;
-
         this.logger.log(
           UpdateProductUseCase.name,
-          `Product ${request.id} ${request.name} updated with new image`,
+          `Product ${request.id} ${request.name} updated with new image ${newImageUrl}`,
         );
       }
-
-      Object.assign(product, restOfRequest);
 
       product.updatedBy = Administrator.restore(
         request.updatedBy,
@@ -149,7 +148,7 @@ export class UpdateProductUseCase
 
       this.logger.log(
         UpdateProductUseCase.name,
-        `Product ${request.id} ${request.name} updated with ${JSON.stringify(restOfRequest, null, 2)}`,
+        `Product ${product.id} ${product?.name} updated`,
       );
     } catch (error: any) {
       this.logger.error(

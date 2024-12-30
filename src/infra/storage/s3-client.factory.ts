@@ -1,5 +1,5 @@
 import { Logger } from '@/shared/logger';
-import { S3Client } from '@aws-sdk/client-s3';
+import { S3Client, S3ClientConfig } from '@aws-sdk/client-s3';
 import { FactoryProvider, Scope } from '@nestjs/common';
 import { EnvService } from '../env/env.service';
 
@@ -13,6 +13,7 @@ export const S3ClientFactory: FactoryProvider<S3Client | null> = {
     const s3Region = envService.get('S3_REGION');
     const s3AccessKeyId = envService.get('S3_ACCESS_KEY_ID');
     const s3SecretAccessKey = envService.get('S3_SECRET_ACCESS_KEY');
+    const s3Endpoint = envService.get('S3_ENDPOINT');
     if (!s3Region) {
       logger.warn(
         'S3ClientFactory',
@@ -41,13 +42,31 @@ export const S3ClientFactory: FactoryProvider<S3Client | null> = {
       );
     }
 
-    const s3Client = new S3Client({
+    const config: S3ClientConfig = {
       region: s3Region,
+      endpoint: s3Endpoint,
       credentials: {
         accessKeyId: s3AccessKeyId,
         secretAccessKey: s3SecretAccessKey,
       },
-    });
+    };
+
+    console.log(
+      'S3ClientFactory',
+      `Initializing s3 config: ${JSON.stringify(
+        {
+          ...config,
+          credentials: {
+            accessKeyId: '***',
+            secretAccessKey: '***',
+          },
+        },
+        null,
+        2,
+      )}`,
+    );
+
+    const s3Client = new S3Client(config);
 
     return s3Client;
   },

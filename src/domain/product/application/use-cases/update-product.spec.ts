@@ -141,6 +141,7 @@ describe('UpdateProduct use case', () => {
       product.subCategory!.id.toString(),
     );
     expect(updatedProduct!.image).toBeDefined();
+    expect(updatedProduct!.image).toEqual(`${newImage.name}.${newImage.type}`);
   });
 
   it.each([

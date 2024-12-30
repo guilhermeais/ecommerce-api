@@ -40,8 +40,12 @@ export class S3StorageGateway implements StorageGateway {
       });
 
       await this.s3Client.send(putObjectCommand);
-      const url = `https://${bucket}.s3.amazonaws.com/${uniqueFileName}`;
-
+      const endpoint = this.env.get('S3_ENDPOINT');
+      const url = `${endpoint}/${bucket}/${uniqueFileName}`;
+      this.logger.log(
+        S3StorageGateway.name,
+        `File ${file.name} deployed to S3 storage on bucket ${url}`,
+      );
       return {
         url,
       };
